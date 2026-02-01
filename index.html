@@ -3,33 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LA BETE 56</title>
+<title>Calidad56</title>
+
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 :root{
   --gold:#d6b56d;
-  --text:#fff;
   --line:rgba(255,255,255,.15);
+  --text:#fff;
+  --panel:rgba(10,15,20,.85);
 }
-
 *{box-sizing:border-box}
 
 body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial;
   color:var(--text);
-  padding-bottom:80px;
+  padding-bottom:90px;
+
+  /* 🔥 TON FOND D’ÉCRAN */
   background:
-    linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.7)),
-    url("https://images.unsplash.com/photo-1508614999368-9260051292e5");
+    linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,.65)),
+    url("background.png");
   background-size:cover;
   background-position:center;
+  background-attachment:fixed;
 }
 
 header{
   text-align:center;
-  padding:20px 14px;
+  padding:22px 14px 12px;
 }
 h1{
   margin:0;
@@ -48,7 +52,7 @@ select{
   flex:1;
   padding:12px;
   border-radius:14px;
-  background:#111;
+  background:#0f141c;
   border:1px solid var(--line);
   color:#fff;
 }
@@ -66,12 +70,14 @@ select{
   gap:12px;
   padding:0 14px;
 }
+
 .card{
-  background:#111;
+  background:var(--panel);
   border-radius:18px;
   overflow:hidden;
   border:1px solid var(--line);
 }
+
 .media{
   height:150px;
   position:relative;
@@ -81,6 +87,7 @@ select{
   height:100%;
   object-fit:cover;
 }
+
 .badge{
   position:absolute;
   bottom:10px;
@@ -90,11 +97,24 @@ select{
   padding:6px 10px;
   border-radius:999px;
   font-size:12px;
-  font-weight:700;
+  font-weight:900;
 }
+
 .body{padding:10px}
 .name{font-weight:900}
 .farm{opacity:.7;font-size:13px;margin-top:4px}
+.price{margin-top:6px;color:var(--gold);font-weight:900}
+
+.add{
+  width:100%;
+  margin-top:8px;
+  padding:10px;
+  border:none;
+  border-radius:12px;
+  background:var(--gold);
+  color:#000;
+  font-weight:900;
+}
 
 nav{
   position:fixed;
@@ -130,6 +150,23 @@ nav button{
   overflow:auto;
 }
 
+.cartRow{
+  display:flex;
+  justify-content:space-between;
+  padding:10px 0;
+  border-top:1px solid var(--line);
+}
+
+input{
+  width:100%;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:#0f141c;
+  color:#fff;
+  margin-top:8px;
+}
+
 .btn{
   width:100%;
   padding:14px;
@@ -149,28 +186,14 @@ nav button{
   color:#fff;
   margin-top:8px;
 }
-.cartRow{
-  display:flex;
-  justify-content:space-between;
-  padding:10px 0;
-  border-top:1px solid var(--line);
-}
-input{
-  width:100%;
-  padding:12px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:#111;
-  color:#fff;
-  margin-top:8px;
-}
 </style>
 </head>
 
 <body>
+
 <header>
-  <h1>LA BETE 56</h1>
-  <div class="sub">mini‑application</div>
+  <h1>Calidad56</h1>
+  <div class="sub">Mini‑app Telegram</div>
 </header>
 
 <div class="filters">
@@ -228,6 +251,15 @@ const PRODUCTS = [
     country:"🇺🇸",
     price:35,
     video:"https://www.w3schools.com/html/movie.mp4"
+  },
+  {
+    id:"p3",
+    name:"OG Kush",
+    category:"Static US",
+    farm:"Calitefarm",
+    country:"🇺🇸",
+    price:20,
+    video:"https://www.w3schools.com/html/mov_bbb.mp4"
   }
 ];
 
@@ -240,28 +272,39 @@ const state={
 const $=id=>document.getElementById(id);
 
 function fillFilters(){
-  $("cat").innerHTML='<option value="">Catégorie</option>'+[...new Set(PRODUCTS.map(p=>p.category))].map(c=>`<option>${c}</option>`).join("");
-  $("farm").innerHTML='<option value="">Farm</option>'+[...new Set(PRODUCTS.map(p=>p.farm))].map(f=>`<option>${f}</option>`).join("");
+  $("cat").innerHTML='<option value="">Toutes catégories</option>'+
+    [...new Set(PRODUCTS.map(p=>p.category))]
+    .map(c=>`<option>${c}</option>`).join("");
+  $("farm").innerHTML='<option value="">Toutes farms</option>'+
+    [...new Set(PRODUCTS.map(p=>p.farm))]
+    .map(f=>`<option>${f}</option>`).join("");
+
   $("cat").onchange=e=>{state.cat=e.target.value;render()};
   $("farm").onchange=e=>{state.farm=e.target.value;render()};
 }
 
 function render(){
   const grid=$("grid");grid.innerHTML="";
-  const f=PRODUCTS.filter(p=>(!state.cat||p.category==state.cat)&&(!state.farm||p.farm==state.farm));
+  const f=PRODUCTS.filter(p=>
+    (!state.cat||p.category==state.cat) &&
+    (!state.farm||p.farm==state.farm)
+  );
   $("count").textContent=f.length;
+
   f.forEach(p=>{
     grid.innerHTML+=`
-      <div class="card" onclick="add('${p.id}')">
-        <div class="media">
-          <video src="${p.video}" muted autoplay loop playsinline></video>
-          <div class="badge">${p.category}</div>
-        </div>
-        <div class="body">
-          <div class="name">${p.name}</div>
-          <div class="farm">${p.farm} ${p.country}</div>
-        </div>
-      </div>`;
+    <div class="card">
+      <div class="media">
+        <video src="${p.video}" muted autoplay loop playsinline></video>
+        <div class="badge">${p.category}</div>
+      </div>
+      <div class="body">
+        <div class="name">${p.name}</div>
+        <div class="farm">${p.farm} ${p.country}</div>
+        <div class="price">${p.price} €</div>
+        <button class="add" onclick="add('${p.id}')">Ajouter</button>
+      </div>
+    </div>`;
   });
   updateCart();
 }
@@ -276,8 +319,13 @@ function updateCart(){
   $("cartCount").textContent=Object.values(state.cart).reduce((a,b)=>a+b,0);
 }
 
-function openCart(){ $("cartModal").style.display="flex"; renderCart(); }
-function closeCart(){ $("cartModal").style.display="none"; }
+function openCart(){
+  $("cartModal").style.display="flex";
+  renderCart();
+}
+function closeCart(){
+  $("cartModal").style.display="none";
+}
 
 function renderCart(){
   const list=$("cartList"); list.innerHTML="";
@@ -289,10 +337,10 @@ function renderCart(){
     list.innerHTML+=`
       <div class="cartRow">
         <div>${p.name} x${q}</div>
-        <div>${p.price*q}€</div>
+        <div>${p.price*q} €</div>
       </div>`;
   }
-  $("total").textContent="Total : "+total+"€";
+  $("total").textContent="Total : "+total+" €";
 }
 
 function checkout(){
@@ -308,20 +356,23 @@ function checkout(){
     total+=p.price*q;
   }
 
-  const text=`🧾 NOUVELLE COMMANDE
+  const msg=`🧾 NOUVELLE COMMANDE
 
 👤 Nom : ${name}
 📞 Téléphone : ${phone}
 
+📦 Produits :
 ${lines.join("\n")}
 
 💰 Total : ${total} €`;
 
-  tg.close();
-  tg.openTelegramLink("https://t.me/LaBete56?text="+encodeURIComponent(text));
+  tg.openTelegramLink(
+    "https://t.me/share/url?text="+encodeURIComponent(msg)
+  );
 
   state.cart={};
   updateCart();
+  closeCart();
 }
 
 function contact(){
