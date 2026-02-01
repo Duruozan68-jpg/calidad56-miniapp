@@ -1,23 +1,182 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Calidad56 Mini‑App</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>Calidad56</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b0f14;
+      color: #f5f5f5;
+    }
+
+    header {
+      padding: 16px;
+      text-align: center;
+      background: linear-gradient(180deg, #1a1f2b, #0b0f14);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 2px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      padding: 12px;
+    }
+
+    select {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      background: #151a23;
+      color: white;
+      border: 1px solid #2a3142;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .card {
+      background: #121723;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #2a3142;
+    }
+
+    .card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 10px;
+    }
+
+    .badge {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .name {
+      font-weight: bold;
+      margin-top: 6px;
+    }
+
+    .farm {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #0f1420;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      border-top: 1px solid #2a3142;
+    }
+
+    nav div {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+  </style>
 </head>
+
 <body>
-  <h2>🚗 Calidad56</h2>
-  <p>Mini‑app Telegram OK ✅</p>
-  <button onclick="send()">Envoyer</button>
+  <header>
+    <h1>🚗 CALIDAD56</h1>
+    <p>Mini‑app Telegram</p>
+  </header>
+
+  <div class="filters">
+    <select id="categoryFilter">
+      <option value="">Toutes les catégories</option>
+      <option value="Flower">Flower</option>
+      <option value="Extract">Extract</option>
+    </select>
+
+    <select id="farmFilter">
+      <option value="">Toutes les farms</option>
+      <option value="Calitefarm">Calitefarm</option>
+    </select>
+  </div>
+
+  <div class="grid" id="products"></div>
+
+  <nav>
+    <div>🏠 Menu</div>
+    <div>❓ FAQ</div>
+    <div>✉️ Contact</div>
+  </nav>
 
   <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
-    function send() {
-      tg.sendData("Mini‑app fonctionne");
-      tg.close();
+
+    const products = [
+      {
+        name: "Brides Maid",
+        category: "Flower",
+        farm: "Calitefarm",
+        country: "🇺🇸",
+        image: "https://via.placeholder.com/300x200"
+      },
+      {
+        name: "OG Kush",
+        category: "Flower",
+        farm: "Calitefarm",
+        country: "🇺🇸",
+        image: "https://via.placeholder.com/300x200"
+      }
+    ];
+
+    const grid = document.getElementById("products");
+    const catFilter = document.getElementById("categoryFilter");
+    const farmFilter = document.getElementById("farmFilter");
+
+    function render() {
+      grid.innerHTML = "";
+      products
+        .filter(p =>
+          (!catFilter.value || p.category === catFilter.value) &&
+          (!farmFilter.value || p.farm === farmFilter.value)
+        )
+        .forEach(p => {
+          grid.innerHTML += `
+            <div class="card">
+              <img src="${p.image}">
+              <div class="card-body">
+                <div class="badge">${p.country}</div>
+                <div class="name">${p.name}</div>
+                <div class="farm">🌾 ${p.farm}</div>
+              </div>
+            </div>
+          `;
+        });
     }
+
+    catFilter.onchange = render;
+    farmFilter.onchange = render;
+
+    render();
   </script>
 </body>
 </html>
