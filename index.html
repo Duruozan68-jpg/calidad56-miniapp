@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Calidad56</title>
+  <title>ALLFARMZ</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
@@ -343,6 +343,14 @@
   // ✅ Données produits (remplace par tes vrais produits)
   // img = image ; video = mp4 (optionnel). Si video existe, elle sera affichée.
   const PRODUCTS = [
+    {
+      id:"p1",
+      name:"Brides Maid",
+      category:"Static us",
+      farm:"Calitefarm",
+      country:"🇺🇸",
+      price:25,
+      img:"https://via.placeholder.com/800x600?text=Brides+Maid"
     },
     {
       id:"p2",
@@ -586,13 +594,13 @@ ${items.map(i=>"• "+i).join("\n")}
 
   // 🚀 Ouvre Telegram avec message pré‑rempli
   tg.openTelegramLink(
-    `https://t.me/LaBete56?text=${encoded}`
+    `https://t.me/AllFarmz44Bot?text=${encoded}`
   );
 
   // Reset panier
   state.cart = {};
   saveCart();
-}
+    
     }
 
     const items = Object.entries(state.cart).map(([id,qty])=>{
