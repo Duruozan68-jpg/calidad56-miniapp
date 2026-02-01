@@ -344,13 +344,16 @@
   // img = image ; video = mp4 (optionnel). Si video existe, elle sera affichée.
   const PRODUCTS = [
     {
-      id:"p1",
-      name:"Brides Maid",
-      category:"Static us",
-      farm:"Calitefarm",
-      country:"🇺🇸",
-      price:25,
-      img:"https://via.placeholder.com/800x600?text=Brides+Maid"
+      {
+  id:"p2",
+  name:"Autumn",
+  category:"Static us",
+  farm:"Calitefarm",
+  country:"🇺🇸",
+  price:35,
+  video:"https://tonsite.com/video.mp4",
+  img:"https://tonsite.com/preview.jpg"
+}
     },
     {
       id:"p2",
@@ -543,12 +546,64 @@
   }
 
   function checkout(){
-    const name = $("buyerName").value.trim();
-    const phone = $("buyerPhone").value.trim();
+  const name = $("buyerName").value.trim();
+  const phone = $("buyerPhone").value.trim();
 
-    if(!name || !phone){
-      tg.showPopup?.({title:"Infos manquantes", message:"Ajoute ton nom et ton téléphone.", buttons:[{type:"ok"}]});
-      return;
+  if(!name || !phone){
+    tg.showPopup?.({
+      title:"Infos manquantes",
+      message:"Ajoute ton nom et ton téléphone.",
+      buttons:[{type:"ok"}]
+    });
+    return;
+  }
+
+  const items = Object.entries(state.cart).map(([id,qty])=>{
+    const p = PRODUCTS.find(x=>x.id===id);
+    return p ? `${p.name} x${qty} (${p.price}€)` : null;
+  }).filter(Boolean);
+
+  if(!items.length){
+    tg.showPopup?.({
+      title:"Panier vide",
+      message:"Ajoute au moins un produit.",
+      buttons:[{type:"ok"}]
+    });
+    return;
+  }
+
+  const total = Object.entries(state.cart).reduce((s,[id,qty])=>{
+    const p = PRODUCTS.find(x=>x.id===id);
+    return s + (p.price * qty);
+  },0);
+
+  // 🧾 Message prêt à envoyer sur Telegram
+  const message =
+`🧾 NOUVELLE COMMANDE
+
+👤 Nom : ${name}
+📞 Téléphone : ${phone}
+
+📦 Produits :
+${items.map(i=>"• "+i).join("\n")}
+
+💰 Total : ${total.toFixed(2)} €`;
+
+  // Encodage URL
+  const encoded = encodeURIComponent(message);
+
+  // 🔁 Ferme la mini‑app
+  tg.close();
+
+  // 🚀 Ouvre Telegram avec message pré‑rempli
+  tg.openTelegramLink(
+    `https://t.me/Calidad56_bot?text=${encoded}`
+  );
+
+  // Reset panier
+  state.cart = {};
+  saveCart();
+}
     }
 
     const items = Object.entries(state.cart).map(([id,qty])=>{
