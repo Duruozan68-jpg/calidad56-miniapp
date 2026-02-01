@@ -258,3 +258,61 @@
 </script>
 </body>
 </html>
+{
+  "name": "calidad56-bot",
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "node-telegram-bot-api": "^0.66.0"
+  }
+}
+BOT_TOKEN=TON_TOKEN_ICI
+WEBAPP_URL=https://duruozan68-jpg.github.io/calidad56-miniapp/
+ADMIN_CHAT_ID=
+import dotenv from "dotenv";
+import TelegramBot from "node-telegram-bot-api";
+dotenv.config();
+
+const bot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
+
+bot.onText(/\/start/, async (msg) => {
+  const chatId = msg.chat.id;
+
+  await bot.sendMessage(chatId, "Bienvenue 👋 Ouvre la boutique :", {
+    reply_markup: {
+      keyboard: [[{ text: "🛍️ Ouvrir la boutique", web_app: { url: process.env.WEBAPP_URL } }]],
+      resize_keyboard: true
+    }
+  });
+});
+
+// ✅ reçoit sendData() de la mini-app
+bot.on("message", async (msg) => {
+  const chatId = msg.chat.id;
+  if (!msg.web_app_data?.data) return;
+
+  let data;
+  try { data = JSON.parse(msg.web_app_data.data); } catch { return; }
+
+  if (data.action !== "order") return;
+
+  const lines = data.items.map(i => `• ${i.name} x${i.qty} (${i.price}€)`).join("\n");
+  const total = data.items.reduce((s,i)=> s + (i.price*i.qty), 0);
+
+  const summary =
+`🧾 Nouvelle commande
+👤 ${data.buyer.name}
+📞 ${data.buyer.phone}
+
+${lines}
+
+💰 Total: ${total.toFixed(2)}€`;
+
+  // Réponse client
+  await bot.sendMessage(chatId, "✅ Commande reçue ! On te répond vite.");
+
+  // Notif admin (si tu mets ADMIN_CHAT_ID)
+  if (process.env.ADMIN_CHAT_ID) {
+    await bot.sendMessage(process.env.ADMIN_CHAT_ID, summary);
+  }
+});
