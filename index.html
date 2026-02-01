@@ -3,170 +3,487 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Calidad56 Shop</title>
+  <title>ALLFARMZ</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <style>
     :root{
-      --bg:#0b0f14; --card:#121723; --muted:#9aa4b2; --line:#2a3142;
-      --gold:#d6b56d; --btn:#22c55e;
+      --bg:#0b0f14;
+      --panel:#0f1420;
+      --card:#101826;
+      --line:rgba(255,255,255,.10);
+      --text:#f7f7f7;
+      --muted:rgba(255,255,255,.65);
+      --gold:#d6b56d;
+      --gold2:#caa14a;
+      --btn:#d6b56d;
+      --btnText:#111;
     }
-    body{margin:0;font-family:Arial,system-ui;background:var(--bg);color:#fff;padding-bottom:76px}
-    header{padding:16px;text-align:center;background:linear-gradient(180deg,#1a1f2b,#0b0f14)}
-    header h1{margin:0;font-size:28px;letter-spacing:2px}
-    header p{margin:6px 0 0;color:var(--muted)}
-    .wrap{padding:12px}
-    .filters{display:flex;gap:10px;margin-bottom:12px}
-    select,input{flex:1;padding:10px;border-radius:10px;background:#151a23;color:#fff;border:1px solid var(--line)}
-    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-    .card img{width:100%;height:120px;object-fit:cover;background:#0f1420}
-    .card .b{padding:10px}
-    .tag{font-size:12px;color:var(--muted)}
-    .name{font-weight:800;margin-top:6px}
-    .price{margin-top:6px;color:var(--gold);font-weight:700}
-    .btn{width:100%;margin-top:10px;padding:10px;border-radius:10px;border:none;background:var(--btn);font-weight:800}
-    .btn2{width:100%;margin-top:10px;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0f1420;color:#fff;font-weight:800}
-    .row{display:flex;gap:10px;align-items:center;justify-content:space-between}
-    .qty{display:flex;gap:8px;align-items:center}
-    .qbtn{padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:#0f1420;color:#fff}
-    nav{position:fixed;left:0;right:0;bottom:0;background:#0f1420;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:10px 0}
-    nav button{background:transparent;border:none;color:#fff;opacity:.85;font-size:14px}
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end}
-    .sheet{background:#0f1420;border:1px solid var(--line);border-radius:16px 16px 0 0;width:100%;max-height:85vh;overflow:auto}
-    .sheet h2{margin:0;padding:14px 14px 0}
-    .sheet .p{padding:10px 14px;color:var(--muted)}
-    .cartItem{padding:12px 14px;border-top:1px solid var(--line)}
-    .total{padding:12px 14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-weight:900}
-    .actions{padding:12px 14px}
-    .mini{font-size:12px;color:var(--muted);margin-top:6px}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 50% -200px, rgba(214,181,109,.25), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      padding-bottom: 78px;
+    }
+
+    /* Header */
+    header{
+      padding:18px 14px 12px;
+      text-align:center;
+    }
+    .brand{
+      display:flex; align-items:center; justify-content:center; gap:10px;
+    }
+    .logo{
+      width:44px; height:44px; border-radius:12px;
+      background: linear-gradient(145deg, rgba(214,181,109,.25), rgba(214,181,109,.05));
+      border:1px solid var(--line);
+      display:grid; place-items:center;
+      font-weight:900; color:var(--gold);
+    }
+    h1{margin:0; letter-spacing:2px; font-size:34px; color:var(--gold);}
+    .sub{margin:8px 0 0; color:var(--muted);}
+
+    /* Filters row */
+    .filters{
+      display:flex; gap:10px;
+      padding: 10px 14px 0;
+    }
+    select{
+      flex:1;
+      padding:12px 12px;
+      border-radius:14px;
+      background: rgba(16,24,38,.85);
+      border:1px solid var(--line);
+      color:var(--text);
+      outline:none;
+    }
+
+    /* Title + count */
+    .section{
+      padding: 16px 14px 10px;
+      display:flex; align-items:baseline; justify-content:space-between;
+    }
+    .section h2{
+      margin:0;
+      font-size:26px;
+      font-weight:900;
+    }
+    .count{color:var(--muted)}
+
+    /* Grid */
+    .grid{
+      padding: 0 14px 18px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:12px;
+    }
+    .card{
+      background: rgba(16,24,38,.88);
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow: 0 14px 30px rgba(0,0,0,.25);
+    }
+    .media{
+      position:relative;
+      width:100%;
+      height:150px;
+      background:#0a0f18;
+      overflow:hidden;
+    }
+    .media img, .media video{
+      width:100%; height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .play{
+      position:absolute;
+      inset:auto auto 10px 10px;
+      width:44px; height:44px;
+      border-radius:999px;
+      background: rgba(0,0,0,.45);
+      border:1px solid rgba(255,255,255,.18);
+      display:grid; place-items:center;
+      backdrop-filter: blur(6px);
+      font-size:18px;
+    }
+    .badge{
+      position:absolute;
+      left:10px; bottom:10px;
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.92);
+      color:#111;
+      font-size:12px;
+      font-weight:800;
+      display:flex; align-items:center; gap:6px;
+    }
+    .body{
+      padding:12px;
+    }
+    .name{
+      font-weight:900;
+      font-size:16px;
+      margin-top:2px;
+      text-transform: none;
+    }
+    .farm{
+      margin-top:8px;
+      padding:10px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      display:flex; align-items:center; justify-content:center;
+      color:rgba(255,255,255,.82);
+      gap:8px;
+      font-size:13px;
+    }
+
+    /* Bottom nav */
+    nav{
+      position:fixed;
+      left:0; right:0; bottom:0;
+      background: rgba(15,20,32,.92);
+      border-top:1px solid var(--line);
+      backdrop-filter: blur(10px);
+      display:flex;
+      justify-content:space-around;
+      padding: 10px 0;
+    }
+    nav button{
+      background:transparent;
+      border:none;
+      color:rgba(255,255,255,.82);
+      font-size:14px;
+    }
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.62);
+      display:none;
+      align-items:flex-end;
+      z-index:50;
+    }
+    .sheet{
+      width:100%;
+      max-height: 88vh;
+      overflow:auto;
+      background: rgba(15,20,32,.96);
+      border:1px solid var(--line);
+      border-radius: 18px 18px 0 0;
+      padding: 14px;
+    }
+    .sheetTop{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+    }
+    .sheetTop h3{margin:0; font-size:18px}
+    .x{
+      width:38px; height:38px; border-radius:12px;
+      border:1px solid var(--line);
+      background: transparent; color:var(--text);
+    }
+    .pmedia{
+      margin-top:12px;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      background:#0a0f18;
+    }
+    .pmedia img, .pmedia video{
+      width:100%; height:220px; object-fit:cover; display:block;
+    }
+    .meta{
+      margin-top:10px; color:var(--muted); font-size:13px;
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .price{
+      margin-top:10px;
+      font-size:20px;
+      font-weight:1000;
+      color: var(--gold);
+    }
+    .btn{
+      width:100%;
+      margin-top:12px;
+      padding:14px;
+      border:none;
+      border-radius:14px;
+      background: linear-gradient(180deg, var(--gold), var(--gold2));
+      color: var(--btnText);
+      font-weight:1000;
+      font-size:16px;
+    }
+    .btn2{
+      width:100%;
+      margin-top:10px;
+      padding:14px;
+      border-radius:14px;
+      background: transparent;
+      border:1px solid var(--line);
+      color: var(--text);
+      font-weight:900;
+      font-size:15px;
+    }
+
+    /* Cart list */
+    .cartRow{
+      padding:12px 0;
+      border-top:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+    }
+    .qty{
+      display:flex; align-items:center; gap:8px;
+    }
+    .qbtn{
+      width:36px; height:36px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      font-weight:900;
+    }
+    .total{
+      margin-top:10px;
+      display:flex; justify-content:space-between;
+      font-weight:1000;
+      border-top:1px solid var(--line);
+      padding-top:12px;
+    }
+    input{
+      width:100%;
+      margin-top:10px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(16,24,38,.85);
+      color: var(--text);
+      outline:none;
+    }
+    .mini{margin-top:8px; color:var(--muted); font-size:12px}
   </style>
 </head>
+
 <body>
   <header>
-    <h1>CALIDAD56</h1>
-    <p>Catalogue • Panier • Commande</p>
+    <div class="brand">
+      <div class="logo">AF</div>
+      <div>
+        <h1>ALLFARMZ</h1>
+        <div class="sub">mini‑application</div>
+      </div>
+    </div>
   </header>
 
-  <div class="wrap">
-    <div class="filters">
-      <select id="category"></select>
-      <select id="farm"></select>
-    </div>
-    <input id="search" placeholder="Rechercher un produit…" />
-    <div style="height:12px"></div>
-    <div class="grid" id="grid"></div>
+  <div class="filters">
+    <select id="cat"></select>
+    <select id="farm"></select>
   </div>
 
+  <div class="section">
+    <h2>Produits disponibles</h2>
+    <div class="count"><span id="count">0</span> résultats</div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <!-- Product modal -->
+  <div class="modal" id="productModal">
+    <div class="sheet">
+      <div class="sheetTop">
+        <h3 id="pTitle">Produit</h3>
+        <button class="x" onclick="closeProduct()">✕</button>
+      </div>
+      <div class="pmedia" id="pMedia"></div>
+      <div class="meta" id="pMeta"></div>
+      <div class="price" id="pPrice"></div>
+      <button class="btn" onclick="addFromModal()">Ajouter au panier</button>
+      <button class="btn2" onclick="openCart()">Voir panier</button>
+    </div>
+  </div>
+
+  <!-- Cart modal -->
   <div class="modal" id="cartModal">
     <div class="sheet">
-      <h2>🛒 Panier</h2>
-      <div class="p" id="cartEmpty">Ton panier est vide.</div>
-      <div id="cartList"></div>
+      <div class="sheetTop">
+        <h3>🛒 Panier</h3>
+        <button class="x" onclick="closeCart()">✕</button>
+      </div>
+
+      <div id="cartList" style="margin-top:6px"></div>
       <div class="total" id="cartTotal" style="display:none">
         <div>Total</div><div id="totalValue">0 €</div>
       </div>
 
-      <div class="actions">
-        <input id="buyerName" placeholder="Ton nom" />
-        <input id="buyerPhone" placeholder="Téléphone" />
-        <button class="btn" onclick="checkout()">✅ Commander</button>
-        <button class="btn2" onclick="closeCart()">Fermer</button>
-        <div class="mini">La commande est envoyée au bot Telegram (et paiement Stripe possible ensuite).</div>
-      </div>
+      <input id="buyerName" placeholder="Ton nom" />
+      <input id="buyerPhone" placeholder="Téléphone" />
+
+      <button class="btn" onclick="checkout()">✅ Commander</button>
+      <button class="btn2" onclick="clearCart()">Vider le panier</button>
+
+      <div class="mini">La commande est envoyée au bot via <b>sendData()</b>.</div>
     </div>
   </div>
 
   <nav>
-    <button onclick="openHome()">🏠 Menu</button>
+    <button onclick="scrollToTop()">🏠 Menu</button>
     <button onclick="openCart()">🛒 Panier (<span id="cartCount">0</span>)</button>
-    <button onclick="openContact()">✉️ Contact</button>
+    <button onclick="contact()">✉️ Contact</button>
   </nav>
 
 <script>
   const tg = window.Telegram.WebApp;
   tg.expand();
 
-  // ✅ Produits (tu modifies ici)
+  // ✅ Données produits (remplace par tes vrais produits)
+  // img = image ; video = mp4 (optionnel). Si video existe, elle sera affichée.
   const PRODUCTS = [
-    { id:"p1", name:"Brides Maid", category:"Flower", farm:"Calitefarm", country:"🇺🇸", price:25, img:"https://via.placeholder.com/600x400?text=Brides+Maid" },
-    { id:"p2", name:"OG Kush",     category:"Flower", farm:"Calitefarm", country:"🇺🇸", price:20, img:"https://via.placeholder.com/600x400?text=OG+Kush" },
-    { id:"p3", name:"Autumn",      category:"Extract",farm:"Calitefarm", country:"🇺🇸", price:35, img:"https://via.placeholder.com/600x400?text=Autumn" },
+    {
+      id:"p1",
+      name:"Brides Maid",
+      category:"Static us",
+      farm:"Calitefarm",
+      country:"🇺🇸",
+      price:25,
+      img:"https://via.placeholder.com/800x600?text=Brides+Maid"
+    },
+    {
+      id:"p2",
+      name:"Autumn",
+      category:"Static us",
+      farm:"Calitefarm",
+      country:"🇺🇸",
+      price:35,
+      img:"https://via.placeholder.com/800x600?text=Autumn",
+      video:"" // ex: "https://tonsite.com/video.mp4"
+    },
+    {
+      id:"p3",
+      name:"OG Kush",
+      category:"Static us",
+      farm:"Calitefarm",
+      country:"🇺🇸",
+      price:20,
+      img:"https://via.placeholder.com/800x600?text=OG+Kush"
+    },
+    {
+      id:"p4",
+      name:"London Pound",
+      category:"Static us",
+      farm:"Calitefarm",
+      country:"🇺🇸",
+      price:40,
+      img:"https://via.placeholder.com/800x600?text=London+Pound"
+    }
   ];
-
-  const state = {
-    category:"",
-    farm:"",
-    q:"",
-    cart: JSON.parse(localStorage.getItem("cart") || "{}") // {id: qty}
-  };
 
   const $ = (id)=>document.getElementById(id);
 
-  function uniq(arr){ return [...new Set(arr)]; }
+  const state = {
+    cat:"",
+    farm:"",
+    cart: JSON.parse(localStorage.getItem("cart") || "{}"), // {id: qty}
+    selectedId:null
+  };
+
+  const uniq = (arr)=>[...new Set(arr)];
+  const money = (n)=>`${Number(n).toFixed(2)} €`;
 
   function fillFilters(){
     const cats = ["Toutes les catégories", ...uniq(PRODUCTS.map(p=>p.category))];
-    const farms= ["Toutes les farms", ...uniq(PRODUCTS.map(p=>p.farm))];
+    const farms = ["Toutes les farms", ...uniq(PRODUCTS.map(p=>p.farm))];
 
-    $("category").innerHTML = cats.map((c,i)=>`<option value="${i===0?"":c}">${c}</option>`).join("");
-    $("farm").innerHTML     = farms.map((f,i)=>`<option value="${i===0?"":f}">${f}</option>`).join("");
+    $("cat").innerHTML = cats.map((c,i)=>`<option value="${i===0?"":c}">${c}</option>`).join("");
+    $("farm").innerHTML = farms.map((f,i)=>`<option value="${i===0?"":f}">${f}</option>`).join("");
 
-    $("category").onchange = (e)=>{ state.category=e.target.value; render(); };
-    $("farm").onchange     = (e)=>{ state.farm=e.target.value; render(); };
-    $("search").oninput    = (e)=>{ state.q=e.target.value.toLowerCase(); render(); };
+    $("cat").onchange = (e)=>{ state.cat=e.target.value; render(); };
+    $("farm").onchange = (e)=>{ state.farm=e.target.value; render(); };
   }
 
   function cartCount(){
     return Object.values(state.cart).reduce((a,b)=>a+b,0);
   }
-
   function saveCart(){
     localStorage.setItem("cart", JSON.stringify(state.cart));
     $("cartCount").textContent = cartCount();
   }
-
-  function addToCart(id){
-    state.cart[id] = (state.cart[id]||0) + 1;
-    saveCart();
-    tg.HapticFeedback?.impactOccurred?.("light");
-  }
-
-  function setQty(id, qty){
-    if(qty<=0) delete state.cart[id];
-    else state.cart[id]=qty;
-    saveCart();
-    renderCart();
-  }
-
-  function money(n){ return `${n.toFixed(2)} €`; }
 
   function render(){
     const grid = $("grid");
     grid.innerHTML = "";
 
     const filtered = PRODUCTS.filter(p=>{
-      const okCat = !state.category || p.category===state.category;
-      const okFarm= !state.farm || p.farm===state.farm;
-      const okQ   = !state.q || p.name.toLowerCase().includes(state.q);
-      return okCat && okFarm && okQ;
+      const okC = !state.cat || p.category===state.cat;
+      const okF = !state.farm || p.farm===state.farm;
+      return okC && okF;
     });
 
+    $("count").textContent = filtered.length;
+
     filtered.forEach(p=>{
+      const hasVideo = p.video && p.video.trim().length;
       grid.innerHTML += `
-        <div class="card">
-          <img src="${p.img}" alt="">
-          <div class="b">
-            <div class="tag">${p.country} • ${p.category}</div>
+        <div class="card" onclick="openProduct('${p.id}')">
+          <div class="media">
+            ${hasVideo
+              ? `<video src="${p.video}" muted playsinline></video><div class="play">▶</div>`
+              : `<img src="${p.img}" alt="">`
+            }
+            <div class="badge">${p.category} ${p.country}</div>
+          </div>
+          <div class="body">
             <div class="name">${p.name}</div>
-            <div class="tag">🌾 ${p.farm}</div>
-            <div class="price">${money(p.price)}</div>
-            <button class="btn" onclick="addToCart('${p.id}')">Ajouter au panier</button>
+            <div class="farm">🌾 ${p.farm} ${p.country}</div>
           </div>
         </div>
       `;
     });
 
+    // Auto-play preview videos (muted)
+    document.querySelectorAll("video").forEach(v=>{
+      v.play().catch(()=>{});
+    });
+
     saveCart();
+  }
+
+  function openProduct(id){
+    state.selectedId = id;
+    const p = PRODUCTS.find(x=>x.id===id);
+    if(!p) return;
+
+    $("pTitle").textContent = p.name;
+    $("pPrice").textContent = money(p.price);
+
+    $("pMeta").innerHTML = `
+      <span>Catégorie: <b>${p.category}</b></span>
+      <span>Farm: <b>${p.farm}</b></span>
+      <span>Pays: <b>${p.country}</b></span>
+    `;
+
+    const hasVideo = p.video && p.video.trim().length;
+    $("pMedia").innerHTML = hasVideo
+      ? `<video src="${p.video}" controls playsinline style="width:100%;height:220px;object-fit:cover"></video>`
+      : `<img src="${p.img}" alt="" />`;
+
+    $("productModal").style.display="flex";
+  }
+  function closeProduct(){ $("productModal").style.display="none"; }
+
+  function addToCart(id){
+    state.cart[id] = (state.cart[id]||0)+1;
+    saveCart();
+    tg.HapticFeedback?.impactOccurred?.("light");
+  }
+  function addFromModal(){
+    if(!state.selectedId) return;
+    addToCart(state.selectedId);
+    tg.showPopup?.({title:"Ajouté ✅", message:"Produit ajouté au panier.", buttons:[{type:"ok"}]});
   }
 
   function openCart(){
@@ -175,43 +492,60 @@
   }
   function closeCart(){ $("cartModal").style.display="none"; }
 
+  function setQty(id, qty){
+    if(qty<=0) delete state.cart[id];
+    else state.cart[id]=qty;
+    saveCart();
+    renderCart();
+  }
+
   function renderCart(){
     const list = $("cartList");
     list.innerHTML = "";
+
     const items = Object.entries(state.cart).map(([id,qty])=>{
       const p = PRODUCTS.find(x=>x.id===id);
-      return { ...p, qty };
-    }).filter(x=>x.id);
+      return p ? {...p, qty} : null;
+    }).filter(Boolean);
 
-    $("cartEmpty").style.display = items.length ? "none":"block";
-    $("cartTotal").style.display = items.length ? "flex":"none";
+    if(!items.length){
+      list.innerHTML = `<div style="color:var(--muted);padding:10px 0">Ton panier est vide.</div>`;
+      $("cartTotal").style.display="none";
+      return;
+    }
 
     let total = 0;
     items.forEach(it=>{
-      total += it.price * it.qty;
+      total += it.price*it.qty;
       list.innerHTML += `
-        <div class="cartItem">
-          <div class="row">
-            <div>
-              <div style="font-weight:800">${it.name}</div>
-              <div class="tag">${it.farm} • ${money(it.price)}</div>
-            </div>
-            <div class="qty">
-              <button class="qbtn" onclick="setQty('${it.id}', ${it.qty-1})">-</button>
-              <div style="min-width:20px;text-align:center">${it.qty}</div>
-              <button class="qbtn" onclick="setQty('${it.id}', ${it.qty+1})">+</button>
-            </div>
+        <div class="cartRow">
+          <div>
+            <div style="font-weight:1000">${it.name}</div>
+            <div style="color:var(--muted);font-size:12px">${it.farm} • ${money(it.price)}</div>
+          </div>
+          <div class="qty">
+            <button class="qbtn" onclick="setQty('${it.id}', ${it.qty-1})">-</button>
+            <div style="min-width:16px;text-align:center">${it.qty}</div>
+            <button class="qbtn" onclick="setQty('${it.id}', ${it.qty+1})">+</button>
           </div>
         </div>
       `;
     });
 
+    $("cartTotal").style.display="flex";
     $("totalValue").textContent = money(total);
+  }
+
+  function clearCart(){
+    state.cart = {};
+    saveCart();
+    renderCart();
   }
 
   function checkout(){
     const name = $("buyerName").value.trim();
-    const phone= $("buyerPhone").value.trim();
+    const phone = $("buyerPhone").value.trim();
+
     if(!name || !phone){
       tg.showPopup?.({title:"Infos manquantes", message:"Ajoute ton nom et ton téléphone.", buttons:[{type:"ok"}]});
       return;
@@ -219,38 +553,35 @@
 
     const items = Object.entries(state.cart).map(([id,qty])=>{
       const p = PRODUCTS.find(x=>x.id===id);
-      return { id, name:p?.name, price:p?.price, qty };
-    });
+      return p ? { id, name:p.name, farm:p.farm, price:p.price, qty } : null;
+    }).filter(Boolean);
 
     if(!items.length){
       tg.showPopup?.({title:"Panier vide", message:"Ajoute au moins un produit.", buttons:[{type:"ok"}]});
       return;
     }
 
+    const total = items.reduce((s,i)=>s + i.price*i.qty, 0);
+
     const payload = {
       action:"order",
       buyer:{ name, phone },
       items,
+      total,
       ts: Date.now()
     };
 
-    // 👉 Envoie au bot (il recevra msg.web_app_data.data)
+    // ✅ envoi au bot
     tg.sendData(JSON.stringify(payload));
 
-    // reset panier
-    state.cart = {};
-    saveCart();
+    clearCart();
     closeCart();
     tg.showPopup?.({title:"Commande envoyée ✅", message:"On te répond dans Telegram.", buttons:[{type:"ok"}]});
   }
 
-  function openHome(){ window.scrollTo({top:0,behavior:"smooth"}); }
-  function openContact(){
-    tg.showPopup?.({
-      title:"Contact",
-      message:"Écris directement au bot pour nous contacter.",
-      buttons:[{type:"ok"}]
-    });
+  function scrollToTop(){ window.scrollTo({top:0,behavior:"smooth"}); }
+  function contact(){
+    tg.showPopup?.({title:"Contact", message:"Écris directement au bot pour le support.", buttons:[{type:"ok"}]});
   }
 
   fillFilters();
@@ -258,61 +589,3 @@
 </script>
 </body>
 </html>
-{
-  "name": "calidad56-bot",
-  "type": "module",
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "node-telegram-bot-api": "^0.66.0"
-  }
-}
-BOT_TOKEN=TON_TOKEN_ICI
-WEBAPP_URL=https://duruozan68-jpg.github.io/calidad56-miniapp/
-ADMIN_CHAT_ID=
-import dotenv from "dotenv";
-import TelegramBot from "node-telegram-bot-api";
-dotenv.config();
-
-const bot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
-
-bot.onText(/\/start/, async (msg) => {
-  const chatId = msg.chat.id;
-
-  await bot.sendMessage(chatId, "Bienvenue 👋 Ouvre la boutique :", {
-    reply_markup: {
-      keyboard: [[{ text: "🛍️ Ouvrir la boutique", web_app: { url: process.env.WEBAPP_URL } }]],
-      resize_keyboard: true
-    }
-  });
-});
-
-// ✅ reçoit sendData() de la mini-app
-bot.on("message", async (msg) => {
-  const chatId = msg.chat.id;
-  if (!msg.web_app_data?.data) return;
-
-  let data;
-  try { data = JSON.parse(msg.web_app_data.data); } catch { return; }
-
-  if (data.action !== "order") return;
-
-  const lines = data.items.map(i => `• ${i.name} x${i.qty} (${i.price}€)`).join("\n");
-  const total = data.items.reduce((s,i)=> s + (i.price*i.qty), 0);
-
-  const summary =
-`🧾 Nouvelle commande
-👤 ${data.buyer.name}
-📞 ${data.buyer.phone}
-
-${lines}
-
-💰 Total: ${total.toFixed(2)}€`;
-
-  // Réponse client
-  await bot.sendMessage(chatId, "✅ Commande reçue ! On te répond vite.");
-
-  // Notif admin (si tu mets ADMIN_CHAT_ID)
-  if (process.env.ADMIN_CHAT_ID) {
-    await bot.sendMessage(process.env.ADMIN_CHAT_ID, summary);
-  }
-});
