@@ -20,7 +20,7 @@
       top:0;
       background:#0b0f14;
       border-bottom:1px solid #222;
-      padding:12px;
+      padding:14px;
       z-index:10
     }
     h1{margin:0}
@@ -88,13 +88,17 @@
   const tg = Telegram.WebApp;
   tg.expand();
 
-  // 🔥 PRODUITS (MODIFIE ICI)
+  // 🔴 CONFIG À MODIFIER
+  const BOT_USERNAME = "Calidad56_bot"; // SANS @
+
+  // 🟢 PRODUITS
   const PRODUCTS = [
     {
       name:"Brides Maid",
       options:[
         {label:"5g",price:25},
-        {label:"10g",price:45}
+        {label:"10g",price:45},
+        {label:"25g",price:100}
       ]
     },
     {
@@ -116,7 +120,10 @@
         <div class="card">
           <b>${p.name}</b>
           <select id="opt${i}">
-            ${p.options.map(o=>`<option value="${o.price}">${o.label} - ${o.price}€</option>`).join("")}
+            ${p.options.map(o=>`
+              <option value="${o.price}">
+                ${o.label} - ${o.price}€
+              </option>`).join("")}
           </select>
           <button onclick="add(${i})">Ajouter</button>
         </div>
@@ -126,7 +133,11 @@
   function add(i){
     const sel = document.getElementById("opt"+i);
     const opt = PRODUCTS[i].options[sel.selectedIndex];
-    cart.push({...PRODUCTS[i], ...opt});
+    cart.push({
+      name: PRODUCTS[i].name,
+      label: opt.label,
+      price: opt.price
+    });
     updateBar();
   }
 
@@ -155,7 +166,7 @@
     msg += `\n💰 TOTAL : ${total}€`;
 
     const link =
-      "https://t.me/share/url?text=" +
+      `https://t.me/${BOT_USERNAME}?start=` +
       encodeURIComponent(msg);
 
     Telegram.WebApp.openTelegramLink(link);
