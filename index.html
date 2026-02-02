@@ -1,99 +1,354 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Calidad West</title>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calidad West Shop</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0b0f14;
-      color: #fff;
-      padding-bottom: 120px;
+    :root{
+      --bg:#0b0f14; --panel:#0f172a; --line:#233047; --text:#fff; --muted:#a8b3c7;
+      --brand:#22c55e; --brand2:#16a34a; --danger:#ff5a5a;
     }
-    h1 { padding: 16px; margin: 0 }
-    .product {
-      background: #111827;
-      border: 1px solid #2a3142;
-      border-radius: 14px;
-      margin: 12px;
-      padding: 12px;
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,system-ui;background:var(--bg);color:var(--text);padding-bottom:92px}
+    header{position:sticky;top:0;z-index:10;background:rgba(11,15,20,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+    .top{padding:12px;display:flex;gap:10px;align-items:center}
+    .logo{font-weight:900}
+    .search{flex:1;display:flex;gap:8px}
+    .search input{
+      width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);
+      background:#0f1420;color:var(--text);outline:none
     }
-    .price { color: #22c55e; font-weight: bold }
-    button {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: none;
-      background: #22c55e;
-      font-weight: bold;
-      margin-top: 8px;
+    .btn{
+      padding:12px 14px;border-radius:12px;border:1px solid var(--line);
+      background:#0f1420;color:var(--text);font-weight:800
     }
-    .cart {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #0f1420;
-      border-top: 1px solid #2a3142;
-      padding: 12px;
+    .btnBrand{background:linear-gradient(180deg,var(--brand),var(--brand2));border:none;color:#04110a}
+    .chips{padding:0 12px 12px;display:flex;gap:8px;overflow:auto}
+    .chip{white-space:nowrap;padding:10px 12px;border-radius:999px;border:1px solid var(--line);background:#0f1420;color:var(--text);font-weight:800}
+    .chip.active{border-color:rgba(34,197,94,.65);box-shadow:0 0 0 3px rgba(34,197,94,.12) inset}
+
+    main{padding:12px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .card{
+      background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+      box-shadow:0 18px 30px rgba(0,0,0,.2)
+    }
+    .img{height:120px;background:#0f1420;display:block;width:100%;object-fit:cover}
+    .pad{padding:10px}
+    .name{font-weight:900}
+    .meta{margin-top:4px;color:var(--muted);font-size:12px}
+    .row{margin-top:8px;display:flex;gap:8px;align-items:center}
+    select{
+      width:100%;padding:10px;border-radius:12px;border:1px solid var(--line);
+      background:#0f1420;color:var(--text);outline:none
+    }
+    .price{color:#86efac;font-weight:900;margin-top:8px}
+    .add{margin-top:10px;width:100%;padding:12px;border-radius:12px;border:none;background:linear-gradient(180deg,var(--brand),var(--brand2));font-weight:900;color:#04110a}
+
+    .bar{
+      position:fixed;left:0;right:0;bottom:0;z-index:20;
+      background:rgba(15,23,42,.96);border-top:1px solid var(--line);backdrop-filter:blur(10px);
+      padding:10px 12px;display:flex;gap:10px;align-items:center
+    }
+    .bar .info{flex:1}
+    .bar .info div{font-weight:900}
+    .bar .info small{color:var(--muted)}
+    .bar button{width:45%}
+
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:flex-end;z-index:30}
+    .sheet{
+      width:100%;max-height:88vh;overflow:auto;
+      background:rgba(15,23,42,.98);border:1px solid var(--line);
+      border-radius:18px 18px 0 0;padding:14px
+    }
+    .sheetTop{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .x{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:#0f1420;color:var(--text);font-weight:900}
+    .cartItem{border-top:1px solid var(--line);padding:12px 0;display:flex;justify-content:space-between;gap:10px}
+    .cartLeft{min-width:0}
+    .cartTitle{font-weight:900}
+    .cartSub{color:var(--muted);font-size:12px;margin-top:4px}
+    .qty{display:flex;gap:8px;align-items:center}
+    .qbtn{width:34px;height:34px;border-radius:12px;border:1px solid var(--line);background:#0f1420;color:var(--text);font-weight:900}
+    .del{border:none;background:transparent;color:var(--danger);font-weight:900}
+    input{
+      width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);
+      background:#0f1420;color:var(--text);outline:none;margin-top:10px
     }
   </style>
 </head>
-
 <body>
 
-<h1>🛒 Calidad West</h1>
+<header>
+  <div class="top">
+    <div class="logo">🛒 Calidad West</div>
+    <div class="search">
+      <input id="q" placeholder="Rechercher un produit…" />
+    </div>
+    <button class="btn" onclick="openCart()">Panier</button>
+  </div>
+  <div class="chips" id="chips"></div>
+</header>
 
-<div class="product">
-  <div>Brides Maid</div>
-  <div class="price">25 €</div>
-  <button onclick="add('Brides Maid',25)">Ajouter</button>
+<main>
+  <div class="grid" id="grid"></div>
+</main>
+
+<!-- Cart modal -->
+<div class="modal" id="cartModal">
+  <div class="sheet">
+    <div class="sheetTop">
+      <h3 style="margin:0">🧺 Panier</h3>
+      <button class="x" onclick="closeCart()">✕</button>
+    </div>
+
+    <div id="cartList"></div>
+
+    <div style="display:flex;justify-content:space-between;font-weight:900;border-top:1px solid var(--line);padding-top:12px;margin-top:10px">
+      <div>Total</div>
+      <div id="total">0.00 €</div>
+    </div>
+
+    <input id="buyerName" placeholder="Nom" />
+    <input id="buyerPhone" placeholder="Téléphone" />
+
+    <button class="btn btnBrand" style="width:100%;margin-top:12px" onclick="checkout()">✅ Commander</button>
+    <button class="btn" style="width:100%;margin-top:10px" onclick="clearCart()">Vider le panier</button>
+
+    <div style="margin-top:10px;color:var(--muted);font-size:12px">
+      La commande part au bot via <b>tg.sendData()</b>.
+    </div>
+  </div>
 </div>
 
-<div class="product">
-  <div>OG Kush</div>
-  <div class="price">20 €</div>
-  <button onclick="add('OG Kush',20)">Ajouter</button>
-</div>
-
-<div class="cart">
-  Articles : <span id="count">0</span><br>
-  Total : <span id="total">0</span> €<br><br>
-  <button onclick="checkout()">Commander</button>
+<div class="bar">
+  <div class="info">
+    <div><span id="count">0</span> article(s)</div>
+    <small>Total: <span id="barTotal">0.00</span> €</small>
+  </div>
+  <button class="btn" onclick="openCart()">Voir panier</button>
+  <button class="btn btnBrand" onclick="openCart()">Commander</button>
 </div>
 
 <script>
   const tg = window.Telegram.WebApp;
   tg.expand();
 
-  let cart = [];
-  let total = 0;
+  // ✅ Produits (exemples) : image + catégorie + options/prix
+  // Remplace ces produits par les tiens.
+  const PRODUCTS = [
+    {
+      id:"p1",
+      name:"Brides Maid",
+      category:"Static US",
+      farm:"Calitefarm",
+      img:"https://via.placeholder.com/800x600?text=Brides+Maid",
+      options:[{label:"5g",price:25},{label:"10g",price:45},{label:"25g",price:100}]
+    },
+    {
+      id:"p2",
+      name:"OG Kush",
+      category:"Static US",
+      farm:"Calitefarm",
+      img:"https://via.placeholder.com/800x600?text=OG+Kush",
+      options:[{label:"5g",price:20},{label:"10g",price:38}]
+    },
+    {
+      id:"p3",
+      name:"Autumn",
+      category:"Premium",
+      farm:"Calitefarm",
+      img:"https://via.placeholder.com/800x600?text=Autumn",
+      options:[{label:"5g",price:30},{label:"10g",price:55}]
+    }
+  ];
 
-  function add(name, price) {
-    cart.push({ name, price });
-    total += price;
-    document.getElementById("count").innerText = cart.length;
-    document.getElementById("total").innerText = total;
+  const $ = (id)=>document.getElementById(id);
+  const uniq = (arr)=>[...new Set(arr)];
+  const money = (n)=>Number(n).toFixed(2);
+
+  const state = {
+    cat: "",
+    q: "",
+    cart: JSON.parse(localStorage.getItem("cw_cart") || "{}") // key -> {pid,name,label,unitPrice,qty}
+  };
+
+  function saveCart(){
+    localStorage.setItem("cw_cart", JSON.stringify(state.cart));
+    const items = Object.values(state.cart);
+    const count = items.reduce((s,i)=>s+i.qty,0);
+    const total = items.reduce((s,i)=>s+i.qty*i.unitPrice,0);
+    $("count").textContent = count;
+    $("barTotal").textContent = money(total);
   }
 
-  function checkout() {
-    tg.sendData(JSON.stringify({
-      action: "order",
-      items: cart,
-      total: total
+  function renderChips(){
+    const cats = ["Tout", ...uniq(PRODUCTS.map(p=>p.category))];
+    const chips = cats.map(c=>{
+      const active = (state.cat==="" && c==="Tout") || state.cat===c;
+      return `<button class="chip ${active?"active":""}" onclick="setCat('${c==="Tout"?"":c}')">${c}</button>`;
+    }).join("");
+    $("chips").innerHTML = chips;
+  }
+
+  function setCat(cat){ state.cat = cat; render(); }
+
+  function render(){
+    renderChips();
+    const q = state.q.trim().toLowerCase();
+
+    const list = PRODUCTS.filter(p=>{
+      const okC = !state.cat || p.category===state.cat;
+      const okQ = !q || (p.name.toLowerCase().includes(q) || p.farm.toLowerCase().includes(q));
+      return okC && okQ;
+    });
+
+    $("grid").innerHTML = list.map(p=>{
+      const selId = `sel_${p.id}`;
+      const optHtml = p.options.map((o,idx)=>`<option value="${idx}">${o.label} — ${o.price}€</option>`).join("");
+      return `
+        <div class="card">
+          <img class="img" src="${p.img}" alt="">
+          <div class="pad">
+            <div class="name">${p.name}</div>
+            <div class="meta">${p.category} • ${p.farm}</div>
+            <div class="row">
+              <select id="${selId}">${optHtml}</select>
+            </div>
+            <div class="price" id="price_${p.id}">${p.options[0].price} €</div>
+            <button class="add" onclick="addToCart('${p.id}','${selId}')">Ajouter au panier</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    // update displayed price when option changes
+    list.forEach(p=>{
+      const sel = document.getElementById(`sel_${p.id}`);
+      if(!sel) return;
+      sel.onchange = ()=>{
+        const opt = p.options[Number(sel.value||0)];
+        document.getElementById(`price_${p.id}`).textContent = opt.price + " €";
+      };
+    });
+
+    saveCart();
+  }
+
+  function addToCart(pid, selId){
+    const p = PRODUCTS.find(x=>x.id===pid);
+    const idx = Number(document.getElementById(selId).value || 0);
+    const opt = p.options[idx];
+    const key = `${pid}|${opt.label}`;
+
+    if(!state.cart[key]){
+      state.cart[key] = { pid, name:p.name, label:opt.label, unitPrice:opt.price, qty:1 };
+    } else {
+      state.cart[key].qty += 1;
+    }
+
+    saveCart();
+    tg.HapticFeedback?.impactOccurred?.("light");
+  }
+
+  function openCart(){
+    $("cartModal").style.display = "flex";
+    renderCart();
+  }
+  function closeCart(){
+    $("cartModal").style.display = "none";
+  }
+
+  function renderCart(){
+    const list = $("cartList");
+    const items = Object.entries(state.cart).map(([key,val])=>({key,...val}));
+
+    if(items.length===0){
+      list.innerHTML = `<div style="color:var(--muted);padding:10px 0">Panier vide.</div>`;
+      $("total").textContent = "0.00 €";
+      return;
+    }
+
+    let total = 0;
+    list.innerHTML = items.map(it=>{
+      total += it.qty * it.unitPrice;
+      return `
+        <div class="cartItem">
+          <div class="cartLeft">
+            <div class="cartTitle">${it.name} (${it.label})</div>
+            <div class="cartSub">${money(it.unitPrice)} € / unité</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+            <div class="qty">
+              <button class="qbtn" onclick="chg('${it.key}',-1)">−</button>
+              <div style="min-width:18px;text-align:center;font-weight:900">${it.qty}</div>
+              <button class="qbtn" onclick="chg('${it.key}',1)">+</button>
+            </div>
+            <button class="del" onclick="delItem('${it.key}')">Supprimer</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    $("total").textContent = money(total) + " €";
+  }
+
+  function chg(key, delta){
+    if(!state.cart[key]) return;
+    state.cart[key].qty += delta;
+    if(state.cart[key].qty <= 0) delete state.cart[key];
+    saveCart();
+    renderCart();
+  }
+
+  function delItem(key){
+    delete state.cart[key];
+    saveCart();
+    renderCart();
+  }
+
+  function clearCart(){
+    state.cart = {};
+    saveCart();
+    renderCart();
+  }
+
+  function checkout(){
+    const name = $("buyerName").value.trim();
+    const phone = $("buyerPhone").value.trim();
+    const items = Object.values(state.cart);
+
+    if(!name || !phone){
+      tg.showPopup?.({ title:"Infos manquantes", message:"Nom + téléphone requis.", buttons:[{type:"ok"}] });
+      return;
+    }
+    if(items.length===0){
+      tg.showPopup?.({ title:"Panier vide", message:"Ajoute au moins un produit.", buttons:[{type:"ok"}] });
+      return;
+    }
+
+    const payloadItems = items.map(i=>({
+      name:i.name, option:i.label, unitPrice:i.unitPrice, qty:i.qty
     }));
-    alert("Commande envoyée ✅");
-    cart = [];
-    total = 0;
-    document.getElementById("count").innerText = 0;
-    document.getElementById("total").innerText = 0;
-  }
-</script>
+    const total = items.reduce((s,i)=>s+i.unitPrice*i.qty,0);
 
+    tg.sendData(JSON.stringify({
+      action:"order",
+      buyer:{ name, phone },
+      items: payloadItems,
+      total: Number(total.toFixed(2)),
+      ts: Date.now()
+    }));
+
+    clearCart();
+    closeCart();
+    tg.showPopup?.({ title:"Commande envoyée ✅", message:"Le bot a reçu ta commande.", buttons:[{type:"ok"}] });
+  }
+
+  $("q").addEventListener("input", (e)=>{ state.q = e.target.value; render(); });
+
+  render();
+</script>
 </body>
 </html>
