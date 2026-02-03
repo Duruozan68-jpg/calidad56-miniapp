@@ -8,172 +8,213 @@
 <style>
 * {
   box-sizing: border-box;
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
   background: url("./assets/background.png") center / cover no-repeat fixed;
-  color: white;
+  color: #fff;
 }
 
 .overlay {
   min-height: 100vh;
-  background: linear-gradient(
-    rgba(0,0,0,0.75),
-    rgba(0,0,0,0.85)
-  );
-  padding: 20px;
+  background: rgba(0,0,0,0.7);
+  padding: 15px;
 }
 
-h1 {
+/* HEADER */
+.header {
   text-align: center;
-  font-size: 32px;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
 }
 
-.subtitle {
-  text-align: center;
+.header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.header p {
+  margin: 5px 0 0;
   opacity: 0.8;
+}
+
+/* CATEGORY */
+.category {
   margin-bottom: 25px;
 }
 
-.category {
-  backdrop-filter: blur(14px);
-  background: rgba(255,255,255,0.08);
-  border-radius: 18px;
-  padding: 18px;
-  margin-bottom: 18px;
-  border: 1px solid rgba(255,255,255,0.15);
-}
-
 .category h2 {
-  margin: 0 0 12px;
-  font-size: 20px;
+  margin-bottom: 10px;
   color: #2ecc71;
 }
 
-.product {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* PRODUCT GRID */
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
 }
 
-.product p {
-  margin: 0;
-  font-weight: bold;
-}
-
-button {
-  background: linear-gradient(135deg,#2ecc71,#27ae60);
-  border: none;
-  padding: 10px 16px;
-  border-radius: 12px;
-  font-weight: bold;
+/* PRODUCT CARD */
+.product-card {
+  background: rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.15);
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 18px rgba(46,204,113,0.4);
+.product-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
 }
 
-/* POPUP */
-#details {
+.product-card h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+.product-card span {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* PRODUCT PAGE (AMAZON STYLE) */
+#productPage {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.9);
   display: none;
-  padding: 20px;
+  padding: 15px;
 }
 
-#details .box {
+.product-box {
   max-width: 420px;
   margin: auto;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(16px);
-  border-radius: 20px;
-  padding: 20px;
-  border: 1px solid rgba(255,255,255,0.2);
+  background: #111;
+  border-radius: 18px;
+  padding: 18px;
 }
 
-#details h2 {
+.product-box h2 {
   margin-top: 0;
 }
 
-select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  margin-top: 10px;
-  border: none;
+.product-box p {
+  opacity: 0.9;
 }
 
-.close {
+select, button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+}
+
+button {
+  background: #2ecc71;
+  color: #000;
+  cursor: pointer;
+}
+
+button.secondary {
   background: #e74c3c;
-  margin-top: 12px;
+  color: #fff;
 }
 </style>
 </head>
 
 <body>
 <div class="overlay">
-  <h1>🌿 Calidad West</h1>
-  <div class="subtitle">Premium selection • Cali quality</div>
 
-  <!-- Mousseux -->
+  <!-- HEADER -->
+  <div class="header">
+    <h1>🌿 Calidad West</h1>
+    <p>Premium selection • Cali quality</p>
+  </div>
+
+  <!-- MOUSSEUX -->
   <div class="category">
     <h2>💨 Mousseux</h2>
-    <div class="product">
-      <p>Ice Hash</p>
-      <button onclick="openDetails('Ice Hash','Mousseux ultra pur, texture crémeuse, goût intense.')">Voir</button>
+    <div class="products">
+      <div class="product-card" onclick="openProduct(
+        'Ice Hash',
+        'Mousseux ultra pur, texture crémeuse, goût intense.'
+      )">
+        <h3>Ice Hash</h3>
+        <span>Ultra premium</span>
+      </div>
     </div>
   </div>
 
-  <!-- Filtrer -->
+  <!-- FILTRER -->
   <div class="category">
     <h2>🧪 Filtrer</h2>
-    <div class="product">
-      <p>Dry Sift Premium</p>
-      <button onclick="openDetails('Dry Sift Premium','Filtration fine, haute concentration, très aromatique.')">Voir</button>
+    <div class="products">
+      <div class="product-card" onclick="openProduct(
+        'Dry Sift Premium',
+        'Filtration fine, haute concentration, très aromatique.'
+      )">
+        <h3>Dry Sift</h3>
+        <span>Qualité supérieure</span>
+      </div>
     </div>
   </div>
 
-  <!-- Frozen -->
+  <!-- FROZEN -->
   <div class="category">
     <h2>❄️ Frozen</h2>
-    <div class="product">
-      <p>Frozen Kush</p>
-      <button onclick="openDetails('Frozen Kush','Conservé à froid pour préserver un maximum de terpènes.')">Voir</button>
+    <div class="products">
+      <div class="product-card" onclick="openProduct(
+        'Frozen Kush',
+        'Conservé à froid pour préserver les terpènes.'
+      )">
+        <h3>Frozen Kush</h3>
+        <span>Fraîcheur extrême</span>
+      </div>
     </div>
   </div>
 
-  <!-- ZIP 0.9 -->
+  <!-- ZIP -->
   <div class="category">
     <h2>📦 ZIP 0.9</h2>
-    <div class="product">
-      <p>ZIP Cali</p>
-      <button onclick="openDetails('ZIP Cali','Conditionnement ZIP 0.9, qualité premium.')">Voir</button>
+    <div class="products">
+      <div class="product-card" onclick="openProduct(
+        'ZIP Cali',
+        'Conditionnement ZIP 0.9, qualité premium.'
+      )">
+        <h3>ZIP Cali</h3>
+        <span>Format pro</span>
+      </div>
     </div>
   </div>
 
-  <!-- Beuh -->
+  <!-- BEUH -->
   <div class="category">
     <h2>🌿 Beuh</h2>
-    <div class="product">
-      <p>OG Kush</p>
-      <button onclick="openDetails('OG Kush','Indica puissante, relaxante, saveur terreuse.')">Voir</button>
+    <div class="products">
+      <div class="product-card" onclick="openProduct(
+        'OG Kush',
+        'Indica puissante, relaxante, saveur terreuse.'
+      )">
+        <h3>OG Kush</h3>
+        <span>Indica</span>
+      </div>
     </div>
   </div>
+
 </div>
 
-<!-- POPUP PRODUIT -->
-<div id="details">
-  <div class="box">
-    <h2 id="dTitle"></h2>
-    <p id="dDesc"></p>
+<!-- PRODUCT PAGE -->
+<div id="productPage">
+  <div class="product-box">
+    <h2 id="pTitle"></h2>
+    <p id="pDesc"></p>
 
     <select>
       <option>1g</option>
@@ -181,20 +222,20 @@ select {
       <option>5g</option>
     </select>
 
-    <button style="margin-top:10px;">Ajouter au panier</button>
-    <button class="close" onclick="closeDetails()">Fermer</button>
+    <button>Ajouter au panier</button>
+    <button class="secondary" onclick="closeProduct()">Retour</button>
   </div>
 </div>
 
 <script>
-function openDetails(title, desc) {
-  document.getElementById("dTitle").innerText = title;
-  document.getElementById("dDesc").innerText = desc;
-  document.getElementById("details").style.display = "block";
+function openProduct(title, desc) {
+  document.getElementById("pTitle").innerText = title;
+  document.getElementById("pDesc").innerText = desc;
+  document.getElementById("productPage").style.display = "block";
 }
 
-function closeDetails() {
-  document.getElementById("details").style.display = "none";
+function closeProduct() {
+  document.getElementById("productPage").style.display = "none";
 }
 </script>
 </body>
