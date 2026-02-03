@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Calidad West Shop</title>
+  <title>Calidad West</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root{
@@ -11,37 +11,28 @@
       --brand:#22c55e; --brand2:#16a34a; --danger:#ff5a5a;
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:Arial,system-ui;background:var(--bg);color:var(--text);padding-bottom:92px}
+    body{margin:0;font-family:Arial,system-ui;background:var(--bg);color:var(--text);padding-bottom:96px}
     header{position:sticky;top:0;z-index:10;background:rgba(11,15,20,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
     .top{padding:12px;display:flex;gap:10px;align-items:center}
     .logo{font-weight:900}
-    .search{flex:1;display:flex;gap:8px}
+    .search{flex:1}
     .search input{
       width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);
       background:#0f1420;color:var(--text);outline:none
     }
-    .btn{
-      padding:12px 14px;border-radius:12px;border:1px solid var(--line);
-      background:#0f1420;color:var(--text);font-weight:800
-    }
-    .btnBrand{background:linear-gradient(180deg,var(--brand),var(--brand2));border:none;color:#04110a}
     .chips{padding:0 12px 12px;display:flex;gap:8px;overflow:auto}
     .chip{white-space:nowrap;padding:10px 12px;border-radius:999px;border:1px solid var(--line);background:#0f1420;color:var(--text);font-weight:800}
     .chip.active{border-color:rgba(34,197,94,.65);box-shadow:0 0 0 3px rgba(34,197,94,.12) inset}
 
     main{padding:12px}
     .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-    .card{
-      background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;
-      box-shadow:0 18px 30px rgba(0,0,0,.2)
-    }
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
     .img{height:120px;background:#0f1420;display:block;width:100%;object-fit:cover}
     .pad{padding:10px}
     .name{font-weight:900}
     .meta{margin-top:4px;color:var(--muted);font-size:12px}
-    .row{margin-top:8px;display:flex;gap:8px;align-items:center}
     select{
-      width:100%;padding:10px;border-radius:12px;border:1px solid var(--line);
+      width:100%;margin-top:8px;padding:10px;border-radius:12px;border:1px solid var(--line);
       background:#0f1420;color:var(--text);outline:none
     }
     .price{color:#86efac;font-weight:900;margin-top:8px}
@@ -55,7 +46,11 @@
     .bar .info{flex:1}
     .bar .info div{font-weight:900}
     .bar .info small{color:var(--muted)}
-    .bar button{width:45%}
+    .btn{
+      padding:12px 14px;border-radius:12px;border:1px solid var(--line);
+      background:#0f1420;color:var(--text);font-weight:800
+    }
+    .btnBrand{background:linear-gradient(180deg,var(--brand),var(--brand2));border:none;color:#04110a}
 
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:flex-end;z-index:30}
     .sheet{
@@ -95,7 +90,6 @@
   <div class="grid" id="grid"></div>
 </main>
 
-<!-- Cart modal -->
 <div class="modal" id="cartModal">
   <div class="sheet">
     <div class="sheetTop">
@@ -113,11 +107,11 @@
     <input id="buyerName" placeholder="Nom" />
     <input id="buyerPhone" placeholder="Téléphone" />
 
-    <button class="btn btnBrand" style="width:100%;margin-top:12px" onclick="checkout()">✅ Commander</button>
+    <button class="btn btnBrand" style="width:100%;margin-top:12px" onclick="checkoutToTelegram()">✅ Commander</button>
     <button class="btn" style="width:100%;margin-top:10px" onclick="clearCart()">Vider le panier</button>
 
     <div style="margin-top:10px;color:var(--muted);font-size:12px">
-      La commande part au bot via <b>tg.sendData()</b>.
+      Commander ➜ ouvre Telegram avec un message pré‑rempli.
     </div>
   </div>
 </div>
@@ -135,8 +129,7 @@
   const tg = window.Telegram.WebApp;
   tg.expand();
 
-  // ✅ Produits (exemples) : image + catégorie + options/prix
-  // Remplace ces produits par les tiens.
+  // ✅ Modifie ici tes produits / catégories / options / prix
   const PRODUCTS = [
     {
       id:"p1",
@@ -153,14 +146,6 @@
       farm:"Calitefarm",
       img:"https://via.placeholder.com/800x600?text=OG+Kush",
       options:[{label:"5g",price:20},{label:"10g",price:38}]
-    },
-    {
-      id:"p3",
-      name:"Autumn",
-      category:"Premium",
-      farm:"Calitefarm",
-      img:"https://via.placeholder.com/800x600?text=Autumn",
-      options:[{label:"5g",price:30},{label:"10g",price:55}]
     }
   ];
 
@@ -185,11 +170,11 @@
 
   function renderChips(){
     const cats = ["Tout", ...uniq(PRODUCTS.map(p=>p.category))];
-    const chips = cats.map(c=>{
+    $("chips").innerHTML = cats.map(c=>{
       const active = (state.cat==="" && c==="Tout") || state.cat===c;
-      return `<button class="chip ${active?"active":""}" onclick="setCat('${c==="Tout"?"":c}')">${c}</button>`;
+      const val = (c==="Tout") ? "" : c;
+      return `<button class="chip ${active?"active":""}" onclick="setCat('${val.replace(/'/g,"\\'")}')">${c}</button>`;
     }).join("");
-    $("chips").innerHTML = chips;
   }
 
   function setCat(cat){ state.cat = cat; render(); }
@@ -213,9 +198,7 @@
           <div class="pad">
             <div class="name">${p.name}</div>
             <div class="meta">${p.category} • ${p.farm}</div>
-            <div class="row">
-              <select id="${selId}">${optHtml}</select>
-            </div>
+            <select id="${selId}">${optHtml}</select>
             <div class="price" id="price_${p.id}">${p.options[0].price} €</div>
             <button class="add" onclick="addToCart('${p.id}','${selId}')">Ajouter au panier</button>
           </div>
@@ -223,7 +206,6 @@
       `;
     }).join("");
 
-    // update displayed price when option changes
     list.forEach(p=>{
       const sel = document.getElementById(`sel_${p.id}`);
       if(!sel) return;
@@ -252,13 +234,8 @@
     tg.HapticFeedback?.impactOccurred?.("light");
   }
 
-  function openCart(){
-    $("cartModal").style.display = "flex";
-    renderCart();
-  }
-  function closeCart(){
-    $("cartModal").style.display = "none";
-  }
+  function openCart(){ $("cartModal").style.display = "flex"; renderCart(); }
+  function closeCart(){ $("cartModal").style.display = "none"; }
 
   function renderCart(){
     const list = $("cartList");
@@ -298,57 +275,47 @@
     if(!state.cart[key]) return;
     state.cart[key].qty += delta;
     if(state.cart[key].qty <= 0) delete state.cart[key];
-    saveCart();
-    renderCart();
+    saveCart(); renderCart();
   }
 
-  function delItem(key){
-    delete state.cart[key];
-    saveCart();
-    renderCart();
-  }
+  function delItem(key){ delete state.cart[key]; saveCart(); renderCart(); }
+  function clearCart(){ state.cart = {}; saveCart(); renderCart(); }
 
-  function clearCart(){
-    state.cart = {};
-    saveCart();
-    renderCart();
-  }
-
-  function checkout(){
+  // ✅ Commander ➜ Telegram avec message pré‑rempli
+  function checkoutToTelegram(){
     const name = $("buyerName").value.trim();
     const phone = $("buyerPhone").value.trim();
     const items = Object.values(state.cart);
 
-    if(!name || !phone){
-      tg.showPopup?.({ title:"Infos manquantes", message:"Nom + téléphone requis.", buttons:[{type:"ok"}] });
-      return;
-    }
-    if(items.length===0){
-      tg.showPopup?.({ title:"Panier vide", message:"Ajoute au moins un produit.", buttons:[{type:"ok"}] });
-      return;
-    }
+    if(!name || !phone){ alert("Nom + téléphone requis"); return; }
+    if(items.length===0){ alert("Panier vide"); return; }
 
-    const payloadItems = items.map(i=>({
-      name:i.name, option:i.label, unitPrice:i.unitPrice, qty:i.qty
-    }));
-    const total = items.reduce((s,i)=>s+i.unitPrice*i.qty,0);
+    let message =
+`🛒 COMMANDE CALIDAD WEST\n\n` +
+`👤 Nom : ${name}\n` +
+`📞 Téléphone : ${phone}\n\n` +
+`📦 Produits :\n`;
 
-    tg.sendData(JSON.stringify({
-      action:"order",
-      buyer:{ name, phone },
-      items: payloadItems,
-      total: Number(total.toFixed(2)),
-      ts: Date.now()
-    }));
+    let total = 0;
+    items.forEach(i=>{
+      const lineTotal = i.unitPrice * i.qty;
+      message += `• ${i.name} (${i.label}) x${i.qty} = ${lineTotal}€\n`;
+      total += lineTotal;
+    });
+
+    message += `\n💰 TOTAL : ${Number(total.toFixed(2))}€`;
+
+    // ➜ ouvre Telegram avec le texte pré‑rempli (partage)
+    const link = "https://t.me/share/url?text=" + encodeURIComponent(message);
+    tg.openTelegramLink(link);
 
     clearCart();
     closeCart();
-    tg.showPopup?.({ title:"Commande envoyée ✅", message:"Le bot a reçu ta commande.", buttons:[{type:"ok"}] });
   }
 
   $("q").addEventListener("input", (e)=>{ state.q = e.target.value; render(); });
-
   render();
 </script>
+
 </body>
 </html>
