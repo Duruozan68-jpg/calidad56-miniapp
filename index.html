@@ -1,955 +1,254 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Boutique</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Calidad • Mini‑Shop</title>
 
-  <!-- Telegram WebApp (optionnel, si ouvert via Telegram) -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <style>
-    :root{
-      --bg:#070b10;
-      --glass: rgba(255,255,255,.08);
-      --glass2: rgba(255,255,255,.12);
-      --line: rgba(255,255,255,.14);
-      --text: #f4f7ff;
-      --muted:#b9c2d6;
-      --brand:#22c55e;
-      --brand2:#16a34a;
-      --warn:#f59e0b;
-      --danger:#ef4444;
-      --shadow: 0 18px 55px rgba(0,0,0,.55);
-    }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      color:var(--text);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background:
-        radial-gradient(1200px 800px at 20% 0%, rgba(34,197,94,.18), transparent 60%),
-        radial-gradient(900px 700px at 90% 20%, rgba(59,130,246,.10), transparent 55%),
-        linear-gradient(rgba(0,0,0,.62), rgba(0,0,0,.82)),
-        url("./assets/background.png") center/cover no-repeat fixed;
-    }
-
-    .wrap{
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 18px 14px 110px;
-    }
-
-    /* Top bar */
-    .top{
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      padding: 12px 0 10px;
-      backdrop-filter: blur(14px);
-      background: linear-gradient(to bottom, rgba(0,0,0,.68), rgba(0,0,0,.35));
-      border-bottom: 1px solid var(--line);
-    }
-
-    .row{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-    }
-
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-      min-width: 210px;
-    }
-    .brand h1{
-      margin:0;
-      font-size: 20px;
-      letter-spacing:.4px;
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
-    .brand .sub{
-      color:var(--muted);
-      font-size:12px;
-    }
-
-    .search{
-      flex: 1;
-      min-width: 220px;
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
-
-    .input{
-      width:100%;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(10,14,20,.68);
-      color: var(--text);
-      outline:none;
-    }
-    .input::placeholder{color: rgba(185,194,214,.65)}
-    .btn{
-      border:0;
-      border-radius: 14px;
-      padding: 11px 14px;
-      font-weight: 800;
-      cursor:pointer;
-      color:#05110a;
-      background: linear-gradient(180deg, var(--brand), var(--brand2));
-      box-shadow: 0 10px 25px rgba(34,197,94,.22);
-      transition: transform .12s ease, filter .12s ease;
-      white-space:nowrap;
-    }
-    .btn:hover{transform: translateY(-1px); filter: brightness(1.03)}
-    .btn.ghost{
-      background: rgba(255,255,255,.10);
-      color: var(--text);
-      border: 1px solid var(--line);
-      box-shadow:none;
-    }
-    .btn.warn{
-      background: linear-gradient(180deg, #fbbf24, #f59e0b);
-      color:#1a1202;
-      box-shadow: 0 10px 25px rgba(245,158,11,.18);
-    }
-    .btn.danger{
-      background: linear-gradient(180deg, #fb7185, #ef4444);
-      color:#240105;
-      box-shadow: 0 10px 25px rgba(239,68,68,.18);
-    }
-
-    .tabs{
-      margin-top: 10px;
-      display:flex;
-      gap:8px;
-      overflow:auto;
-      padding-bottom: 8px;
-    }
-    .tab{
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.08);
-      color: var(--text);
-      font-weight: 800;
-      font-size: 13px;
-      cursor:pointer;
-      user-select:none;
-      transition: transform .12s ease, background .12s ease;
-      white-space: nowrap;
-    }
-    .tab:hover{transform: translateY(-1px)}
-    .tab.active{
-      background: rgba(34,197,94,.18);
-      border-color: rgba(34,197,94,.38);
-    }
-
-    /* Grid */
-    .grid{
-      margin-top: 14px;
-      display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 12px;
-    }
-    .card{
-      grid-column: span 3;
-      border-radius: 18px;
-      border: 1px solid var(--line);
-      background: var(--glass);
-      backdrop-filter: blur(16px);
-      box-shadow: var(--shadow);
-      padding: 12px;
-      cursor:pointer;
-      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
-      position: relative;
-      overflow:hidden;
-    }
-    .card:hover{
-      transform: translateY(-2px);
-      background: rgba(255,255,255,.10);
-      box-shadow: 0 22px 70px rgba(0,0,0,.60);
-    }
-
-    .thumb{
-      height: 120px;
-      border-radius: 14px;
-      background:
-        radial-gradient(260px 120px at 30% 30%, rgba(34,197,94,.22), transparent 60%),
-        linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
-      border: 1px solid rgba(255,255,255,.10);
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      padding:10px;
-    }
-    .badge{
-      font-size: 11px;
-      font-weight: 900;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.38);
-      border: 1px solid rgba(255,255,255,.16);
-    }
-    .price{
-      font-size: 12px;
-      font-weight: 900;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(34,197,94,.18);
-      border: 1px solid rgba(34,197,94,.30);
-      color: var(--text);
-    }
-
-    .title{
-      margin: 10px 0 4px;
-      font-weight: 900;
-      letter-spacing:.2px;
-    }
-    .desc{
-      margin:0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.3;
-      min-height: 32px;
-    }
-
-    .meta{
-      margin-top: 10px;
-      display:flex;
-      gap:8px;
-      align-items:center;
-      justify-content:space-between;
-      color: rgba(185,194,214,.85);
-      font-size: 12px;
-    }
-
-    @media (max-width: 980px){
-      .card{grid-column: span 4;}
-    }
-    @media (max-width: 680px){
-      .card{grid-column: span 6;}
-      .thumb{height: 110px;}
-    }
-
-    /* Bottom bar */
-    .bar{
-      position: fixed;
-      left:0; right:0; bottom:0;
-      z-index: 25;
-      border-top: 1px solid var(--line);
-      background: rgba(0,0,0,.72);
-      backdrop-filter: blur(14px);
-      padding: 12px 14px;
-    }
-    .bar .inner{
-      max-width: 1100px;
-      margin: 0 auto;
-      display:flex;
-      gap: 12px;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .bar .sum{
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .bar .sum b{color:var(--text); font-size: 14px}
-    .bar .actions{display:flex; gap:10px; align-items:center}
-
-    /* Modal */
-    .modal{
-      position: fixed;
-      inset:0;
-      display:none;
-      z-index: 40;
-      background: rgba(0,0,0,.78);
-      padding: 16px;
-    }
-    .modal.show{display:block}
-    .sheet{
-      max-width: 720px;
-      margin: 22px auto;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(20,26,36,.72);
-      backdrop-filter: blur(18px);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .sheetHead{
-      padding: 14px 16px;
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
-      border-bottom: 1px solid rgba(255,255,255,.12);
-    }
-    .sheetHead h2{margin:0;font-size: 18px}
-    .sheetHead .small{margin-top:4px; color:var(--muted); font-size:12px}
-    .sheetBody{padding: 14px 16px}
-    .sheetGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    @media (max-width: 760px){
-      .sheetGrid{grid-template-columns: 1fr;}
-    }
-    .fieldLabel{font-size: 12px; color: var(--muted); margin: 0 0 6px}
-    .select,.number,.textarea{
-      width:100%;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(10,14,20,.70);
-      color: var(--text);
-      outline:none;
-    }
-    .textarea{min-height: 86px; resize: vertical}
-    .sheetFoot{
-      padding: 14px 16px;
-      display:flex;
-      gap:10px;
-      justify-content:flex-end;
-      border-top: 1px solid rgba(255,255,255,.12);
-      flex-wrap:wrap;
-    }
-
-    /* Toast */
-    .toast{
-      position: fixed;
-      left: 50%;
-      bottom: 92px;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,.75);
-      border: 1px solid rgba(255,255,255,.14);
-      padding: 10px 12px;
-      border-radius: 14px;
-      color: var(--text);
-      font-weight: 800;
-      font-size: 12px;
-      display:none;
-      z-index: 60;
-    }
-    .toast.show{display:block; animation: pop .16s ease}
-    @keyframes pop{from{transform:translateX(-50%) translateY(6px);opacity:.0}to{transform:translateX(-50%) translateY(0);opacity:1}}
-  </style>
+<style>
+:root{
+  --bg:#0b0f14;
+  --glass:rgba(255,255,255,.08);
+  --line:rgba(255,255,255,.14);
+  --text:#f5f7ff;
+  --muted:#b6bfd6;
+  --brand:#22c55e;
+  --brand2:#16a34a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto;
+  color:var(--text);
+  background:
+    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.85)),
+    url("assets/background.png") center/cover fixed no-repeat;
+}
+header{
+  position:sticky;top:0;z-index:10;
+  backdrop-filter:blur(14px);
+  background:rgba(0,0,0,.65);
+  border-bottom:1px solid var(--line);
+}
+header .wrap{
+  max-width:1100px;margin:auto;padding:14px;
+  display:flex;gap:12px;align-items:center;
+}
+h1{margin:0;font-size:20px}
+.search{flex:1}
+.search input{
+  width:100%;padding:12px 14px;border-radius:14px;
+  border:1px solid var(--line);
+  background:rgba(10,14,20,.8);
+  color:var(--text);
+}
+.btn{
+  padding:12px 16px;border-radius:14px;border:0;
+  font-weight:800;cursor:pointer;
+  background:linear-gradient(var(--brand),var(--brand2));
+  color:#05250f;
+}
+.btn.ghost{
+  background:rgba(255,255,255,.1);
+  color:var(--text);border:1px solid var(--line);
+}
+main{max-width:1100px;margin:auto;padding:16px}
+.tabs{display:flex;gap:8px;overflow:auto;margin-bottom:14px}
+.tab{
+  padding:10px 14px;border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.08);
+  cursor:pointer;font-weight:800;font-size:13px;
+}
+.tab.active{background:rgba(34,197,94,.25)}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:14px;
+}
+.card{
+  background:var(--glass);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:14px;
+  cursor:pointer;
+}
+.card h3{margin:10px 0 4px}
+.card p{margin:0;color:var(--muted);font-size:13px}
+.price{margin-top:8px;font-weight:900}
+footer{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+}
+footer .wrap{
+  max-width:1100px;margin:auto;padding:12px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.modal{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.8);
+  display:none;z-index:50;
+}
+.modal.show{display:block}
+.sheet{
+  max-width:600px;margin:40px auto;
+  background:rgba(20,26,36,.85);
+  border:1px solid var(--line);
+  border-radius:20px;
+}
+.sheet header,.sheet footer{padding:14px;border-bottom:1px solid var(--line)}
+.sheet footer{border-top:1px solid var(--line);border-bottom:0}
+.sheet main{padding:14px}
+select{width:100%;padding:12px;border-radius:12px;
+  background:rgba(10,14,20,.8);color:var(--text);border:1px solid var(--line)}
+</style>
 </head>
 
 <body>
-  <div class="top">
-    <div class="wrap" style="padding-bottom:0">
-      <div class="row">
-        <div class="brand">
-          <h1>🛒 Boutique <span style="opacity:.7;font-weight:800;font-size:12px;">v2</span></h1>
-          <div class="sub">Catalogue premium • paniers • admin</div>
-        </div>
 
-        <div class="search">
-          <input id="q" class="input" placeholder="Rechercher un produit…" autocomplete="off" />
-          <button class="btn ghost" id="btnAdmin">Admin</button>
-        </div>
-
-        <div style="display:flex; gap:10px;">
-          <button class="btn warn" id="btnCart">Panier</button>
-          <button class="btn" id="btnCheckout">Commander</button>
-        </div>
-      </div>
-
-      <div class="tabs" id="tabs"></div>
-    </div>
-  </div>
-
+<header>
   <div class="wrap">
-    <div class="grid" id="grid"></div>
-  </div>
-
-  <div class="bar">
-    <div class="inner">
-      <div class="sum">
-        <div><b id="count">0</b> article(s)</div>
-        <div>Total: <b><span id="total">0</span> €</b></div>
-      </div>
-      <div class="actions">
-        <button class="btn ghost danger" id="btnClear">Vider</button>
-        <button class="btn warn" id="btnCart2">Voir panier</button>
-        <button class="btn" id="btnCheckout2">Commander</button>
-      </div>
+    <h1>🛒 Calidad</h1>
+    <div class="search">
+      <input id="search" placeholder="Rechercher…"/>
     </div>
+    <button class="btn ghost" onclick="openCart()">Panier</button>
   </div>
+</header>
 
-  <!-- Product modal -->
-  <div class="modal" id="mProduct">
-    <div class="sheet">
-      <div class="sheetHead">
-        <div>
-          <h2 id="pName">Produit</h2>
-          <div class="small" id="pCat">Catégorie</div>
-        </div>
-        <button class="btn ghost" onclick="UI.close('mProduct')">Fermer</button>
-      </div>
-      <div class="sheetBody">
-        <p id="pDesc" style="margin:0 0 14px;color:var(--muted);line-height:1.4"></p>
+<main>
+  <div class="tabs" id="tabs"></div>
+  <div class="grid" id="grid"></div>
+</main>
 
-        <div class="sheetGrid">
-          <div>
-            <div class="fieldLabel">Variante</div>
-            <select class="select" id="pVariant"></select>
-          </div>
-          <div>
-            <div class="fieldLabel">Quantité</div>
-            <select class="select" id="pQty">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="5">5</option>
-            </select>
-          </div>
-        </div>
-
-        <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:14px">
-          <div style="font-weight:900">Sous-total: <span id="pSub">0</span> €</div>
-          <button class="btn" id="btnAdd">Ajouter au panier</button>
-        </div>
-      </div>
-    </div>
+<footer>
+  <div class="wrap">
+    <div><b id="count">0</b> article(s)</div>
+    <button class="btn" onclick="checkout()">Commander</button>
   </div>
+</footer>
 
-  <!-- Cart modal -->
-  <div class="modal" id="mCart">
-    <div class="sheet">
-      <div class="sheetHead">
-        <div>
-          <h2>🧺 Panier</h2>
-          <div class="small">Gère tes items, puis commande</div>
-        </div>
-        <button class="btn ghost" onclick="UI.close('mCart')">Fermer</button>
-      </div>
-      <div class="sheetBody" id="cartList"></div>
-      <div class="sheetFoot">
-        <div style="margin-right:auto;font-weight:900">
-          Total: <span id="cartTotal">0</span> €
-        </div>
-        <button class="btn ghost danger" onclick="Cart.clear()">Vider</button>
-        <button class="btn" onclick="Checkout.send()">Commander</button>
-      </div>
-    </div>
+<!-- MODAL PRODUIT -->
+<div class="modal" id="productModal">
+  <div class="sheet">
+    <header>
+      <b id="pName"></b>
+      <button class="btn ghost" onclick="closeModal()">Fermer</button>
+    </header>
+    <main>
+      <p id="pDesc"></p>
+      <label>Quantité</label>
+      <select id="pVariant"></select>
+      <p class="price">Prix : <span id="pPrice"></span> €</p>
+    </main>
+    <footer>
+      <button class="btn" onclick="addToCart()">Ajouter</button>
+    </footer>
   </div>
+</div>
 
-  <!-- Admin modal -->
-  <div class="modal" id="mAdmin">
-    <div class="sheet">
-      <div class="sheetHead">
-        <div>
-          <h2>⚙️ Admin</h2>
-          <div class="small">Import/Export JSON • Modifs sauvegardées</div>
-        </div>
-        <button class="btn ghost" onclick="UI.close('mAdmin')">Fermer</button>
-      </div>
+<script>
+const TG = window.Telegram?.WebApp || null;
 
-      <div class="sheetBody">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          <div>
-            <div class="fieldLabel">PIN admin</div>
-            <input class="number" id="adminPin" placeholder="PIN (défaut: 2468)" />
-          </div>
-          <div>
-            <div class="fieldLabel">Actions</div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <button class="btn ghost" onclick="Admin.export()">Export</button>
-              <button class="btn ghost" onclick="Admin.import()">Import</button>
-              <button class="btn danger" onclick="Admin.reset()">Reset</button>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top:12px">
-          <div class="fieldLabel">Édition des produits (JSON)</div>
-          <textarea class="textarea" id="adminJson"></textarea>
-        </div>
-
-        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
-          <button class="btn ghost" onclick="Admin.refreshEditor()">Recharger</button>
-          <button class="btn" onclick="Admin.save()">Enregistrer</button>
-        </div>
-
-        <p style="margin:12px 0 0;color:var(--muted);font-size:12px;line-height:1.35">
-          ⚠️ Utilise cette mini‑app uniquement pour des articles/lists légaux.  
-          Les données sont stockées dans ton navigateur (localStorage).
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <div class="toast" id="toast">OK</div>
-
-  <script>
-    // =========================
-    // Storage keys
-    // =========================
-    const STORE_KEY = "shop_v2_products";
-    const CART_KEY  = "shop_v2_cart";
-    const PIN_KEY   = "shop_v2_pin";
-
-    // =========================
-    // Default (produits légaux d'exemple)
-    // =========================
-    const DEFAULT = {
-      pin: "2468",
-      categories: [
-        { id:"cat_a", name:"Catégorie A" },
-        { id:"cat_b", name:"Catégorie B" },
-        { id:"cat_c", name:"Catégorie C" },
-        { id:"cat_d", name:"Catégorie D" },
-        { id:"cat_e", name:"Catégorie E" }
-      ],
-      products: [
-        {
-          id:"p1", cat:"cat_a",
-          name:"Produit Alpha",
-          desc:"Description premium, courte, claire, style catalogue.",
-          badge:"Best",
-          variants:[ {label:"Standard", price:19}, {label:"Pack", price:35} ]
-        },
-        {
-          id:"p2", cat:"cat_b",
-          name:"Produit Beta",
-          desc:"Qualité supérieure, finition propre, expérience premium.",
-          badge:"New",
-          variants:[ {label:"1 unité", price:12}, {label:"3 unités", price:30} ]
-        },
-        {
-          id:"p3", cat:"cat_c",
-          name:"Produit Gamma",
-          desc:"Sélection premium, orientée performance/qualité.",
-          badge:"Top",
-          variants:[ {label:"S", price:9}, {label:"M", price:16}, {label:"L", price:24} ]
-        },
-        {
-          id:"p4", cat:"cat_d",
-          name:"Produit Delta",
-          desc:"Format pratique et propre, prêt à l’emploi.",
-          badge:"Pro",
-          variants:[ {label:"Pack 1", price:15}, {label:"Pack 2", price:28} ]
-        },
-        {
-          id:"p5", cat:"cat_e",
-          name:"Produit Epsilon",
-          desc:"Classique premium, bonne régularité, bon rendu.",
-          badge:"Classic",
-          variants:[ {label:"Standard", price:10}, {label:"Plus", price:18} ]
-        }
+const DATA={
+  categories:[
+    {id:"mousseux",name:"Mousseux"},
+    {id:"filtrer",name:"Filtrer"},
+    {id:"frozen",name:"Frozen"},
+    {id:"zip",name:"ZIP 0.9"},
+    {id:"beuh",name:"Beuh"}
+  ],
+  products:[
+    {
+      id:"p1",cat:"beuh",
+      name:"Beuh Premium",
+      desc:"Qualité supérieure, manucurée, sélection premium.",
+      variants:[
+        {label:"1g",price:10},
+        {label:"3g",price:25},
+        {label:"5g",price:30},
+        {label:"10g",price:55}
       ]
-    };
-
-    // =========================
-    // Utils
-    // =========================
-    const $ = (id) => document.getElementById(id);
-    const money = (n) => (Math.round(n*100)/100).toString().replace(".", ",");
-    const clamp = (n,min,max) => Math.max(min, Math.min(max, n));
-    const safeParse = (s, fallback) => { try { return JSON.parse(s); } catch { return fallback; } };
-
-    const Toast = {
-      show(msg){
-        const t = $("toast");
-        t.textContent = msg;
-        t.classList.add("show");
-        clearTimeout(this._to);
-        this._to = setTimeout(()=>t.classList.remove("show"), 1100);
-      }
-    };
-
-    const UI = {
-      open(id){ $(id).classList.add("show"); },
-      close(id){ $(id).classList.remove("show"); }
-    };
-
-    // =========================
-    // Data layer
-    // =========================
-    const DB = {
-      load(){
-        const raw = localStorage.getItem(STORE_KEY);
-        const data = raw ? safeParse(raw, null) : null;
-        if(!data || !data.categories || !data.products){
-          localStorage.setItem(STORE_KEY, JSON.stringify(DEFAULT));
-          localStorage.setItem(PIN_KEY, DEFAULT.pin);
-          return structuredClone(DEFAULT);
-        }
-        // pin stored separately
-        const pin = localStorage.getItem(PIN_KEY) || DEFAULT.pin;
-        data.pin = pin;
-        return data;
-      },
-      save(data){
-        localStorage.setItem(STORE_KEY, JSON.stringify({categories:data.categories, products:data.products}));
-      },
-      reset(){
-        localStorage.setItem(STORE_KEY, JSON.stringify(DEFAULT));
-        localStorage.setItem(PIN_KEY, DEFAULT.pin);
-      }
-    };
-
-    // =========================
-    // Cart
-    // =========================
-    const Cart = {
-      items: [],
-      load(){
-        this.items = safeParse(localStorage.getItem(CART_KEY) || "[]", []);
-      },
-      save(){
-        localStorage.setItem(CART_KEY, JSON.stringify(this.items));
-        Render.bar();
-      },
-      add({pid, name, variant, unitPrice, qty}){
-        qty = clamp(Number(qty||1), 1, 99);
-        const key = pid + "::" + variant;
-        const found = this.items.find(i => i.key === key);
-        if(found){
-          found.qty = clamp(found.qty + qty, 1, 99);
-        }else{
-          this.items.push({ key, pid, name, variant, unitPrice, qty });
-        }
-        this.save();
-        Toast.show("Ajouté ✅");
-      },
-      remove(key){
-        this.items = this.items.filter(i => i.key !== key);
-        this.save();
-      },
-      setQty(key, qty){
-        const it = this.items.find(i => i.key === key);
-        if(!it) return;
-        it.qty = clamp(Number(qty||1), 1, 99);
-        this.save();
-      },
-      clear(){
-        this.items = [];
-        this.save();
-        Render.cart();
-        Toast.show("Panier vidé");
-      },
-      total(){
-        return this.items.reduce((s,i)=> s + i.unitPrice*i.qty, 0);
-      },
-      count(){
-        return this.items.reduce((s,i)=> s + i.qty, 0);
-      }
-    };
-
-    // =========================
-    // Telegram / Checkout
-    // =========================
-    const TG = (window.Telegram && Telegram.WebApp) ? Telegram.WebApp : null;
-
-    const Checkout = {
-      buildMessage(){
-        if(Cart.items.length === 0) return null;
-        const lines = [];
-        lines.push("🛒 COMMANDE");
-        lines.push("");
-        Cart.items.forEach(i=>{
-          lines.push(`• ${i.name} (${i.variant}) x${i.qty} = ${money(i.unitPrice*i.qty)}€`);
-        });
-        lines.push("");
-        lines.push(`💰 TOTAL: ${money(Cart.total())}€`);
-        return lines.join("\n");
-      },
-      send(){
-        const msg = this.buildMessage();
-        if(!msg){ Toast.show("Panier vide"); return; }
-
-        // Telegram WebApp: sendData vers le bot
-        if(TG && TG.sendData){
-          TG.sendData(JSON.stringify({ type:"order", text: msg, items: Cart.items, total: Cart.total() }));
-          Toast.show("Envoyé ✅");
-          return;
-        }
-
-        // Fallback: copie/partage
-        navigator.clipboard?.writeText(msg).then(()=>{
-          alert("Commande copiée ✅\nColle-la dans Telegram.");
-        }).catch(()=>{
-          alert(msg);
-        });
-      }
-    };
-
-    // =========================
-    // Render / App
-    // =========================
-    let STATE = {
-      data: DB.load(),
-      activeCat: "all",
-      q: ""
-    };
-
-    const Render = {
-      tabs(){
-        const el = $("tabs");
-        const cats = STATE.data.categories;
-        const mk = (id, name) => {
-          const div = document.createElement("div");
-          div.className = "tab" + (STATE.activeCat===id ? " active" : "");
-          div.textContent = name;
-          div.onclick = () => { STATE.activeCat = id; Render.tabs(); Render.grid(); };
-          return div;
-        };
-        el.innerHTML = "";
-        el.appendChild(mk("all","Tout"));
-        cats.forEach(c => el.appendChild(mk(c.id, c.name)));
-      },
-
-      grid(){
-        const el = $("grid");
-        const q = STATE.q.trim().toLowerCase();
-        const cat = STATE.activeCat;
-
-        const catName = (id) => (STATE.data.categories.find(c=>c.id===id)?.name || "—");
-
-        const list = STATE.data.products
-          .filter(p => (cat==="all" ? true : p.cat===cat))
-          .filter(p => {
-            if(!q) return true;
-            return (
-              p.name.toLowerCase().includes(q) ||
-              (p.desc||"").toLowerCase().includes(q) ||
-              catName(p.cat).toLowerCase().includes(q)
-            );
-          });
-
-        el.innerHTML = "";
-        list.forEach(p=>{
-          const minPrice = Math.min(...p.variants.map(v=>v.price));
-          const card = document.createElement("div");
-          card.className = "card";
-          card.innerHTML = `
-            <div class="thumb">
-              <span class="badge">${escapeHtml(p.badge || "Premium")}</span>
-              <span class="price">dès ${money(minPrice)}€</span>
-            </div>
-            <div class="title">${escapeHtml(p.name)}</div>
-            <p class="desc">${escapeHtml(p.desc || "")}</p>
-            <div class="meta">
-              <span>${escapeHtml(catName(p.cat))}</span>
-              <span>${p.variants.length} option(s)</span>
-            </div>
-          `;
-          card.onclick = ()=> Product.open(p.id);
-          el.appendChild(card);
-        });
-
-        if(list.length === 0){
-          el.innerHTML = `<div style="grid-column:1/-1;color:var(--muted);padding:18px;border:1px dashed rgba(255,255,255,.18);border-radius:18px;background:rgba(255,255,255,.06)">
-            Aucun résultat.
-          </div>`;
-        }
-      },
-
-      bar(){
-        $("count").textContent = Cart.count();
-        $("total").textContent = money(Cart.total());
-      },
-
-      cart(){
-        const el = $("cartList");
-        if(Cart.items.length === 0){
-          el.innerHTML = `<div style="color:var(--muted);padding:8px 2px">Panier vide.</div>`;
-          $("cartTotal").textContent = "0";
-          return;
-        }
-
-        const rows = Cart.items.map(i=>{
-          const lineTotal = i.unitPrice*i.qty;
-          return `
-            <div style="display:flex;gap:10px;align-items:flex-start;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.10)">
-              <div style="min-width:0">
-                <div style="font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(i.name)}</div>
-                <div style="color:var(--muted);font-size:12px">${escapeHtml(i.variant)} • ${money(i.unitPrice)}€/u</div>
-                <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
-                  <span style="color:var(--muted);font-size:12px">Qté</span>
-                  <select class="select" style="width:120px;padding:10px;border-radius:12px"
-                    onchange="Cart.setQty('${escapeAttr(i.key)}', this.value)">
-                    ${[1,2,3,4,5,6,7,8,9,10].map(n=>`<option value="${n}" ${n===i.qty?"selected":""}>${n}</option>`).join("")}
-                  </select>
-                </div>
-              </div>
-              <div style="text-align:right">
-                <div style="font-weight:900">${money(lineTotal)}€</div>
-                <button class="btn ghost danger" style="margin-top:10px" onclick="Cart.remove('${escapeAttr(i.key)}'); Render.cart();">Supprimer</button>
-              </div>
-            </div>
-          `;
-        }).join("");
-
-        el.innerHTML = rows;
-        $("cartTotal").textContent = money(Cart.total());
-      }
-    };
-
-    const Product = {
-      current: null,
-      open(pid){
-        const p = STATE.data.products.find(x=>x.id===pid);
-        if(!p) return;
-        this.current = p;
-
-        $("pName").textContent = p.name;
-        $("pCat").textContent  = STATE.data.categories.find(c=>c.id===p.cat)?.name || "—";
-        $("pDesc").textContent = p.desc || "";
-
-        const sel = $("pVariant");
-        sel.innerHTML = p.variants.map((v,idx)=>`<option value="${idx}">${v.label} — ${money(v.price)}€</option>`).join("");
-
-        $("pQty").value = "1";
-        this.updateSubtotal();
-
-        sel.onchange = ()=>this.updateSubtotal();
-        $("pQty").onchange = ()=>this.updateSubtotal();
-
-        $("btnAdd").onclick = ()=>{
-          const vidx = Number(sel.value);
-          const v = p.variants[vidx];
-          const qty = Number($("pQty").value);
-          Cart.add({ pid:p.id, name:p.name, variant:v.label, unitPrice:v.price, qty });
-          UI.close("mProduct");
-        };
-
-        UI.open("mProduct");
-      },
-      updateSubtotal(){
-        const p = this.current;
-        if(!p) return;
-        const vidx = Number($("pVariant").value || 0);
-        const qty = Number($("pQty").value || 1);
-        const v = p.variants[vidx];
-        $("pSub").textContent = money(v.price * qty);
-      }
-    };
-
-    const Admin = {
-      unlocked: false,
-      unlock(){
-        const pin = prompt("PIN admin ?");
-        const real = localStorage.getItem(PIN_KEY) || DEFAULT.pin;
-        if((pin||"").trim() !== real){
-          Toast.show("PIN incorrect");
-          return false;
-        }
-        this.unlocked = true;
-        return true;
-      },
-      open(){
-        if(!this.unlocked && !this.unlock()) return;
-        $("adminPin").value = localStorage.getItem(PIN_KEY) || DEFAULT.pin;
-        this.refreshEditor();
-        UI.open("mAdmin");
-      },
-      refreshEditor(){
-        const data = DB.load();
-        // include pin display only (stored separate)
-        $("adminJson").value = JSON.stringify({ categories: data.categories, products: data.products }, null, 2);
-      },
-      save(){
-        const pin = ($("adminPin").value || "").trim() || DEFAULT.pin;
-        const parsed = safeParse($("adminJson").value, null);
-        if(!parsed || !Array.isArray(parsed.categories) || !Array.isArray(parsed.products)){
-          Toast.show("JSON invalide");
-          return;
-        }
-        // minimal validation
-        for(const c of parsed.categories){
-          if(!c.id || !c.name) return Toast.show("Catégorie invalide");
-        }
-        for(const p of parsed.products){
-          if(!p.id || !p.cat || !p.name || !Array.isArray(p.variants) || p.variants.length===0){
-            return Toast.show("Produit invalide");
-          }
-          for(const v of p.variants){
-            if(typeof v.label!=="string" || typeof v.price!=="number") return Toast.show("Variante invalide");
-          }
-        }
-
-        localStorage.setItem(PIN_KEY, pin);
-        DB.save({ categories: parsed.categories, products: parsed.products });
-
-        STATE.data = DB.load();
-        Render.tabs();
-        Render.grid();
-        Toast.show("Sauvé ✅");
-      },
-      export(){
-        const data = DB.load();
-        const txt = JSON.stringify({ categories:data.categories, products:data.products }, null, 2);
-        prompt("Copie le JSON :", txt);
-      },
-      import(){
-        const txt = prompt("Colle le JSON :");
-        if(!txt) return;
-        $("adminJson").value = txt;
-        Toast.show("Collé");
-      },
-      reset(){
-        if(!confirm("Reset produits par défaut ?")) return;
-        DB.reset();
-        STATE.data = DB.load();
-        Render.tabs();
-        Render.grid();
-        this.refreshEditor();
-        Toast.show("Reset OK");
-      }
-    };
-
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
     }
-    function escapeAttr(s){ return String(s).replace(/'/g,"&#39;"); }
+  ]
+};
 
-    // =========================
-    // Events
-    // =========================
-    Cart.load();
-    Render.tabs();
-    Render.grid();
-    Render.bar();
+let STATE={cat:"all",cart:[],current:null};
 
-    $("q").addEventListener("input", (e)=>{
-      STATE.q = e.target.value || "";
-      Render.grid();
+function renderTabs(){
+  const t=document.getElementById("tabs");
+  t.innerHTML="";
+  const mk=(id,name)=>{
+    const d=document.createElement("div");
+    d.className="tab"+(STATE.cat===id?" active":"");
+    d.textContent=name;
+    d.onclick=()=>{STATE.cat=id;renderGrid();renderTabs()};
+    t.appendChild(d);
+  };
+  mk("all","Tout");
+  DATA.categories.forEach(c=>mk(c.id,c.name));
+}
+
+function renderGrid(){
+  const g=document.getElementById("grid");
+  const q=document.getElementById("search").value.toLowerCase();
+  g.innerHTML="";
+  DATA.products
+    .filter(p=>STATE.cat==="all"||p.cat===STATE.cat)
+    .filter(p=>p.name.toLowerCase().includes(q))
+    .forEach(p=>{
+      const c=document.createElement("div");
+      c.className="card";
+      c.innerHTML=`
+        <h3>${p.name}</h3>
+        <p>${p.desc}</p>
+        <div class="price">dès ${Math.min(...p.variants.map(v=>v.price))}€</div>`;
+      c.onclick=()=>openProduct(p);
+      g.appendChild(c);
     });
+}
 
-    $("btnCart").onclick  = ()=>{ Render.cart(); UI.open("mCart"); };
-    $("btnCart2").onclick = ()=>{ Render.cart(); UI.open("mCart"); };
-    $("btnCheckout").onclick  = ()=>Checkout.send();
-    $("btnCheckout2").onclick = ()=>Checkout.send();
+function openProduct(p){
+  STATE.current=p;
+  document.getElementById("pName").textContent=p.name;
+  document.getElementById("pDesc").textContent=p.desc;
+  const s=document.getElementById("pVariant");
+  s.innerHTML=p.variants.map((v,i)=>
+    `<option value="${i}">${v.label} — ${v.price}€</option>`).join("");
+  updatePrice();
+  s.onchange=updatePrice;
+  document.getElementById("productModal").classList.add("show");
+}
+function closeModal(){document.getElementById("productModal").classList.remove("show")}
+function updatePrice(){
+  const v=STATE.current.variants[
+    document.getElementById("pVariant").value];
+  document.getElementById("pPrice").textContent=v.price;
+}
+function addToCart(){
+  const v=STATE.current.variants[
+    document.getElementById("pVariant").value];
+  STATE.cart.push({name:STATE.current.name,variant:v.label,price:v.price});
+  document.getElementById("count").textContent=STATE.cart.length;
+  closeModal();
+}
+function openCart(){
+  alert(STATE.cart.map(i=>`${i.name} ${i.variant} = ${i.price}€`).join("\n"));
+}
+function checkout(){
+  if(!STATE.cart.length)return alert("Panier vide");
+  const msg=STATE.cart.map(i=>`${i.name} ${i.variant} = ${i.price}€`).join("\n");
+  if(TG)TG.sendData(msg);
+  else alert("Commande:\n"+msg);
+}
 
-    $("btnClear").onclick = ()=>Cart.clear();
-
-    $("btnAdmin").onclick = ()=>Admin.open();
-
-    // Telegram UI polish (optional)
-    if(TG){
-      try{
-        TG.expand();
-        TG.setHeaderColor && TG.setHeaderColor("#0b1018");
-        TG.setBackgroundColor && TG.setBackgroundColor("#0b1018");
-      }catch{}
-    }
-  </script>
+document.getElementById("search").oninput=renderGrid;
+renderTabs();renderGrid();
+if(TG)TG.expand();
+</script>
 </body>
 </html>
