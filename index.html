@@ -13,7 +13,6 @@
       --bg:#04040a;
       --panel:#0a0a14;
       --glass: rgba(255,255,255,.06);
-      --glass2: rgba(255,255,255,.10);
       --line: rgba(255,255,255,.14);
       --text: #f6f7ff;
       --muted:#a0a7bf;
@@ -83,7 +82,7 @@
     }
     .tag{
       font-size: 11px;
-      font-weight: 900;
+      font-weight: 950;
       padding: 4px 10px;
       border-radius: 999px;
       border: 1px solid rgba(34,255,136,.35);
@@ -100,7 +99,7 @@
     }
     .kbd{
       font-size: 11px;
-      font-weight: 900;
+      font-weight: 950;
       border: 1px solid rgba(255,255,255,.18);
       background: rgba(255,255,255,.06);
       padding: 3px 8px;
@@ -123,7 +122,7 @@
       background: rgba(10,14,20,.70);
       color: var(--text);
       outline:none;
-      font-weight: 800;
+      font-weight: 900;
     }
     .input::placeholder{ color: rgba(160,167,191,.65) }
 
@@ -191,8 +190,7 @@
     }
     .tab:hover{ transform: translateY(-1px) }
     .tab.active{
-      background:
-        linear-gradient(135deg, rgba(34,255,136,.16), rgba(0,217,255,.12));
+      background: linear-gradient(135deg, rgba(34,255,136,.16), rgba(0,217,255,.12));
       border-color: rgba(34,255,136,.35);
     }
 
@@ -395,7 +393,7 @@
     @media (max-width: 760px){ .sheetGrid{ grid-template-columns: 1fr; } }
     .fieldLabel{ font-size: 12px; color: var(--muted); margin: 0 0 6px }
 
-    .select2,.number,.textarea{
+    .select2{
       width:100%;
       padding: 12px 12px;
       border-radius: 14px;
@@ -404,17 +402,6 @@
       color: var(--text);
       outline:none;
       font-weight: 900;
-    }
-    .textarea{ min-height: 120px; resize: vertical; font-weight: 800 }
-
-    .sheetFoot{
-      padding: 14px 16px;
-      display:flex;
-      gap:10px;
-      justify-content:flex-end;
-      border-top: 1px solid rgba(255,255,255,.12);
-      flex-wrap:wrap;
-      align-items:center;
     }
 
     /* Drawer cart */
@@ -532,7 +519,6 @@
 
         <div class="search">
           <input id="q" class="input" placeholder="Rechercher…" autocomplete="off" />
-          <button class="btn ghost" id="btnAdmin">Admin</button>
         </div>
 
         <div style="display:flex; gap:10px;">
@@ -593,7 +579,7 @@
 
         <div class="sheetGrid">
           <div>
-            <div class="fieldLabel">Variante (ex: 1 unité, 5 unités, 10 unités)</div>
+            <div class="fieldLabel">Variante</div>
             <select class="select2" id="pVariant"></select>
           </div>
           <div>
@@ -617,53 +603,13 @@
     </div>
   </div>
 
-  <!-- Admin modal -->
-  <div class="modal" id="mAdmin">
-    <div class="sheet">
-      <div class="sheetHead">
-        <div>
-          <h2>⚙️ Admin</h2>
-          <div class="small">PIN • Import/Export JSON • Produits/Variantes</div>
-        </div>
-        <button class="btn ghost" onclick="UI.close('mAdmin')">Fermer</button>
-      </div>
-
-      <div class="sheetBody">
-        <div class="sheetGrid">
-          <div>
-            <div class="fieldLabel">PIN admin</div>
-            <input class="number" id="adminPin" placeholder="PIN (défaut: 2468)" />
-          </div>
-          <div>
-            <div class="fieldLabel">Actions</div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <button class="btn ghost" onclick="Admin.export()">Export</button>
-              <button class="btn ghost" onclick="Admin.import()">Import</button>
-              <button class="btn hot" onclick="Admin.reset()">Reset</button>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top:12px">
-          <div class="fieldLabel">Édition (JSON complet)</div>
-          <textarea class="textarea" id="adminJson"></textarea>
-        </div>
-
-        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap">
-          <button class="btn ghost" onclick="Admin.refreshEditor()">Recharger</button>
-          <button class="btn" onclick="Admin.save()">Enregistrer</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Cart drawer -->
+  <!-- Backdrop + Cart drawer -->
   <div class="modal" id="backdrop" onclick="Drawer.close()"></div>
   <aside class="drawer" id="drawer">
     <div class="drawerHead">
       <div>
         <h3 style="margin:0">🧺 Panier</h3>
-        <div class="small">Promo • Livraison • Totaux • Checkout Telegram</div>
+        <div class="small">Totaux • Checkout Telegram</div>
       </div>
       <button class="btn ghost" onclick="Drawer.close()">Fermer</button>
     </div>
@@ -671,14 +617,7 @@
     <div class="drawerBody" id="cartList"></div>
 
     <div class="drawerFoot">
-      <div style="display:flex;gap:10px;align-items:center">
-        <input id="promo" class="input" placeholder="Code promo (ex: SAVE10)" />
-        <button class="btn ghost" onclick="Pricing.applyPromo()">Appliquer</button>
-      </div>
-
       <div class="totalRow"><span>Sous-total</span><b><span id="subTotal">0</span> €</b></div>
-      <div class="totalRow"><span>Remise</span><b>- <span id="discount">0</span> €</b></div>
-      <div class="totalRow"><span>Livraison</span><b>+ <span id="delivery">0</span> €</b></div>
       <div class="hr"></div>
       <div class="totalRow"><span>Total</span><b><span id="grandTotal">0</span> €</b></div>
 
@@ -694,22 +633,14 @@
 
   <script>
     // ======================================================
-    // ⚠️ TEMPLATE POUR PRODUITS LÉGAUX UNIQUEMENT.
-    // Renomme tout via Admin si besoin.
+    // Template e‑commerce (produits légaux uniquement).
     // ======================================================
-
-    // Storage keys
-    const STORE_KEY = "shop_neon_products";
-    const CART_KEY  = "shop_neon_cart";
-    const PIN_KEY   = "shop_neon_pin";
-    const PROMO_KEY = "shop_neon_promo";
 
     // Telegram
     const TG = (window.Telegram && Telegram.WebApp) ? Telegram.WebApp : null;
 
     // Utils
     const $ = (id) => document.getElementById(id);
-    const safeParse = (s, fallback) => { try { return JSON.parse(s); } catch { return fallback; } };
     const clamp = (n,min,max) => Math.max(min, Math.min(max, n));
     const money = (n) => (Math.round((n + Number.EPSILON) * 100) / 100).toString().replace(".", ",");
     const escapeHtml = (s) => String(s).replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
@@ -729,153 +660,109 @@
       close(id){ $(id).classList.remove("show"); }
     };
 
-    // ✅ Exemple demandé (variantes + prix dynamiques)
-    const DEFAULT = {
-      pin: "2468",
-      promos: {
-        SAVE10: { type:"percent", value:10 },
-        LESS5:  { type:"fixed", value:5 }
-      },
-      delivery: { base: 5, freeAbove: 60 },
+    // Data (figé)
+    const DATA = {
       categories: [
-        { id:"mousseux", name:"Mousseux" },
-        { id:"filtrer", name:"Filtrer" },
-        { id:"frozen",  name:"Frozen" },
-        { id:"zip09",   name:"ZIP 0.9" },
-        { id:"classic", name:"Classique" }
+        { id:"cat_a", name:"Catégorie A" },
+        { id:"cat_b", name:"Catégorie B" },
+        { id:"cat_c", name:"Catégorie C" },
+        { id:"cat_d", name:"Catégorie D" },
+        { id:"cat_e", name:"Catégorie E" }
       ],
       products: [
-        { id:"p1", cat:"mousseux", name:"Produit Mousseux", badge:"TOP",
-          desc:"Fiche premium, finition propre, expérience e‑commerce.",
-          variants:[ {label:"1 unité",price:10},{label:"3 unités",price:25},{label:"5 unités",price:30},{label:"10 unités",price:55} ] },
-        { id:"p2", cat:"filtrer", name:"Produit Filtrer", badge:"NEW",
+        { id:"p1", cat:"cat_a", name:"Produit Alpha", badge:"TOP",
+          desc:"Fiche premium, expérience e‑commerce.",
+          variants:[
+            {label:"1 unité", price:10},
+            {label:"3 unités", price:25},
+            {label:"5 unités", price:30},
+            {label:"10 unités", price:55}
+          ]
+        },
+        { id:"p2", cat:"cat_b", name:"Produit Beta", badge:"NEW",
           desc:"Design brutal, qualité stable, variantes claires.",
-          variants:[ {label:"1 unité",price:12},{label:"3 unités",price:32},{label:"5 unités",price:45},{label:"10 unités",price:80} ] },
-        { id:"p3", cat:"frozen", name:"Produit Frozen", badge:"NEON",
-          desc:"Look neon, UX rapide, checkout Telegram JSON.",
-          variants:[ {label:"1 unité",price:9},{label:"3 unités",price:24},{label:"5 unités",price:36},{label:"10 unités",price:65} ] },
-        { id:"p4", cat:"zip09", name:"Produit ZIP 0.9", badge:"PRO",
-          desc:"Panier avancé, promo, livraison, totals.",
-          variants:[ {label:"1 unité",price:11},{label:"3 unités",price:28},{label:"5 unités",price:40},{label:"10 unités",price:72} ] },
-        { id:"p5", cat:"classic", name:"Produit Classique", badge:"CLASSIC",
-          desc:"Base clean et pro, modifiable via Admin.",
-          variants:[ {label:"1 unité",price:10},{label:"3 unités",price:26},{label:"5 unités",price:38},{label:"10 unités",price:70} ] }
-      ]
-    };
-
-    // DB
-    const DB = {
-      load(){
-        const raw = localStorage.getItem(STORE_KEY);
-        const data = raw ? safeParse(raw, null) : null;
-        if(!data || !data.categories || !data.products){
-          localStorage.setItem(STORE_KEY, JSON.stringify(DEFAULT));
-          localStorage.setItem(PIN_KEY, DEFAULT.pin);
-          return structuredClone(DEFAULT);
+          variants:[
+            {label:"1 unité", price:12},
+            {label:"3 unités", price:32},
+            {label:"5 unités", price:45},
+            {label:"10 unités", price:80}
+          ]
+        },
+        { id:"p3", cat:"cat_c", name:"Produit Gamma", badge:"NEON",
+          desc:"UX rapide, checkout Telegram JSON.",
+          variants:[
+            {label:"1 unité", price:9},
+            {label:"3 unités", price:24},
+            {label:"5 unités", price:36},
+            {label:"10 unités", price:65}
+          ]
+        },
+        { id:"p4", cat:"cat_d", name:"Produit Delta", badge:"PRO",
+          desc:"Panier avancé, totaux propres.",
+          variants:[
+            {label:"1 unité", price:11},
+            {label:"3 unités", price:28},
+            {label:"5 unités", price:40},
+            {label:"10 unités", price:72}
+          ]
+        },
+        { id:"p5", cat:"cat_e", name:"Produit Epsilon", badge:"CLASSIC",
+          desc:"Base clean et pro.",
+          variants:[
+            {label:"1 unité", price:10},
+            {label:"3 unités", price:26},
+            {label:"5 unités", price:38},
+            {label:"10 unités", price:70}
+          ]
         }
-        data.pin = localStorage.getItem(PIN_KEY) || DEFAULT.pin;
-        return data;
-      },
-      save(data){
-        localStorage.setItem(STORE_KEY, JSON.stringify({
-          promos: data.promos,
-          delivery: data.delivery,
-          categories: data.categories,
-          products: data.products
-        }));
-      },
-      reset(){
-        localStorage.setItem(STORE_KEY, JSON.stringify(DEFAULT));
-        localStorage.setItem(PIN_KEY, DEFAULT.pin);
-      }
+      ]
     };
 
     // State
     let STATE = {
-      data: DB.load(),
       activeCat: "all",
       q: "",
       sort: "pop",
       view: "dense",
-      currentProduct: null,
-      promoCode: localStorage.getItem(PROMO_KEY) || ""
+      currentProduct: null
     };
 
     // Cart
     const Cart = {
       items: [],
-      load(){ this.items = safeParse(localStorage.getItem(CART_KEY) || "[]", []); },
-      save(){
-        localStorage.setItem(CART_KEY, JSON.stringify(this.items));
-        Render.bar();
-        Pricing.renderTotals();
-      },
       add({pid, name, variant, unitPrice, qty}){
         qty = clamp(Number(qty||1), 1, 99);
         const key = pid + "::" + variant;
         const found = this.items.find(i => i.key === key);
         if(found) found.qty = clamp(found.qty + qty, 1, 99);
         else this.items.push({ key, pid, name, variant, unitPrice, qty });
-        this.save();
+        Render.bar();
         Toast.show("Ajouté ✅");
       },
-      remove(key){ this.items = this.items.filter(i => i.key !== key); this.save(); },
+      remove(key){
+        this.items = this.items.filter(i => i.key !== key);
+        Render.bar();
+      },
       setQty(key, qty){
         const it = this.items.find(i => i.key === key);
         if(!it) return;
         it.qty = clamp(Number(qty||1), 1, 99);
-        this.save();
+        Render.bar();
       },
-      clear(){ this.items = []; this.save(); Render.cart(); Toast.show("Panier vidé"); },
+      clear(){
+        this.items = [];
+        Render.bar();
+        Render.cart();
+        Toast.show("Panier vidé");
+      },
       subtotal(){ return this.items.reduce((s,i)=> s + i.unitPrice*i.qty, 0); },
       count(){ return this.items.reduce((s,i)=> s + i.qty, 0); }
     };
 
     // Drawer
     const Drawer = {
-      open(){ $("backdrop").classList.add("show"); $("drawer").classList.add("show"); Render.cart(); Pricing.renderTotals(); },
+      open(){ $("backdrop").classList.add("show"); $("drawer").classList.add("show"); Render.cart(); },
       close(){ $("backdrop").classList.remove("show"); $("drawer").classList.remove("show"); }
-    };
-
-    // Pricing
-    const Pricing = {
-      applyPromo(){
-        const code = ($("promo").value || "").trim().toUpperCase();
-        STATE.promoCode = code;
-        localStorage.setItem(PROMO_KEY, code);
-        Toast.show(code ? "Code appliqué" : "Code retiré");
-        this.renderTotals();
-      },
-      getDiscount(subtotal){
-        const code = (STATE.promoCode || "").trim().toUpperCase();
-        if(!code) return 0;
-        const p = STATE.data.promos?.[code];
-        if(!p) return 0;
-        if(p.type === "percent") return Math.max(0, subtotal * (p.value/100));
-        if(p.type === "fixed") return Math.max(0, p.value);
-        return 0;
-      },
-      getDelivery(afterDiscount){
-        const d = STATE.data.delivery || DEFAULT.delivery;
-        if(afterDiscount <= 0) return 0;
-        if(afterDiscount >= (d.freeAbove ?? 0)) return 0;
-        return d.base ?? 0;
-      },
-      totals(){
-        const sub = Cart.subtotal();
-        const discount = Math.min(sub, this.getDiscount(sub));
-        const after = Math.max(0, sub - discount);
-        const delivery = this.getDelivery(after);
-        const grand = Math.max(0, after + delivery);
-        return { sub, discount, delivery, grand };
-      },
-      renderTotals(){
-        const { sub, discount, delivery, grand } = this.totals();
-        $("subTotal").textContent = money(sub);
-        $("discount").textContent = money(discount);
-        $("delivery").textContent = money(delivery);
-        $("grandTotal").textContent = money(grand);
-      }
     };
 
     // Render
@@ -891,16 +778,16 @@
           return div;
         };
         el.appendChild(mk("all","Tout"));
-        STATE.data.categories.forEach(c => el.appendChild(mk(c.id, c.name)));
+        DATA.categories.forEach(c => el.appendChild(mk(c.id, c.name)));
       },
       grid(){
         const el = $("grid");
         const q = (STATE.q || "").trim().toLowerCase();
         const cat = STATE.activeCat;
 
-        const catName = (id) => (STATE.data.categories.find(c=>c.id===id)?.name || "—");
+        const catName = (id) => (DATA.categories.find(c=>c.id===id)?.name || "—");
 
-        let list = STATE.data.products
+        let list = DATA.products
           .filter(p => (cat==="all" ? true : p.cat===cat))
           .filter(p => {
             if(!q) return true;
@@ -911,6 +798,7 @@
             );
           });
 
+        const minPrice = (p) => Math.min(...p.variants.map(v=>v.price));
         if(STATE.sort === "az") list = list.slice().sort((a,b)=>a.name.localeCompare(b.name,"fr"));
         else if(STATE.sort === "low") list = list.slice().sort((a,b)=>minPrice(a)-minPrice(b));
         else if(STATE.sort === "high") list = list.slice().sort((a,b)=>minPrice(b)-minPrice(a));
@@ -931,7 +819,7 @@
             <p class="desc">${escapeHtml(p.desc || "")}</p>
             <div class="meta">
               <span>${escapeHtml(catName(p.cat))}</span>
-              <span>${(p.variants?.length||0)} option(s)</span>
+              <span>${p.variants.length} option(s)</span>
             </div>
           `;
           card.onmousemove = (e)=> tilt(card,e);
@@ -948,15 +836,14 @@
       },
       bar(){
         $("count").textContent = Cart.count();
-        $("total").textContent = money(Pricing.totals().grand);
+        $("total").textContent = money(Cart.subtotal());
       },
       cart(){
         const el = $("cartList");
-        $("promo").value = STATE.promoCode || "";
-
         if(Cart.items.length === 0){
           el.innerHTML = `<div style="color:var(--muted);padding:8px 2px">Panier vide.</div>`;
-          Pricing.renderTotals();
+          $("subTotal").textContent = "0";
+          $("grandTotal").textContent = "0";
           return;
         }
 
@@ -985,23 +872,25 @@
           `;
         }).join("");
 
-        Pricing.renderTotals();
+        const sub = Cart.subtotal();
+        $("subTotal").textContent = money(sub);
+        $("grandTotal").textContent = money(sub);
       }
     };
 
     // Product
     const Product = {
       open(pid){
-        const p = STATE.data.products.find(x=>x.id===pid);
+        const p = DATA.products.find(x=>x.id===pid);
         if(!p) return;
         STATE.currentProduct = p;
 
         $("pName").textContent = p.name;
         $("pDesc").textContent = p.desc || "";
-        $("pCat").textContent  = STATE.data.categories.find(c=>c.id===p.cat)?.name || "—";
+        $("pCat").textContent  = DATA.categories.find(c=>c.id===p.cat)?.name || "—";
 
         const sel = $("pVariant");
-        sel.innerHTML = (p.variants||[]).map((v,idx)=>
+        sel.innerHTML = p.variants.map((v,idx)=>
           `<option value="${idx}">${escapeHtml(v.label)} — ${money(v.price)}€</option>`
         ).join("");
 
@@ -1035,25 +924,22 @@
     // Checkout (Telegram JSON)
     const Checkout = {
       payload(){
-        const totals = Pricing.totals();
+        const subtotal = Cart.subtotal();
         return {
           type: "order",
           createdAt: new Date().toISOString(),
           currency: "EUR",
-          promo: (STATE.promoCode || "").trim().toUpperCase() || null,
-          totals: {
-            subtotal: Number(totals.sub.toFixed(2)),
-            discount: Number(totals.discount.toFixed(2)),
-            delivery: Number(totals.delivery.toFixed(2)),
-            grandTotal: Number(totals.grand.toFixed(2))
-          },
+          totals: { grandTotal: Number(subtotal.toFixed(2)) },
           items: Cart.items.map(i => ({
             name: i.name,
             variant: i.variant,
             unitPrice: Number(i.unitPrice.toFixed(2)),
             qty: i.qty,
             lineTotal: Number((i.unitPrice*i.qty).toFixed(2))
-          }))
+          })),
+          user: TG?.initDataUnsafe?.user
+            ? { id: TG.initDataUnsafe.user.id, username: TG.initDataUnsafe.user.username || null }
+            : null
         };
       },
       textSummary(){
@@ -1065,11 +951,7 @@
           lines.push(`• ${i.name} (${i.variant}) x${i.qty} = ${money(i.lineTotal)}€`);
         });
         lines.push("");
-        lines.push(`Sous-total: ${money(p.totals.subtotal)}€`);
-        if(p.totals.discount > 0) lines.push(`Remise: -${money(p.totals.discount)}€`);
-        if(p.totals.delivery > 0) lines.push(`Livraison: +${money(p.totals.delivery)}€`);
         lines.push(`💰 TOTAL: ${money(p.totals.grandTotal)}€`);
-        if(p.promo) lines.push(`Code promo: ${p.promo}`);
         return lines.join("\\n");
       },
       preview(){
@@ -1093,95 +975,6 @@
       }
     };
 
-    // Admin
-    const Admin = {
-      unlocked: false,
-      unlock(){
-        const pin = prompt("PIN admin ?");
-        const real = localStorage.getItem(PIN_KEY) || DEFAULT.pin;
-        if((pin||"").trim() !== real){
-          Toast.show("PIN incorrect");
-          return false;
-        }
-        this.unlocked = true;
-        return true;
-      },
-      open(){
-        if(!this.unlocked && !this.unlock()) return;
-        $("adminPin").value = localStorage.getItem(PIN_KEY) || DEFAULT.pin;
-        this.refreshEditor();
-        UI.open("mAdmin");
-      },
-      refreshEditor(){
-        const data = DB.load();
-        $("adminJson").value = JSON.stringify({
-          promos: data.promos,
-          delivery: data.delivery,
-          categories: data.categories,
-          products: data.products
-        }, null, 2);
-      },
-      save(){
-        const pin = ($("adminPin").value || "").trim() || DEFAULT.pin;
-        const parsed = safeParse($("adminJson").value, null);
-        if(!parsed) return Toast.show("JSON invalide");
-
-        if(!parsed.delivery || typeof parsed.delivery.base !== "number") return Toast.show("Delivery invalide");
-        if(!Array.isArray(parsed.categories) || !Array.isArray(parsed.products)) return Toast.show("Structure invalide");
-
-        for(const c of parsed.categories){
-          if(!c.id || !c.name) return Toast.show("Catégorie invalide");
-        }
-        for(const p of parsed.products){
-          if(!p.id || !p.cat || !p.name || !Array.isArray(p.variants) || p.variants.length===0){
-            return Toast.show("Produit invalide");
-          }
-          for(const v of p.variants){
-            if(typeof v.label!=="string" || typeof v.price!=="number") return Toast.show("Variante invalide");
-          }
-        }
-
-        localStorage.setItem(PIN_KEY, pin);
-        DB.save(parsed);
-
-        STATE.data = DB.load();
-        Render.tabs();
-        Render.grid();
-        Pricing.renderTotals();
-        Toast.show("Sauvé ✅");
-      },
-      export(){
-        const data = DB.load();
-        const txt = JSON.stringify({
-          promos: data.promos,
-          delivery: data.delivery,
-          categories: data.categories,
-          products: data.products
-        }, null, 2);
-        prompt("Copie le JSON :", txt);
-      },
-      import(){
-        const txt = prompt("Colle le JSON :");
-        if(!txt) return;
-        $("adminJson").value = txt;
-        Toast.show("Collé");
-      },
-      reset(){
-        if(!confirm("Reset par défaut ?")) return;
-        DB.reset();
-        STATE.data = DB.load();
-        Render.tabs();
-        Render.grid();
-        this.refreshEditor();
-        Toast.show("Reset OK");
-      }
-    };
-
-    function minPrice(p){
-      const arr = (p.variants||[]).map(v=>v.price);
-      return arr.length ? Math.min(...arr) : 0;
-    }
-
     // Neon tilt
     function tilt(card, e){
       const r = card.getBoundingClientRect();
@@ -1191,17 +984,13 @@
       const ry = (x - 0.5) * 10;
       card.style.transform = `translateY(-3px) rotateX(${rx}deg) rotateY(${ry}deg)`;
     }
-    function untilt(card){
-      card.style.transform = "";
-    }
+    function untilt(card){ card.style.transform = ""; }
 
     // Init
-    Cart.load();
     Render.tabs();
     Render.grid();
     Render.bar();
-    Pricing.renderTotals();
-    $("promo").value = STATE.promoCode || "";
+    Render.cart();
 
     $("q").addEventListener("input", (e)=>{ STATE.q = e.target.value || ""; Render.grid(); });
     $("sort").addEventListener("change",(e)=>{ STATE.sort = e.target.value; Render.grid(); });
@@ -1212,7 +1001,6 @@
     $("btnCheckout").onclick  = ()=>{ Drawer.open(); Checkout.send(); };
     $("btnCheckout2").onclick = ()=>{ Drawer.open(); Checkout.send(); };
     $("btnClear").onclick = ()=>Cart.clear();
-    $("btnAdmin").onclick = ()=>Admin.open();
 
     if(TG){
       try{
@@ -1229,7 +1017,6 @@
       }
       if(e.key==="Escape"){
         UI.close("mProduct");
-        UI.close("mAdmin");
         Drawer.close();
       }
     });
