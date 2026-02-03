@@ -8,7 +8,7 @@
 <style>
 * {
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
 }
 
 body {
@@ -20,63 +20,100 @@ body {
 
 .overlay {
   min-height: 100vh;
-  background: rgba(0,0,0,0.65);
-  padding: 15px;
+  background: linear-gradient(
+    rgba(0,0,0,0.75),
+    rgba(0,0,0,0.85)
+  );
+  padding: 20px;
 }
 
 h1 {
   text-align: center;
-  margin-bottom: 20px;
+  font-size: 32px;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  text-align: center;
+  opacity: 0.8;
+  margin-bottom: 25px;
 }
 
 .category {
-  background: rgba(0,0,0,0.7);
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 15px;
+  backdrop-filter: blur(14px);
+  background: rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(255,255,255,0.15);
 }
 
 .category h2 {
-  margin-top: 0;
+  margin: 0 0 12px;
+  font-size: 20px;
   color: #2ecc71;
 }
 
 .product {
-  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-select, button {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  margin-top: 8px;
+.product p {
+  margin: 0;
+  font-weight: bold;
 }
 
 button {
-  background: #2ecc71;
-  color: black;
+  background: linear-gradient(135deg,#2ecc71,#27ae60);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 12px;
   font-weight: bold;
   cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(46,204,113,0.4);
+}
+
+/* POPUP */
 #details {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.9);
   display: none;
   padding: 20px;
 }
 
 #details .box {
-  background: #111;
-  border-radius: 12px;
-  padding: 15px;
+  max-width: 420px;
+  margin: auto;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(16px);
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+#details h2 {
+  margin-top: 0;
+}
+
+select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 10px;
+  border: none;
 }
 
 .close {
   background: #e74c3c;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 </style>
 </head>
@@ -84,6 +121,7 @@ button {
 <body>
 <div class="overlay">
   <h1>🌿 Calidad West</h1>
+  <div class="subtitle">Premium selection • Cali quality</div>
 
   <!-- Mousseux -->
   <div class="category">
@@ -99,7 +137,7 @@ button {
     <h2>🧪 Filtrer</h2>
     <div class="product">
       <p>Dry Sift Premium</p>
-      <button onclick="openDetails('Dry Sift','Filtration fine, haute concentration.')">Voir</button>
+      <button onclick="openDetails('Dry Sift Premium','Filtration fine, haute concentration, très aromatique.')">Voir</button>
     </div>
   </div>
 
@@ -108,7 +146,7 @@ button {
     <h2>❄️ Frozen</h2>
     <div class="product">
       <p>Frozen Kush</p>
-      <button onclick="openDetails('Frozen Kush','Conservé à froid pour un maximum de terpènes.')">Voir</button>
+      <button onclick="openDetails('Frozen Kush','Conservé à froid pour préserver un maximum de terpènes.')">Voir</button>
     </div>
   </div>
 
@@ -126,12 +164,12 @@ button {
     <h2>🌿 Beuh</h2>
     <div class="product">
       <p>OG Kush</p>
-      <button onclick="openDetails('OG Kush','Indica puissante, relaxante, goût terreux.')">Voir</button>
+      <button onclick="openDetails('OG Kush','Indica puissante, relaxante, saveur terreuse.')">Voir</button>
     </div>
   </div>
 </div>
 
-<!-- Détails produit -->
+<!-- POPUP PRODUIT -->
 <div id="details">
   <div class="box">
     <h2 id="dTitle"></h2>
@@ -143,7 +181,7 @@ button {
       <option>5g</option>
     </select>
 
-    <button>Ajouter au panier</button>
+    <button style="margin-top:10px;">Ajouter au panier</button>
     <button class="close" onclick="closeDetails()">Fermer</button>
   </div>
 </div>
@@ -161,4 +199,3 @@ function closeDetails() {
 </script>
 </body>
 </html>
-
