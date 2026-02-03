@@ -1,178 +1,66 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
   <title>Calidad West</title>
-
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
-    body{
-      margin:0;
-      font-family:Arial, sans-serif;
-      background:#0b0f14;
-      color:#fff;
-      padding-bottom:110px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
     }
-    header{
-      position:sticky;
-      top:0;
-      background:#0b0f14;
-      border-bottom:1px solid #222;
-      padding:14px;
-      z-index:10;
+
+    body {
+      min-height: 100vh;
+      background: url("assets/background.png") no-repeat center center fixed;
+      background-size: cover;
+      color: white;
     }
-    h1{margin:0}
-    input{
-      width:100%;
-      padding:12px;
-      border-radius:10px;
-      border:1px solid #333;
-      background:#111;
-      color:#fff;
-      margin-top:10px;
+
+    .overlay {
+      min-height: 100vh;
+      background: rgba(0,0,0,0.6);
+      padding: 20px;
     }
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:12px;
-      padding:12px;
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
     }
-    .card{
-      background:#111827;
-      border-radius:14px;
-      padding:12px;
-      border:1px solid #222;
+
+    .card {
+      background: rgba(0,0,0,0.7);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
     }
-    select,button{
-      width:100%;
-      margin-top:8px;
-      padding:10px;
-      border-radius:10px;
-      border:none;
-    }
-    button{
-      background:#22c55e;
-      font-weight:bold;
-    }
-    .bar{
-      position:fixed;
-      bottom:0;
-      left:0;
-      right:0;
-      background:#0f1420;
-      border-top:1px solid #222;
-      padding:12px;
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background: #2ecc71;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
     }
   </style>
 </head>
-
 <body>
+  <div class="overlay">
+    <h1>🌿 Calidad West</h1>
 
-<header>
-  <h1>🛒 Calidad West</h1>
-  <input id="search" placeholder="Rechercher un produit…">
-</header>
-
-<div class="grid" id="products"></div>
-
-<div class="bar">
-  Articles : <span id="count">0</span> |
-  Total : <span id="total">0</span> €
-  <button onclick="checkout()">Commander</button>
-</div>
-
-<script>
-  const tg = Telegram.WebApp;
-  tg.expand();
-
-  // 🔴 CONFIG
-  const BOT_USERNAME = "LaBete56"; // SANS @
-
-  // 🟢 PRODUITS (modifie ici)
-  const PRODUCTS = [
-    {
-      name:"Brides Maid",
-      options:[
-        {label:"5g",price:25},
-        {label:"10g",price:45},
-        {label:"25g",price:100}
-      ]
-    },
-    {
-      name:"OG Kush",
-      options:[
-        {label:"5g",price:20},
-        {label:"10g",price:38}
-      ]
-    }
-  ];
-
-  let cart = [];
-
-  function render(){
-    const q = document.getElementById("search").value.toLowerCase();
-    document.getElementById("products").innerHTML = PRODUCTS
-      .filter(p => p.name.toLowerCase().includes(q))
-      .map((p,i)=>`
-        <div class="card">
-          <b>${p.name}</b>
-          <select id="opt${i}">
-            ${p.options.map(o=>`
-              <option value="${o.price}">
-                ${o.label} - ${o.price}€
-              </option>`).join("")}
-          </select>
-          <button onclick="add(${i})">Ajouter</button>
-        </div>
-      `).join("");
-  }
-
-  function add(i){
-    const sel = document.getElementById("opt"+i);
-    const opt = PRODUCTS[i].options[sel.selectedIndex];
-    cart.push({
-      name: PRODUCTS[i].name,
-      label: opt.label,
-      price: opt.price
-    });
-    updateBar();
-  }
-
-  function updateBar(){
-    document.getElementById("count").innerText = cart.length;
-    document.getElementById("total").innerText =
-      cart.reduce((s,i)=>s+i.price,0);
-  }
-
-  function checkout(){
-    if(cart.length === 0){
-      alert("Panier vide");
-      return;
-    }
-
-    let msg = "🛒 COMMANDE CALIDAD WEST\n\n";
-    let total = 0;
-
-    cart.forEach(i=>{
-      msg += `• ${i.name} (${i.label}) = ${i.price}€\n`;
-      total += i.price;
-    });
-
-    msg += `\n💰 TOTAL : ${total}€`;
-
-    // ➜ redirection Telegram avec message pré‑rempli
-    const link =
-      "@LaBete56" +
-      encodeURIComponent(msg);
-
-    Telegram.WebApp.openTelegramLink(link);
-  }
-
-  document.getElementById("search").addEventListener("input",render);
-  render();
-</script>
-
+    <div class="card">
+      <p>Bienvenue sur la mini‑app.</p>
+      <p>Les catégories arrivent juste après 👇</p>
+      <button class="btn">Commander</button>
+    </div>
+  </div>
 </body>
 </html>
