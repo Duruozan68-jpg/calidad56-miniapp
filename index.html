@@ -6,236 +6,252 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* {
-  box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
+*{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:url("./assets/background.png") center/cover no-repeat fixed;
+  color:#fff;
 }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: url("./assets/background.png") center / cover no-repeat fixed;
-  color: #fff;
-}
-
-.overlay {
-  min-height: 100vh;
-  background: rgba(0,0,0,0.7);
-  padding: 15px;
+.overlay{
+  min-height:100vh;
+  background:rgba(0,0,0,.78);
+  padding:15px;
 }
 
 /* HEADER */
-.header {
-  text-align: center;
-  margin-bottom: 20px;
+.header{text-align:center;margin-bottom:15px}
+.header h1{margin:0;font-size:30px}
+.header p{margin:6px 0 12px;opacity:.8}
+
+.btn{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:8px;
 }
 
-.header h1 {
-  margin: 0;
-  font-size: 28px;
+.btn-cart{background:#f1c40f;color:#000}
+.btn-admin{background:#3498db;color:#000}
+
+/* CATALOG */
+.category{margin:20px 0}
+.category h2{color:#2ecc71;margin-bottom:10px}
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:12px;
 }
 
-.header p {
-  margin: 5px 0 0;
-  opacity: 0.8;
+.card{
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:16px;
+  padding:14px;
+  cursor:pointer;
 }
 
-/* CATEGORY */
-.category {
-  margin-bottom: 25px;
+.card h3{margin:0 0 6px;font-size:16px}
+.card span{opacity:.8;font-size:13px}
+
+/* MODALS */
+#productPage,#cartPage,#adminPage{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.92);
+  display:none;
+  padding:15px;
 }
 
-.category h2 {
-  margin-bottom: 10px;
-  color: #2ecc71;
+.box{
+  max-width:440px;
+  margin:auto;
+  background:#111;
+  border-radius:20px;
+  padding:18px;
 }
 
-/* PRODUCT GRID */
-.products {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
+/* FORM */
+select,input,button{
+  width:100%;
+  padding:12px;
+  margin-top:8px;
+  border-radius:10px;
+  border:none;
+  font-weight:bold;
 }
 
-/* PRODUCT CARD */
-.product-card {
-  background: rgba(255,255,255,0.1);
-  border-radius: 14px;
-  padding: 12px;
-  border: 1px solid rgba(255,255,255,0.15);
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+button.primary{background:#2ecc71;color:#000}
+button.secondary{background:#e74c3c;color:#fff}
+
+/* CART */
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:6px;
 }
 
-.product-card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+.total{
+  font-size:18px;
+  font-weight:bold;
+  margin-top:10px;
 }
 
-.product-card h3 {
-  margin: 0 0 6px;
-  font-size: 16px;
-}
-
-.product-card span {
-  font-size: 13px;
-  opacity: 0.8;
-}
-
-/* PRODUCT PAGE (AMAZON STYLE) */
-#productPage {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.9);
-  display: none;
-  padding: 15px;
-}
-
-.product-box {
-  max-width: 420px;
-  margin: auto;
-  background: #111;
-  border-radius: 18px;
-  padding: 18px;
-}
-
-.product-box h2 {
-  margin-top: 0;
-}
-
-.product-box p {
-  opacity: 0.9;
-}
-
-select, button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 10px;
-  border: none;
-  font-weight: bold;
-}
-
-button {
-  background: #2ecc71;
-  color: #000;
-  cursor: pointer;
-}
-
-button.secondary {
-  background: #e74c3c;
-  color: #fff;
-}
+/* ADMIN */
+.admin-row{display:flex;gap:8px}
+.admin-row input{flex:1}
+.small{opacity:.7;font-size:12px}
 </style>
 </head>
 
 <body>
 <div class="overlay">
 
-  <!-- HEADER -->
   <div class="header">
     <h1>🌿 Calidad West</h1>
     <p>Premium selection • Cali quality</p>
+    <button class="btn btn-cart" onclick="openCart()">🛒 Panier</button>
+    <button class="btn btn-admin" onclick="openAdmin()">⚙️ Admin</button>
   </div>
 
-  <!-- MOUSSEUX -->
-  <div class="category">
-    <h2>💨 Mousseux</h2>
-    <div class="products">
-      <div class="product-card" onclick="openProduct(
-        'Ice Hash',
-        'Mousseux ultra pur, texture crémeuse, goût intense.'
-      )">
-        <h3>Ice Hash</h3>
-        <span>Ultra premium</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- FILTRER -->
-  <div class="category">
-    <h2>🧪 Filtrer</h2>
-    <div class="products">
-      <div class="product-card" onclick="openProduct(
-        'Dry Sift Premium',
-        'Filtration fine, haute concentration, très aromatique.'
-      )">
-        <h3>Dry Sift</h3>
-        <span>Qualité supérieure</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- FROZEN -->
-  <div class="category">
-    <h2>❄️ Frozen</h2>
-    <div class="products">
-      <div class="product-card" onclick="openProduct(
-        'Frozen Kush',
-        'Conservé à froid pour préserver les terpènes.'
-      )">
-        <h3>Frozen Kush</h3>
-        <span>Fraîcheur extrême</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ZIP -->
-  <div class="category">
-    <h2>📦 ZIP 0.9</h2>
-    <div class="products">
-      <div class="product-card" onclick="openProduct(
-        'ZIP Cali',
-        'Conditionnement ZIP 0.9, qualité premium.'
-      )">
-        <h3>ZIP Cali</h3>
-        <span>Format pro</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- BEUH -->
-  <div class="category">
-    <h2>🌿 Beuh</h2>
-    <div class="products">
-      <div class="product-card" onclick="openProduct(
-        'OG Kush',
-        'Indica puissante, relaxante, saveur terreuse.'
-      )">
-        <h3>OG Kush</h3>
-        <span>Indica</span>
-      </div>
-    </div>
-  </div>
-
+  <div id="catalog"></div>
 </div>
 
-<!-- PRODUCT PAGE -->
+<!-- PRODUIT -->
 <div id="productPage">
-  <div class="product-box">
+  <div class="box">
     <h2 id="pTitle"></h2>
-    <p id="pDesc"></p>
+    <p>Prix : <b><span id="pPrice"></span> €</b></p>
 
-    <select>
-      <option>1g</option>
-      <option>3g</option>
-      <option>5g</option>
+    <select id="pQty">
+      <option value="1">1</option>
+      <option value="3">3</option>
+      <option value="5">5</option>
     </select>
 
-    <button>Ajouter au panier</button>
+    <button class="primary" onclick="addToCart()">Ajouter au panier</button>
     <button class="secondary" onclick="closeProduct()">Retour</button>
   </div>
 </div>
 
+<!-- PANIER -->
+<div id="cartPage">
+  <div class="box">
+    <h2>🛒 Panier</h2>
+    <div id="cartItems"></div>
+    <div class="total">Total : <span id="total">0</span> €</div>
+    <button class="secondary" onclick="closeCart()">Continuer</button>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="adminPage">
+  <div class="box">
+    <h2>⚙️ Mode Admin</h2>
+    <p class="small">Modifier noms & prix puis enregistrer</p>
+    <div id="adminForm"></div>
+    <button class="primary" onclick="saveAdmin()">Enregistrer</button>
+    <button class="secondary" onclick="closeAdmin()">Fermer</button>
+  </div>
+</div>
+
 <script>
-function openProduct(title, desc) {
-  document.getElementById("pTitle").innerText = title;
-  document.getElementById("pDesc").innerText = desc;
-  document.getElementById("productPage").style.display = "block";
+/* ===== DATA ===== */
+const defaultData=[
+  {cat:"💨 Mousseux",items:[{name:"Ice Hash",price:20}]},
+  {cat:"🧪 Filtrer",items:[{name:"Dry Sift",price:15}]},
+  {cat:"❄️ Frozen",items:[{name:"Frozen Kush",price:12}]},
+  {cat:"📦 ZIP 0.9",items:[{name:"ZIP Cali",price:250}]},
+  {cat:"🌿 Beuh",items:[{name:"OG Kush",price:10}]}
+];
+
+let data=JSON.parse(localStorage.getItem("products"))||defaultData;
+let cart=[];
+let current={};
+
+/* ===== CATALOG ===== */
+const catalog=document.getElementById("catalog");
+
+function renderCatalog(){
+  catalog.innerHTML="";
+  data.forEach(c=>{
+    const sec=document.createElement("div");
+    sec.className="category";
+    sec.innerHTML=`<h2>${c.cat}</h2><div class="products"></div>`;
+    const grid=sec.querySelector(".products");
+
+    c.items.forEach(p=>{
+      const card=document.createElement("div");
+      card.className="card";
+      card.onclick=()=>openProduct(p.name,p.price);
+      card.innerHTML=`<h3>${p.name}</h3><span>${p.price} €</span>`;
+      grid.appendChild(card);
+    });
+
+    catalog.appendChild(sec);
+  });
+}
+renderCatalog();
+
+/* ===== PRODUCT ===== */
+function openProduct(name,price){
+  current={name,price};
+  pTitle.innerText=name;
+  pPrice.innerText=price;
+  productPage.style.display="block";
+}
+function closeProduct(){productPage.style.display="none";}
+function addToCart(){
+  const q=+pQty.value;
+  cart.push({name:current.name,qty:q,price:current.price*q});
+  closeProduct();
 }
 
-function closeProduct() {
-  document.getElementById("productPage").style.display = "none";
+/* ===== CART ===== */
+function openCart(){
+  cartItems.innerHTML="";
+  let t=0;
+  cart.forEach(i=>{
+    t+=i.price;
+    cartItems.innerHTML+=`
+      <div class="cart-item">
+        <span>${i.name} x${i.qty}</span>
+        <span>${i.price}€</span>
+      </div>`;
+  });
+  total.innerText=t;
+  cartPage.style.display="block";
+}
+function closeCart(){cartPage.style.display="none";}
+
+/* ===== ADMIN ===== */
+function openAdmin(){
+  adminForm.innerHTML="";
+  data.forEach((c,ci)=>{
+    adminForm.innerHTML+=`<h3>${c.cat}</h3>`;
+    c.items.forEach((p,pi)=>{
+      adminForm.innerHTML+=`
+        <div class="admin-row">
+          <input value="${p.name}" 
+            oninput="data[${ci}].items[${pi}].name=this.value">
+          <input type="number" value="${p.price}" 
+            oninput="data[${ci}].items[${pi}].price=+this.value">
+        </div>`;
+    });
+  });
+  adminPage.style.display="block";
+}
+function closeAdmin(){adminPage.style.display="none";}
+function saveAdmin(){
+  localStorage.setItem("products",JSON.stringify(data));
+  renderCatalog();
+  closeAdmin();
 }
 </script>
 </body>
