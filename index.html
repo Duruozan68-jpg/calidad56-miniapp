@@ -3,102 +3,141 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#12110e" />
+  <meta name="theme-color" content="#0f0e0b" />
   <title>Calidad Shop</title>
+
   <style>
+    @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;600;700&display=swap");
+
     :root{
-      --bg:#0f0e0b;
-      --bg-soft:#14130f;
-      --card:#1b1a17;
-      --card-2:#20201c;
+      --bg:#0b0a08;
+      --bg-2:#12100d;
+      --panel:#191814;
+      --panel-2:#1f1d18;
       --gold:#d6b36a;
       --gold-2:#b8934c;
-      --text:#f6f2e7;
-      --muted:#bcb6a7;
+      --gold-3:#8f6b2d;
+      --text:#f6f1e7;
+      --muted:#b9b2a5;
       --line:#3a3429;
-      --green:#3fb977;
+      --green:#3bd28a;
       --blue:#2da9ff;
       --danger:#e04b4b;
-      --shadow:0 20px 50px rgba(0,0,0,.5);
+      --shadow:0 20px 60px rgba(0,0,0,.55);
       --radius:22px;
       --radius-sm:16px;
       --pad:18px;
+      --vh:1vh;
     }
 
     * { box-sizing: border-box; }
     html, body { height:100%; }
     body{
       margin:0;
-      font-family: "Georgia","Times New Roman",serif;
-      background: radial-gradient(1200px 900px at 50% -10%, #2c291f 0%, #12110e 45%, #0c0b09 100%);
+      font-family:"Manrope", system-ui, -apple-system, sans-serif;
+      background:
+        radial-gradient(1200px 900px at 50% -10%, #2e2a1f 0%, #12100d 45%, #0a0907 100%);
       color:var(--text);
       overflow-x:hidden;
     }
 
-    .app{
-      min-height:100%;
-      padding: env(safe-area-inset-top) env(safe-area-inset-right) calc(110px + env(safe-area-inset-bottom)) env(safe-area-inset-left);
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      background:
+        radial-gradient(500px 280px at 15% 10%, rgba(214,179,106,.22), transparent 60%),
+        radial-gradient(520px 320px at 80% 12%, rgba(59,210,138,.16), transparent 65%),
+        radial-gradient(520px 340px at 85% 80%, rgba(45,169,255,.12), transparent 70%),
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='0.06'/></svg>");
+      pointer-events:none;
+      mix-blend-mode:soft-light;
     }
 
-    .fade-in{
-      animation: fadeInUp .6s ease both;
+    .app{
+      min-height:calc(var(--vh) * 100);
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) calc(110px + env(safe-area-inset-bottom)) env(safe-area-inset-left);
+      max-width:980px;
+      margin:0 auto;
+      position:relative;
+      z-index:1;
     }
-    @keyframes fadeInUp{
-      from{opacity:0; transform:translateY(16px);}
+
+    .fade-up{
+      animation: fadeUp .7s ease both;
+    }
+    @keyframes fadeUp{
+      from{opacity:0; transform:translateY(18px);}
       to{opacity:1; transform:translateY(0);}
     }
     @media (prefers-reduced-motion: reduce){
-      .fade-in{animation:none;}
+      .fade-up{animation:none;}
     }
 
     .hero{
-      padding:24px 18px 10px;
+      padding:26px 18px 6px;
       text-align:center;
     }
     .brand{
-      font-size:38px;
+      font-family:"Cinzel", serif;
+      font-size:42px;
       letter-spacing:2px;
       color:var(--gold);
-      text-shadow:0 2px 10px rgba(0,0,0,.5);
-      margin:10px 0 6px;
+      text-shadow:0 2px 14px rgba(0,0,0,.55);
+      margin:6px 0 6px;
     }
     .brand-sub{
-      font-size:12px;
-      letter-spacing:4px;
+      font-family:"Cormorant Garamond", serif;
+      font-size:13px;
+      letter-spacing:5px;
       text-transform:uppercase;
       color:var(--muted);
     }
     .divider{
-      width:80px;
+      width:90px;
       height:1px;
-      margin:12px auto 0;
+      margin:14px auto 0;
       background:linear-gradient(90deg, transparent, var(--gold), transparent);
     }
 
     .section-title{
-      margin:18px 18px 12px;
-      font-size:22px;
-      letter-spacing:.5px;
-      color:var(--text);
+      margin:18px 18px 10px;
+      font-family:"Cormorant Garamond", serif;
+      font-size:26px;
+      letter-spacing:.6px;
     }
     .section-sub{
       color:var(--muted);
       font-size:13px;
-      margin:0 18px 8px;
+      margin:0 18px 12px;
+    }
+
+    .panel{
+      margin:14px 18px;
+      border-radius:var(--radius);
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, #1b1915 0%, #14120f 100%);
+      padding:16px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .panel::after{
+      content:"";
+      position:absolute; inset:0;
+      background:linear-gradient(120deg, rgba(214,179,106,.08), transparent 35%, transparent 65%, rgba(214,179,106,.08));
+      pointer-events:none;
     }
 
     .grid{
       display:grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
+      grid-template-columns:repeat(2, minmax(0,1fr));
       gap:12px;
       padding:0 14px 14px;
     }
-    @media (max-width:340px){
-      .grid{grid-template-columns:1fr;}
-    }
+    @media (max-width:360px){ .grid{grid-template-columns:1fr;} }
 
-    .card{
-      background:linear-gradient(180deg, #1f1d18 0%, #161510 100%);
+    .product-card{
+      background:linear-gradient(180deg, #201e19 0%, #15140f 100%);
       border:1px solid var(--line);
       border-radius:18px;
       overflow:hidden;
@@ -106,21 +145,26 @@
       position:relative;
       cursor:pointer;
       transition:transform .2s ease, border-color .2s ease;
+      text-align:left;
+      padding:0;
+      color:inherit;
+      width:100%;
     }
-    .card:hover{ transform:translateY(-2px); border-color:var(--gold-2); }
-    .card-media{
-      height:120px;
-      background: radial-gradient(120px 80px at 20% 20%, rgba(214,179,106,.4), transparent 60%),
-                  radial-gradient(140px 120px at 80% 30%, rgba(63,185,119,.2), transparent 70%),
-                  #2a241b;
+    .product-card:hover{ transform:translateY(-2px); border-color:var(--gold-2); }
+    .product-media{
+      height:130px;
+      background:
+        radial-gradient(120px 80px at 20% 20%, rgba(214,179,106,.4), transparent 60%),
+        radial-gradient(140px 120px at 80% 30%, rgba(63,185,119,.2), transparent 70%),
+        #2a241b;
       position:relative;
     }
-    .card-media::after{
+    .product-media::after{
       content:"";
       position:absolute; inset:0;
-      background:linear-gradient(180deg, rgba(0,0,0,0) 20%, rgba(0,0,0,.7) 100%);
+      background:linear-gradient(180deg, rgba(0,0,0,0) 10%, rgba(0,0,0,.7) 100%);
     }
-    .card-badge{
+    .product-badge{
       position:absolute; left:10px; top:10px;
       background:rgba(0,0,0,.55);
       border:1px solid var(--gold);
@@ -129,16 +173,14 @@
       padding:6px 10px;
       border-radius:999px;
       backdrop-filter: blur(6px);
+      z-index:2;
     }
-    .card-body{
-      padding:10px 12px 14px;
-    }
-    .card-title{
-      font-size:16px; margin:2px 0 6px;
-    }
-    .card-sub{
-      font-size:12px; color:var(--muted);
-    }
+    .product-body{ padding:10px 12px 14px; }
+    .product-title{ font-size:16px; margin:2px 0 6px; }
+    .product-sub{ font-size:12px; color:var(--muted); }
+
+    .row{ display:flex; gap:10px; align-items:center; }
+    .row.space{ justify-content:space-between; }
 
     .btn{
       appearance:none; border:none; cursor:pointer;
@@ -147,7 +189,7 @@
       border:1px solid var(--gold-2);
       padding:12px 16px;
       border-radius:999px;
-      font-weight:600;
+      font-weight:700;
       letter-spacing:.4px;
       transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
     }
@@ -156,6 +198,7 @@
     .btn.gold{
       background:linear-gradient(180deg, #d6b36a, #b8934c);
       color:#1a140b;
+      border-color:transparent;
     }
     .btn.blue{
       background:linear-gradient(180deg, #35b7ff, #1f8ad2);
@@ -170,21 +213,7 @@
       color:#fff; border-color:#3a362c;
     }
 
-    .panel{
-      margin:14px 18px;
-      border-radius:var(--radius);
-      border:1px solid var(--line);
-      background:linear-gradient(180deg, #1b1915 0%, #14120f 100%);
-      padding:16px;
-      box-shadow:var(--shadow);
-    }
-
-    .row{
-      display:flex; gap:10px; align-items:center;
-    }
-    .row.space{ justify-content:space-between; }
-
-    .input, .select, .textarea{
+    .input, .textarea{
       width:100%;
       background:#15130f;
       border:1px solid #3a3429;
@@ -195,11 +224,7 @@
       font-size:14px;
     }
     .textarea{ min-height:90px; resize:vertical; }
-
-    .label{
-      font-size:12px; color:var(--muted);
-      margin:8px 2px 6px;
-    }
+    .label{ font-size:12px; color:var(--muted); margin:8px 2px 6px; }
 
     .pill-group{
       display:flex; gap:8px;
@@ -279,7 +304,7 @@
     /* Modal */
     .modal{
       position:fixed; inset:0;
-      background:rgba(0,0,0,.6);
+      background:rgba(0,0,0,.65);
       display:none; align-items:center; justify-content:center;
       z-index:60;
       padding:16px;
@@ -294,17 +319,18 @@
       padding:16px;
       box-shadow:var(--shadow);
       position:relative;
-      animation: fadeInUp .25s ease both;
+      animation: fadeUp .25s ease both;
     }
     .modal-close{
       position:absolute; right:12px; top:12px;
       background:transparent; border:none; color:#fff; font-size:26px; cursor:pointer;
     }
     .modal-media{
-      height:180px; border-radius:14px; overflow:hidden;
-      background: radial-gradient(150px 100px at 20% 20%, rgba(214,179,106,.4), transparent 60%),
-                  radial-gradient(180px 140px at 80% 30%, rgba(63,185,119,.2), transparent 70%),
-                  #2a241b;
+      height:190px; border-radius:14px; overflow:hidden;
+      background:
+        radial-gradient(150px 100px at 20% 20%, rgba(214,179,106,.4), transparent 60%),
+        radial-gradient(180px 140px at 80% 30%, rgba(63,185,119,.2), transparent 70%),
+        #2a241b;
       position:relative; margin-bottom:12px;
     }
     .modal-media::after{
@@ -366,21 +392,19 @@
 </head>
 <body>
   <div class="app">
-    <header class="hero fade-in">
+    <header class="hero fade-up">
       <div class="brand">Calidad</div>
       <div class="brand-sub">SELECTION PREMIUM</div>
       <div class="divider"></div>
     </header>
 
-    <!-- MENU / HOME -->
-    <section id="page-home" class="fade-in">
+    <section id="page-home" class="fade-up">
       <div class="section-title">Produits disponibles</div>
       <div class="section-sub">Selection premium, qualite controlee</div>
       <div id="product-grid" class="grid"></div>
     </section>
 
-    <!-- PANIER -->
-    <section id="page-cart" class="fade-in hidden">
+    <section id="page-cart" class="fade-up hidden">
       <div class="section-title">Mon Panier</div>
       <div class="panel">
         <div id="cart-items"></div>
@@ -432,8 +456,7 @@
       </div>
     </section>
 
-    <!-- COMPTE -->
-    <section id="page-account" class="fade-in hidden">
+    <section id="page-account" class="fade-up hidden">
       <div class="section-title">Mon Compte</div>
 
       <div class="panel">
@@ -501,12 +524,11 @@
     </section>
   </div>
 
-  <!-- MODAL PRODUIT -->
   <div id="product-modal" class="modal">
     <div class="modal-card">
       <button class="modal-close" id="modal-close">&times;</button>
       <div class="modal-media" id="modal-media"></div>
-      <div class="card-title" id="modal-title">Produit</div>
+      <div class="product-title" id="modal-title">Produit</div>
       <div class="section-sub" id="modal-desc"></div>
 
       <div class="label" style="margin-top:10px;">Prix</div>
@@ -526,7 +548,6 @@
     </div>
   </div>
 
-  <!-- NAV -->
   <nav class="bottom-nav">
     <div class="nav-btn active" data-target="home">
       <span class="nav-icon">🏠</span>
@@ -543,116 +564,69 @@
   </nav>
 
   <script>
-    // Telegram safe
-    try {
-      if (window.Telegram && Telegram.WebApp) {
-        Telegram.WebApp.expand();
-      }
-    } catch (e) {}
+    function setVh(){ document.documentElement.style.setProperty("--vh", (window.innerHeight * 0.01) + "px"); }
+    setVh(); window.addEventListener("resize", setVh);
+
+    try { if (window.Telegram && Telegram.WebApp) Telegram.WebApp.expand(); } catch(e){}
+
+    const ADMIN_CODE = "2810";
+    const SECRETARY_URL = "https://t.me/Calidad_Secretaire";
 
     const STORAGE = {
-      products: "calidad_products_v1",
-      cart: "calidad_cart_v1",
-      orders: "calidad_orders_v1",
+      products: "calidad_products_v3",
+      cart: "calidad_cart_v3",
+      orders: "calidad_orders_v3",
       admin: "calidad_admin_ok"
     };
 
     const DEFAULT_PRODUCTS = [
-      {
-        id:"p1",
-        name:"Brides maid",
-        category:"Static us",
-        badge:"Static us 🇺🇸",
-        image:"",
-        description:"Fleur premium, texture dense, aromes complexes, finition propre.",
-        sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}],
-        active:true
-      },
-      {
-        id:"p2",
-        name:"Autumn",
-        category:"Static us",
-        badge:"Static us 🇺🇸",
-        image:"",
-        description:"Selection haute gamme, effet equilibr&eacute;, rendement propre.",
-        sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}],
-        active:true
-      },
-      {
-        id:"p3",
-        name:"OG Kush",
-        category:"Static us",
-        badge:"Static us 🇺🇸",
-        image:"",
-        description:"Note kush classique, puissance constante, selection premium.",
-        sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}],
-        active:true
-      },
-      {
-        id:"p4",
-        name:"Lemon Cherry",
-        category:"Static us",
-        badge:"Static us 🇺🇸",
-        image:"",
-        description:"Profil citronne, finition propre, choix elite.",
-        sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}],
-        active:true
-      }
+      { id:"p1", name:"Brides maid", category:"Static us", badge:"Static us 🇺🇸", image:"", description:"Fleur premium, texture dense, aromes complexes, finition propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
+      { id:"p2", name:"Autumn", category:"Static us", badge:"Static us 🇺🇸", image:"", description:"Selection haut de gamme, effet equilibré, rendu propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
+      { id:"p3", name:"OG Kush", category:"Static us", badge:"Static us 🇺🇸", image:"", description:"Note kush classique, puissance constante, selection premium.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
+      { id:"p4", name:"Lemon Cherry", category:"Static us", badge:"Static us 🇺🇸", image:"", description:"Profil citronné, finition propre, choix elite.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true }
     ];
 
     const $ = (id) => document.getElementById(id);
 
-    let products = loadProducts();
-    let cart = loadCart();
-    let orders = loadOrders();
-
+    let products = load(STORAGE.products, DEFAULT_PRODUCTS);
+    let cart = load(STORAGE.cart, []);
+    let orders = load(STORAGE.orders, []);
     let currentProduct = null;
     let selectedSize = null;
     let quantity = 1;
     let pickupType = null;
 
-    function loadProducts(){
-      const saved = localStorage.getItem(STORAGE.products);
-      if (!saved) return DEFAULT_PRODUCTS;
-      try { return JSON.parse(saved); } catch { return DEFAULT_PRODUCTS; }
+    function load(key, fallback){
+      try{
+        const v = JSON.parse(localStorage.getItem(key));
+        return Array.isArray(v) || typeof v === "object" ? v : fallback;
+      }catch{ return fallback; }
     }
-    function saveProducts(){
-      localStorage.setItem(STORAGE.products, JSON.stringify(products));
-    }
-    function loadCart(){
-      const saved = localStorage.getItem(STORAGE.cart);
-      if (!saved) return [];
-      try { return JSON.parse(saved); } catch { return []; }
-    }
-    function saveCart(){
-      localStorage.setItem(STORAGE.cart, JSON.stringify(cart));
-    }
-    function loadOrders(){
-      const saved = localStorage.getItem(STORAGE.orders);
-      if (!saved) return [];
-      try { return JSON.parse(saved); } catch { return []; }
-    }
-    function saveOrders(){
-      localStorage.setItem(STORAGE.orders, JSON.stringify(orders));
+    function save(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
+
+    function priceRange(sizes){
+      if (!sizes || !sizes.length) return "";
+      const min = Math.min(...sizes.map(s=>s.price));
+      return "A partir de " + min + "€";
     }
 
     function renderProducts(){
       const grid = $("product-grid");
       grid.innerHTML = "";
-      const list = products.filter(p => p.active);
-      list.forEach(p => {
-        const card = document.createElement("div");
-        card.className = "card";
+      products.filter(p => p.active).forEach(p => {
+        const card = document.createElement("button");
+        card.className = "product-card";
+        card.type = "button";
         card.innerHTML = `
-          <div class="card-media" style="${p.image ? `background-image:url('${p.image}'); background-size:cover; background-position:center;` : ""}">
-            <div class="card-badge">${p.badge || (p.category || "")}</div>
+          <div class="product-media" style="${p.image ? `background-image:url('${p.image}'); background-size:cover; background-position:center;` : ""}">
+            <div class="product-badge">${p.badge || p.category || ""}</div>
           </div>
-          <div class="card-body">
-            <div class="card-title">${p.name}</div>
-            <div class="card-sub">${p.category || ""}</div>
+          <div class="product-body">
+            <div class="product-title">${p.name}</div>
+            <div class="product-sub">${priceRange(p.sizes)}</div>
           </div>
         `;
-        card.addEventListener("click", () => openModal(p));
+        card.onclick = () => openModal(p);
         grid.appendChild(card);
       });
     }
@@ -663,7 +637,7 @@
       quantity = 1;
 
       $("modal-title").textContent = product.name;
-      $("modal-desc").innerHTML = product.description || "";
+      $("modal-desc").textContent = product.description || "";
       const media = $("modal-media");
       if (product.image){
         media.style.backgroundImage = `url('${product.image}')`;
@@ -685,10 +659,7 @@
         const btn = document.createElement("div");
         btn.className = "size-btn" + (selectedSize && selectedSize.label === s.label ? " active" : "");
         btn.innerHTML = `<span>${s.label}</span><strong>${s.price}€</strong>`;
-        btn.addEventListener("click", () => {
-          selectedSize = s;
-          renderSizes();
-        });
+        btn.onclick = () => { selectedSize = s; renderSizes(); };
         wrap.appendChild(btn);
       });
     }
@@ -706,7 +677,7 @@
         price: selectedSize.price,
         qty: quantity
       });
-      saveCart();
+      save(STORAGE.cart, cart);
       renderCart();
       closeModal();
       showPage("cart");
@@ -715,9 +686,8 @@
     function renderCart(){
       const wrap = $("cart-items");
       wrap.innerHTML = "";
-      if (!cart.length){
-        wrap.innerHTML = `<div class="section-sub">Panier vide.</div>`;
-      }
+      if (!cart.length) wrap.innerHTML = `<div class="section-sub">Panier vide.</div>`;
+
       cart.forEach(item => {
         const row = document.createElement("div");
         row.className = "cart-item";
@@ -746,7 +716,6 @@
 
       const count = cart.reduce((s,i)=>s+i.qty,0);
       const total = cart.reduce((s,i)=>s+i.qty*i.price,0);
-
       $("cart-count").textContent = count;
       $("cart-total").textContent = total.toFixed(2) + " €";
     }
@@ -756,14 +725,16 @@
       if (!item) return;
       item.qty += delta;
       if (item.qty <= 0) cart = cart.filter(i => i.key !== key);
-      saveCart();
+      save(STORAGE.cart, cart);
       renderCart();
     }
     function removeItem(key){
       cart = cart.filter(i => i.key !== key);
-      saveCart();
+      save(STORAGE.cart, cart);
       renderCart();
     }
+
+    function closeModal(){ $("product-modal").classList.remove("show"); }
 
     function showPage(name){
       ["home","cart","account"].forEach(p => {
@@ -774,17 +745,14 @@
       });
     }
 
-    // Pickup
     document.querySelectorAll("[data-pickup]").forEach(el=>{
-      el.addEventListener("click", () => {
+      el.onclick = () => {
         pickupType = el.dataset.pickup;
-        document.querySelectorAll("[data-pickup]").forEach(p=>{
-          p.classList.remove("active");
-        });
+        document.querySelectorAll("[data-pickup]").forEach(p=>p.classList.remove("active"));
         el.classList.add("active");
         $("meetup-box").classList.toggle("hidden", pickupType !== "meetup");
         $("delivery-box").classList.toggle("hidden", pickupType !== "delivery");
-      });
+      };
     });
 
     function buildOrderMessage(type){
@@ -807,7 +775,6 @@
     }
 
     function openSecretary(message){
-      // store order
       if (cart.length){
         orders.push({
           id: "CMD-" + Date.now(),
@@ -816,39 +783,33 @@
           total: cart.reduce((s,i)=>s+i.qty*i.price,0),
           type: pickupType || "meetup"
         });
-        saveOrders();
+        save(STORAGE.orders, orders);
         renderOrders();
       }
 
-      // best effort: copy + open
       try { navigator.clipboard.writeText(message); } catch(e){}
       try {
         if (window.Telegram && Telegram.WebApp) {
-          Telegram.WebApp.openTelegramLink("https://t.me/Calidad_Secretaire");
+          Telegram.WebApp.openTelegramLink(SECRETARY_URL);
           alert("Message copie. Colle-le dans la conversation du secretaire.");
           return;
         }
       } catch(e){}
-
       const share = "https://t.me/share/url?url=&text=" + encodeURIComponent(message);
       window.open(share, "_blank");
     }
 
     $("btn-meetup").onclick = () => {
       if (!cart.length) return alert("Panier vide.");
-      const msg = buildOrderMessage("meetup");
       pickupType = "meetup";
-      openSecretary(msg);
+      openSecretary(buildOrderMessage("meetup"));
     };
-
     $("btn-delivery").onclick = () => {
       if (!cart.length) return alert("Panier vide.");
       pickupType = "delivery";
-      const msg = buildOrderMessage("delivery");
-      openSecretary(msg);
+      openSecretary(buildOrderMessage("delivery"));
     };
 
-    // Orders list
     function renderOrders(){
       const wrap = $("order-list");
       wrap.innerHTML = "";
@@ -873,20 +834,15 @@
       });
     }
 
-    // Admin
-    function adminUnlocked(){
-      return localStorage.getItem(STORAGE.admin) === "1";
-    }
+    function adminUnlocked(){ return localStorage.getItem(STORAGE.admin) === "1"; }
     function unlockAdmin(){
       const code = $("admin-code").value.trim();
-      if (code === "2810"){
+      if (code === ADMIN_CODE){
         localStorage.setItem(STORAGE.admin, "1");
         $("admin-lock").classList.add("hidden");
         $("admin-area").classList.remove("hidden");
         renderAdminList();
-      } else {
-        alert("Code incorrect");
-      }
+      } else { alert("Code incorrect"); }
     }
     $("admin-unlock").onclick = unlockAdmin;
 
@@ -927,7 +883,7 @@
       const idx = products.findIndex(p=>p.id===id);
       if (idx >= 0) products[idx] = product;
       else products.push(product);
-      saveProducts();
+      save(STORAGE.products, products);
       renderProducts();
       renderAdminList();
       resetAdminForm();
@@ -964,13 +920,13 @@
         };
         btns[1].onclick = () => {
           p.active = !p.active;
-          saveProducts();
+          save(STORAGE.products, products);
           renderProducts();
           renderAdminList();
         };
         btns[2].onclick = () => {
           products = products.filter(x=>x.id!==p.id);
-          saveProducts();
+          save(STORAGE.products, products);
           renderProducts();
           renderAdminList();
         };
@@ -983,7 +939,7 @@
     $("admin-clear").onclick = () => {
       if (confirm("Vider tout le catalogue ?")){
         products = [];
-        saveProducts();
+        save(STORAGE.products, products);
         renderProducts();
         renderAdminList();
       }
@@ -996,7 +952,7 @@
         const data = JSON.parse($("admin-json").value);
         if (!Array.isArray(data)) throw new Error();
         products = data;
-        saveProducts();
+        save(STORAGE.products, products);
         renderProducts();
         renderAdminList();
       } catch {
@@ -1004,19 +960,16 @@
       }
     };
 
-    // Modal handlers
-    $("modal-close").onclick = () => $("product-modal").classList.remove("show");
+    $("modal-close").onclick = closeModal;
     $("add-to-cart").onclick = addToCart;
-    $("go-cart").onclick = () => { $("product-modal").classList.remove("show"); showPage("cart"); };
+    $("go-cart").onclick = () => { closeModal(); showPage("cart"); };
     $("qty-minus").onclick = () => { quantity = Math.max(1, quantity-1); $("qty-value").textContent = quantity; };
     $("qty-plus").onclick = () => { quantity += 1; $("qty-value").textContent = quantity; };
 
-    // Nav
     document.querySelectorAll(".nav-btn").forEach(btn=>{
-      btn.addEventListener("click", () => showPage(btn.dataset.target));
+      btn.onclick = () => showPage(btn.dataset.target);
     });
 
-    // Init
     renderProducts();
     renderCart();
     renderOrders();
