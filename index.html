@@ -171,23 +171,10 @@
     }
     .btn:hover{ transform:translateY(-1px); box-shadow:0 12px 24px rgba(0,0,0,.35); }
     .btn.block{ width:100%; }
-    .btn.gold{
-      background:linear-gradient(180deg, #d6b36a, #b8934c);
-      color:#1a140b;
-      border-color:transparent;
-    }
-    .btn.green{
-      background:linear-gradient(180deg, #48d08a, #2f9b65);
-      color:#0f2017; border-color:transparent;
-    }
-    .btn.blue{
-      background:linear-gradient(180deg, #35b7ff, #1f8ad2);
-      color:#fff; border-color:transparent;
-    }
-    .btn.gray{
-      background:linear-gradient(180deg, #2c2a25, #1d1b16);
-      color:#fff; border-color:#3a362c;
-    }
+    .btn.gold{ background:linear-gradient(180deg, #d6b36a, #b8934c); color:#1a140b; border-color:transparent; }
+    .btn.green{ background:linear-gradient(180deg, #48d08a, #2f9b65); color:#0f2017; border-color:transparent; }
+    .btn.blue{ background:linear-gradient(180deg, #35b7ff, #1f8ad2); color:#fff; border-color:transparent; }
+    .btn.gray{ background:linear-gradient(180deg, #2c2a25, #1d1b16); color:#fff; border-color:#3a362c; }
     .btn.tiny{ padding:6px 10px; font-size:12px; border-radius:10px; }
 
     .input, .textarea{
@@ -220,13 +207,8 @@
       cursor:pointer;
       transition:background .2s ease;
     }
-    .pill.active{
-      background:linear-gradient(180deg, #2ea6ff, #1b7dc2);
-      color:#fff;
-    }
-    .pill.green.active{
-      background:linear-gradient(180deg, #45d088, #2f9b65);
-    }
+    .pill.active{ background:linear-gradient(180deg, #2ea6ff, #1b7dc2); color:#fff; }
+    .pill.green.active{ background:linear-gradient(180deg, #45d088, #2f9b65); }
 
     .cart-item{
       border:1px solid var(--line);
@@ -539,6 +521,7 @@
 
   <script>
     const ADMIN_CODE = "2810";
+    const SECRETARY_URL = "https://t.me/Calidad_Secretaire";
 
     const STORAGE = {
       products: "calidad_products_ultra",
@@ -576,6 +559,7 @@
     let products = storage.get(STORAGE.products, DEFAULT_PRODUCTS);
     let cart = storage.get(STORAGE.cart, []);
     let orders = storage.get(STORAGE.orders, []);
+    let pickupType = null;
 
     let currentProduct = null;
     let selectedSize = null;
@@ -767,6 +751,94 @@
       });
       document.querySelectorAll(".nav-btn").forEach(btn=>{
         btn.classList.toggle("active", btn.dataset.target === name);
+      });
+    }
+
+    // Pickup selection
+    document.querySelectorAll("[data-pickup]").forEach(el=>{
+      el.onclick = () => {
+        pickupType = el.dataset.pickup;
+        document.querySelectorAll("[data-pickup]").forEach(p=>p.classList.remove("active"));
+        el.classList.add("active");
+        $("meetup-box").classList.toggle("hidden", pickupType !== "meetup");
+        $("delivery-box").classList.toggle("hidden", pickupType !== "delivery");
+      };
+    });
+
+    function buildOrderMessage(type){
+      const total = cart.reduce((s,i)=>s+i.qty*i.price,0);
+      let msg = "Calidad - Nouvelle commande\n";
+      msg += "Type: " + (type === "meetup" ? "Meetup" : "Livraison") + "\n";
+      msg += "Articles:\n";
+      cart.forEach(i=>{
+        msg += `- ${i.name} (${i.size}) x${i.qty} = ${(i.price*i.qty).toFixed(2)} EUR\n`;
+      });
+      msg += "Total: " + total.toFixed(2) + " EUR\n";
+
+      if (type === "delivery"){
+        const addr = $("delivery-address").value.trim();
+        const housing = document.querySelector("input[name='housing']:checked");
+        msg += "Adresse: " + (addr || "Non renseignee") + "\n";
+        msg += "Logement: " + (housing ? housing.value : "Non renseigne") + "\n";
+      }
+      return msg;
+    }
+
+    function openSecretary(message){
+      try { navigator.clipboard.writeText(message); } catch(e){}
+      try {
+        if (window.Telegram && Telegram.WebApp) {
+          Telegram.WebApp.openTelegramLink(SECRETARY_URL);
+          alert("Message copie. Colle-le dans la conversation du secretaire.");
+          return;
+        }
+      } catch(e){}
+      const share = "https://t.me/share/url?url=&text=" + encodeURIComponent(message);
+      window.open(share, "_blank");
+    }
+
+    function placeOrder(type){
+      if (!cart.length) return alert("Panier vide.");
+      pickupType = type;
+
+      const total = cart.reduce((s,i)=>s+i.qty*i.price,0);
+      orders.push({
+        id: "CMD-" + Date.now(),
+        date: new Date().toISOString(),
+        type,
+        total,
+        items: [...cart]
+      });
+      saveOrders();
+      renderOrders();
+
+      openSecretary(buildOrderMessage(type));
+    }
+
+    $("btn-meetup").onclick = () => placeOrder("meetup");
+    $("btn-delivery").onclick = () => placeOrder("delivery");
+
+    function renderOrders(){
+      const wrap = $("order-list");
+      wrap.innerHTML = "";
+      if (!orders.length){
+        wrap.innerHTML = `<div class="section-sub">Aucune commande.</div>`;
+        return;
+      }
+      orders.slice().reverse().forEach(o=>{
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+          <div class="row space">
+            <div>
+              <div class="cart-title">${esc(o.id)}</div>
+              <div class="cart-meta">${new Date(o.date).toLocaleString()}</div>
+              <div class="cart-meta">Type: ${esc(o.type)}</div>
+            </div>
+            <div style="color:var(--gold); font-weight:700;">${o.total.toFixed(2)} EUR</div>
+          </div>
+        `;
+        wrap.appendChild(div);
       });
     }
 
