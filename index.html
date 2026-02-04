@@ -32,10 +32,13 @@
 
     * { box-sizing: border-box; }
     html, body { height:100%; }
+
     body{
       margin:0;
       font-family:"Manrope", system-ui, -apple-system, sans-serif;
       background:
+        linear-gradient(rgba(10,9,7,.75), rgba(10,9,7,.9)),
+        url("background.png?v=2") center/cover no-repeat,
         radial-gradient(1200px 900px at 50% -10%, #2e2a1f 0%, #12100d 45%, #0a0907 100%);
       color:var(--text);
       overflow-x:hidden;
@@ -407,12 +410,7 @@
     .admin-card .meta{ font-size:12px; color:var(--muted); }
     .admin-actions{ display:flex; gap:6px; }
     .tiny{ padding:6px 10px; font-size:12px; border-radius:10px; }
-
-    .admin-error{
-      color:#ffb3b3;
-      font-size:12px;
-      margin-top:8px;
-    }
+    .admin-error{ color:#ffb3b3; font-size:12px; margin-top:8px; }
   </style>
 </head>
 <body>
