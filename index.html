@@ -33,7 +33,7 @@
       font-family:"Manrope", system-ui, -apple-system, sans-serif;
       background:
         linear-gradient(rgba(10,9,7,.78), rgba(10,9,7,.92)),
-        url("background.png?v=4") center/cover no-repeat,
+        url("background.png?v=5") center/cover no-repeat,
         radial-gradient(1200px 900px at 50% -10%, #2e2a1f 0%, #12100d 45%, #0a0907 100%);
       color:var(--text);
       overflow-x:hidden;
@@ -127,19 +127,41 @@
       width:100%;
     }
     .product-card:hover{ transform:translateY(-2px); border-color:var(--gold-2); }
+
     .product-media{
       height:130px;
-      background:
-        radial-gradient(120px 80px at 20% 20%, rgba(214,179,106,.4), transparent 60%),
-        radial-gradient(140px 120px at 80% 30%, rgba(63,185,119,.2), transparent 70%),
-        #2a241b;
+      background:#2a241b;
       position:relative;
+      overflow:hidden;
     }
     .product-media::after{
       content:"";
       position:absolute; inset:0;
       background:linear-gradient(180deg, rgba(0,0,0,0) 10%, rgba(0,0,0,.7) 100%);
+      pointer-events:none;
     }
+
+    .product-media video,
+    .product-media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .video-badge{
+      position:absolute;
+      right:10px;
+      top:10px;
+      background:rgba(0,0,0,.6);
+      border:1px solid rgba(214,179,106,.8);
+      color:#fff;
+      font-size:10px;
+      padding:5px 8px;
+      border-radius:999px;
+      z-index:3;
+    }
+
     .product-badge{
       position:absolute; left:10px; top:10px;
       background:rgba(0,0,0,.55);
@@ -149,7 +171,7 @@
       padding:6px 10px;
       border-radius:999px;
       backdrop-filter: blur(6px);
-      z-index:2;
+      z-index:3;
     }
     .product-body{ padding:10px 12px 14px; }
     .product-title{ font-size:16px; margin:2px 0 6px; font-weight:700; }
@@ -177,7 +199,7 @@
     .btn.gray{ background:linear-gradient(180deg, #2c2a25, #1d1b16); color:#fff; border-color:#3a362c; }
     .btn.tiny{ padding:6px 10px; font-size:12px; border-radius:10px; }
 
-    .input, .textarea{
+    .input, .textarea, .select{
       width:100%;
       background:#15130f;
       border:1px solid #3a3429;
@@ -318,17 +340,20 @@
     }
     .modal-media{
       height:200px; border-radius:14px; overflow:hidden;
-      background:
-        radial-gradient(150px 100px at 20% 20%, rgba(214,179,106,.4), transparent 60%),
-        radial-gradient(180px 140px at 80% 30%, rgba(63,185,119,.2), transparent 70%),
-        #2a241b;
+      background:#2a241b;
       position:relative; margin-bottom:12px;
+    }
+    .modal-media video,
+    .modal-media img{
+      width:100%; height:100%; object-fit:cover; display:block;
     }
     .modal-media::after{
       content:"";
       position:absolute; inset:0;
       background:linear-gradient(180deg, rgba(0,0,0,0) 20%, rgba(0,0,0,.75) 100%);
+      pointer-events:none;
     }
+
     .size-grid{
       display:grid; grid-template-columns: repeat(2, minmax(0,1fr));
       gap:8px; margin:8px 0 12px;
@@ -455,8 +480,17 @@
           <label class="label">Badge (optionnel)</label>
           <input class="input" id="admin-badge" placeholder="Ex: Static us USA" />
 
-          <label class="label">Image (URL)</label>
-          <input class="input" id="admin-image" placeholder="https://..." />
+          <label class="label">Type de media</label>
+          <select class="select" id="admin-media-type">
+            <option value="image">Image</option>
+            <option value="video">Video</option>
+          </select>
+
+          <label class="label">Media URL (image ou video)</label>
+          <input class="input" id="admin-media-url" placeholder="https://..." />
+
+          <label class="label">Poster video (optionnel)</label>
+          <input class="input" id="admin-poster" placeholder="https://..." />
 
           <label class="label">Prix rapide (si tu ne veux pas entrer plusieurs tailles)</label>
           <input class="input" id="admin-price" placeholder="Ex: 40" />
@@ -521,7 +555,7 @@
 
   <script>
     const ADMIN_CODE = "2810";
-    const SECRETARY_URL = "https://t.me/Calidad_Secretaire";
+    const SECRETARY_USERNAME = "Calidad_Secretaire";
 
     const STORAGE = {
       products: "calidad_products_ultra",
@@ -531,10 +565,10 @@
     };
 
     const DEFAULT_PRODUCTS = [
-      { id:"p1", name:"Brides Maid", category:"Static us", badge:"Static us USA", image:"", description:"Fleur premium, texture dense, aromes complexes, finition propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
-      { id:"p2", name:"Autumn", category:"Static us", badge:"Static us USA", image:"", description:"Selection haut de gamme, effet equilibre, rendu propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
-      { id:"p3", name:"OG Kush", category:"Static us", badge:"Static us USA", image:"", description:"Kush classique, puissance stable, finition premium.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350}], active:true },
-      { id:"p4", name:"Lemon Cherry", category:"Static us", badge:"Static us USA", image:"", description:"Profil citronne, selection elite, rendu propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350}], active:true }
+      { id:"p1", name:"Brides Maid", category:"Static us", badge:"Static us USA", mediaType:"image", mediaUrl:"", poster:"", description:"Fleur premium, texture dense, aromes complexes, finition propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350}], active:true },
+      { id:"p2", name:"Autumn", category:"Static us", badge:"Static us USA", mediaType:"image", mediaUrl:"", poster:"", description:"Selection haut de gamme, effet equilibre, rendu propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350}], active:true },
+      { id:"p3", name:"OG Kush", category:"Static us", badge:"Static us USA", mediaType:"image", mediaUrl:"", poster:"", description:"Kush classique, puissance stable, finition premium.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350}], active:true },
+      { id:"p4", name:"Lemon Cherry", category:"Static us", badge:"Static us USA", mediaType:"image", mediaUrl:"", poster:"", description:"Profil citronne, selection elite, rendu propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350}], active:true }
     ];
 
     const $ = (id) => document.getElementById(id);
@@ -596,6 +630,35 @@
       return sizes;
     }
 
+    function renderMedia(container, product, isModal=false){
+      container.innerHTML = "";
+      const type = product.mediaType || "image";
+      const url = product.mediaUrl || "";
+
+      if (type === "video" && url){
+        const v = document.createElement("video");
+        v.src = url;
+        v.muted = !isModal;
+        v.loop = !isModal;
+        v.autoplay = !isModal;
+        v.playsInline = true;
+        v.controls = isModal;
+        if (product.poster) v.poster = product.poster;
+        container.appendChild(v);
+
+        if (!isModal){
+          const badge = document.createElement("div");
+          badge.className = "video-badge";
+          badge.textContent = "VIDEO";
+          container.appendChild(badge);
+        }
+      } else {
+        const img = document.createElement("img");
+        if (url) img.src = url;
+        container.appendChild(img);
+      }
+    }
+
     function renderProducts(){
       const grid = $("product-grid");
       grid.innerHTML = "";
@@ -606,15 +669,13 @@
 
         const media = document.createElement("div");
         media.className = "product-media";
-        if (p.image){
-          media.style.backgroundImage = `url('${esc(p.image)}')`;
-          media.style.backgroundSize = "cover";
-          media.style.backgroundPosition = "center";
-        }
+        renderMedia(media, p, false);
 
         const badge = document.createElement("div");
         badge.className = "product-badge";
         badge.textContent = p.badge || p.category || "";
+
+        media.appendChild(badge);
 
         const body = document.createElement("div");
         body.className = "product-body";
@@ -627,7 +688,6 @@
         sub.className = "product-sub";
         sub.textContent = priceRange(p.sizes);
 
-        media.appendChild(badge);
         body.appendChild(title);
         body.appendChild(sub);
         card.appendChild(media);
@@ -645,14 +705,7 @@
 
       $("modal-title").textContent = product.name;
       $("modal-desc").textContent = product.description || "";
-      const media = $("modal-media");
-      if (product.image){
-        media.style.backgroundImage = `url('${esc(product.image)}')`;
-        media.style.backgroundSize = "cover";
-        media.style.backgroundPosition = "center";
-      } else {
-        media.style.backgroundImage = "";
-      }
+      renderMedia($("modal-media"), product, true);
 
       $("qty-value").textContent = quantity;
       renderSizes();
@@ -785,15 +838,19 @@
     }
 
     function openSecretary(message){
+      const encoded = encodeURIComponent(message);
+      const direct = `https://t.me/${SECRETARY_USERNAME}?text=${encoded}`;
+      const share  = `https://t.me/share/url?url=&text=${encoded}`;
+
       try { navigator.clipboard.writeText(message); } catch(e){}
+
       try {
         if (window.Telegram && Telegram.WebApp) {
-          Telegram.WebApp.openTelegramLink(SECRETARY_URL);
-          alert("Message copie. Colle-le dans la conversation du secretaire.");
+          Telegram.WebApp.openTelegramLink(direct);
           return;
         }
       } catch(e){}
-      const share = "https://t.me/share/url?url=&text=" + encodeURIComponent(message);
+
       window.open(share, "_blank");
     }
 
@@ -859,7 +916,9 @@
       $("admin-name").value = "";
       $("admin-category").value = "";
       $("admin-badge").value = "";
-      $("admin-image").value = "";
+      $("admin-media-type").value = "image";
+      $("admin-media-url").value = "";
+      $("admin-poster").value = "";
       $("admin-desc").value = "";
       $("admin-sizes").value = "";
       $("admin-price").value = "";
@@ -894,7 +953,9 @@
         name,
         category: $("admin-category").value.trim(),
         badge: $("admin-badge").value.trim(),
-        image: $("admin-image").value.trim(),
+        mediaType: $("admin-media-type").value,
+        mediaUrl: $("admin-media-url").value.trim(),
+        poster: $("admin-poster").value.trim(),
         description: $("admin-desc").value.trim(),
         sizes,
         active: $("admin-active").checked
@@ -919,7 +980,7 @@
         card.innerHTML = `
           <div>
             <div><strong>${esc(p.name)}</strong></div>
-            <div class="meta">${esc(p.category || "")} - ${p.active ? "Actif" : "Inactif"}</div>
+            <div class="meta">${esc(p.category || "")} - ${p.active ? "Actif" : "Inactif"} - ${esc(p.mediaType || "image")}</div>
           </div>
           <div class="admin-actions">
             <button class="btn tiny" type="button">Edit</button>
@@ -933,7 +994,9 @@
           $("admin-name").value = p.name;
           $("admin-category").value = p.category || "";
           $("admin-badge").value = p.badge || "";
-          $("admin-image").value = p.image || "";
+          $("admin-media-type").value = p.mediaType || "image";
+          $("admin-media-url").value = p.mediaUrl || "";
+          $("admin-poster").value = p.poster || "";
           $("admin-desc").value = p.description || "";
           $("admin-sizes").value = (p.sizes || []).map(s=>`${s.label} - ${s.price}`).join(", ");
           $("admin-active").checked = !!p.active;
