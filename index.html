@@ -2,25 +2,32 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0f0e0b" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Calidad — Mini App</title>
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap");
       :root {
         color-scheme: dark;
-        --bg: #0f0e0b;
-        --panel: #1a1916;
-        --panel-2: #23211d;
-        --gold: #d9bf72;
-        --gold-2: #b69045;
-        --text: #f3f1ea;
-        --text-dim: #c9c4b8;
-        --muted: #9b958b;
-        --accent: #3ea0ff;
-        --shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
-        --radius-xl: 26px;
-        --radius-lg: 18px;
-        --radius-md: 14px;
+        --bg: #0b0b08;
+        --bg-2: #11100c;
+        --panel: #1a1915;
+        --panel-2: #22201b;
+        --gold: #e2c77a;
+        --gold-2: #b89649;
+        --gold-3: #7c5a26;
+        --champagne: #f3e7c3;
+        --text: #f5f3ee;
+        --text-dim: #c7c3ba;
+        --muted: #8f8b81;
+        --accent: #4aa9ff;
+        --success: #4bc17b;
+        --danger: #ff5b5b;
+        --shadow: 0 18px 50px rgba(0, 0, 0, 0.65);
+        --radius-xl: 30px;
+        --radius-lg: 22px;
+        --radius-md: 16px;
+        --radius-sm: 12px;
+        --ring: 0 0 0 1px rgba(217, 193, 122, 0.38) inset;
       }
 
       * {
@@ -28,23 +35,47 @@
       }
 
       html {
+        scroll-behavior: smooth;
         -webkit-text-size-adjust: 100%;
         text-size-adjust: 100%;
       }
 
       body {
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-        background: linear-gradient(180deg, #0f0e0b, #0c0b09 60%, #0f0e0b);
+        font-family: "Manrope", "Segoe UI", sans-serif;
+        background:
+          radial-gradient(70% 60% at 50% 0%, rgba(217, 193, 122, 0.15), transparent 60%),
+          radial-gradient(30% 30% at 10% 5%, rgba(255, 255, 255, 0.08), transparent 60%),
+          radial-gradient(30% 30% at 90% 5%, rgba(255, 255, 255, 0.08), transparent 60%),
+          linear-gradient(180deg, #0e0d0b, #0b0b09 50%, #0e0d0b 100%);
         color: var(--text);
         min-height: 100vh;
+        position: relative;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
       }
 
-      button, input, select, textarea {
-        font-family: inherit;
-        font-size: inherit;
-        -webkit-appearance: none;
-        appearance: none;
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(60% 40% at 20% 0%, rgba(255, 255, 255, 0.08), transparent 60%),
+          radial-gradient(50% 40% at 80% 0%, rgba(255, 255, 255, 0.08), transparent 60%),
+          radial-gradient(35% 30% at 50% 20%, rgba(226, 199, 122, 0.16), transparent 70%);
+        opacity: 0.7;
+        pointer-events: none;
+        z-index: -2;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E");
+        opacity: 0.25;
+        pointer-events: none;
+        z-index: -1;
       }
 
       .app {
@@ -53,12 +84,20 @@
         padding: 16px 16px 120px;
       }
 
+      main {
+        margin-top: 18px;
+        padding: 16px;
+        border-radius: var(--radius-xl);
+        background: rgba(15, 14, 11, 0.75);
+        border: 1px solid rgba(217, 193, 122, 0.2);
+        box-shadow: 0 22px 60px rgba(0, 0, 0, 0.55);
+      }
+
       .topbar {
-        display: grid;
-        grid-template-columns: auto 1fr auto;
+        display: flex;
+        justify-content: center;
         align-items: center;
-        gap: 10px;
-        margin-bottom: 10px;
+        padding: 6px 0 8px;
       }
 
       .brand {
@@ -67,107 +106,112 @@
 
       .brand h1 {
         margin: 4px 0 0;
-        font-size: clamp(28px, 7vw, 44px);
-        letter-spacing: 1px;
+        font-family: "Cormorant Garamond", "Georgia", serif;
+        font-weight: 700;
+        font-size: clamp(30px, 7vw, 52px);
+        letter-spacing: 2px;
         color: var(--gold);
+        text-shadow: 0 10px 24px rgba(217, 193, 122, 0.35);
       }
 
       .brand .subtitle {
-        font-size: 11px;
+        margin-top: 4px;
+        font-size: 12px;
         letter-spacing: 2px;
         text-transform: uppercase;
         color: var(--muted);
       }
 
-      .icon-btn {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        background: #161511;
-        color: var(--text);
-        display: grid;
-        place-items: center;
+      .brand {
+        position: relative;
       }
 
-      .categories {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 10px;
-        padding: 12px;
-        border-radius: var(--radius-xl);
-        background: var(--panel);
-        border: 1px solid rgba(217, 191, 114, 0.2);
-        box-shadow: var(--shadow);
-      }
-
-      .cat-toggle {
-        width: 40px;
-        height: 40px;
-        border-radius: 12px;
-        border: 1px solid rgba(217, 191, 114, 0.3);
-        background: #1a1916;
-        color: var(--gold);
-        display: grid;
-        place-items: center;
-      }
-
-      .cat-scroll {
-        display: flex;
-        gap: 8px;
-        overflow-x: auto;
-        padding-bottom: 2px;
-      }
-
-      .pill {
-        padding: 8px 14px;
-        border-radius: 999px;
-        border: 1px solid rgba(217, 191, 114, 0.35);
-        background: #181713;
-        color: var(--text);
-        white-space: nowrap;
-        font-size: 13px;
-      }
-
-      .pill.active {
-        background: var(--gold);
-        color: #1a1406;
-        border-color: transparent;
-      }
-
-      main {
-        margin-top: 16px;
-        padding: 14px;
-        border-radius: var(--radius-xl);
-        background: #14130f;
-        border: 1px solid rgba(217, 191, 114, 0.15);
+      .brand::after {
+        content: "";
+        display: block;
+        width: 80px;
+        height: 2px;
+        margin: 10px auto 0;
+        background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        opacity: 0.8;
+        animation: glowLine 3.5s ease-in-out infinite;
       }
 
       .section-title {
-        margin: 10px 0 12px;
-        font-size: 20px;
+        margin: 22px 0 12px;
+        font-size: 24px;
         font-weight: 600;
+        font-family: "Cormorant Garamond", "Georgia", serif;
+        letter-spacing: 0.3px;
+        position: relative;
+        padding-bottom: 8px;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 60px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--gold), transparent);
       }
 
       .product-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
+        gap: 14px;
       }
 
       .product-card {
-        background: var(--panel);
+        background:
+          linear-gradient(180deg, rgba(28, 27, 23, 0.98), rgba(20, 19, 16, 0.98)) padding-box,
+          linear-gradient(135deg, rgba(226, 199, 122, 0.75), rgba(226, 199, 122, 0.15), rgba(90, 70, 30, 0.45)) border-box;
         border-radius: var(--radius-lg);
-        border: 1px solid rgba(217, 191, 114, 0.25);
+        border: 1px solid transparent;
         overflow: hidden;
         box-shadow: var(--shadow);
         cursor: pointer;
+        transition: transform 0.2s ease, border 0.2s ease;
+        position: relative;
+      }
+
+      .product-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.12), transparent 70%);
+        opacity: 0;
+        transform: translateX(-20%);
+        transition: opacity 0.3s ease, transform 0.4s ease;
+        pointer-events: none;
+      }
+
+      .product-card:hover::after {
+        opacity: 1;
+        transform: translateX(10%);
+      }
+
+      .product-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(217, 193, 122, 0.7);
       }
 
       .product-media {
-        height: 130px;
+        height: 140px;
         background: linear-gradient(130deg, rgba(89, 60, 255, 0.6), rgba(25, 12, 40, 0.95));
+        display: grid;
+        place-items: center;
         position: relative;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .product-media::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.45));
       }
 
       .product-media[data-tone="teal"] {
@@ -179,34 +223,34 @@
       }
 
       .product-media span {
-        position: absolute;
-        left: 10px;
-        bottom: 10px;
         background: rgba(0, 0, 0, 0.55);
-        padding: 6px 10px;
+        padding: 8px 14px;
         border-radius: 999px;
         border: 1px solid rgba(255, 255, 255, 0.1);
         font-size: 11px;
+        letter-spacing: 1.2px;
         text-transform: uppercase;
       }
 
       .product-body {
-        padding: 10px 12px 12px;
+        padding: 12px 14px 16px;
       }
 
       .product-title {
-        font-size: 15px;
+        font-size: 17px;
         font-weight: 600;
-        margin: 2px 0 4px;
+        margin: 6px 0 6px;
       }
 
       .product-meta {
         color: var(--text-dim);
-        font-size: 12px;
+        font-size: 13px;
+        font-family: "Manrope", sans-serif;
       }
 
       .view {
         display: none;
+        animation: fade 0.3s ease;
       }
 
       .view.active {
@@ -214,31 +258,33 @@
       }
 
       .cart-header {
-        font-size: 24px;
-        margin: 10px 0 8px;
+        font-family: "Cormorant Garamond", "Georgia", serif;
+        font-size: 30px;
+        margin: 16px 0 8px;
       }
 
       .cart-item {
-        padding: 14px;
+        padding: 16px;
         border-radius: var(--radius-lg);
-        border: 1px solid rgba(217, 191, 114, 0.25);
-        background: var(--panel);
+        border: 1px solid transparent;
+        background:
+          linear-gradient(180deg, rgba(30, 28, 24, 0.98), rgba(21, 19, 16, 0.98)) padding-box,
+          linear-gradient(135deg, rgba(226, 199, 122, 0.55), rgba(226, 199, 122, 0.1)) border-box;
         display: flex;
         justify-content: space-between;
-        gap: 10px;
+        gap: 12px;
         align-items: center;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
       }
 
       .cart-item h3 {
-        margin: 0 0 4px;
-        font-size: 16px;
+        margin: 0 0 6px;
+        font-size: 18px;
       }
 
       .cart-item p {
         margin: 0;
         color: var(--text-dim);
-        font-size: 13px;
       }
 
       .qty {
@@ -246,14 +292,14 @@
         align-items: center;
         gap: 8px;
         background: #202420;
-        padding: 6px 8px;
+        padding: 6px 10px;
         border-radius: 999px;
         border: 1px solid rgba(255, 255, 255, 0.12);
       }
 
       .qty button {
-        width: 26px;
-        height: 26px;
+        width: 28px;
+        height: 28px;
         border-radius: 50%;
         border: none;
         cursor: pointer;
@@ -271,81 +317,203 @@
       }
 
       .totals {
-        margin-top: 10px;
+        margin-top: 12px;
         display: grid;
-        gap: 8px;
-        font-size: 16px;
+        gap: 10px;
+        font-size: 18px;
       }
 
       .totals strong {
-        font-size: 20px;
+        font-size: 24px;
+      }
+
+      .pickup {
+        margin-top: 18px;
       }
 
       .segmented {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         border-radius: 999px;
-        border: 1px solid rgba(217, 191, 114, 0.3);
+        border: 1px solid transparent;
+        background:
+          linear-gradient(180deg, rgba(26, 25, 21, 0.95), rgba(17, 16, 13, 0.95)) padding-box,
+          linear-gradient(120deg, rgba(226, 199, 122, 0.6), rgba(226, 199, 122, 0.1)) border-box;
         overflow: hidden;
         margin-top: 10px;
-        background: #161511;
       }
 
       .segmented button {
-        padding: 10px;
+        padding: 12px 10px;
         border: none;
         background: transparent;
         color: var(--text);
-        font-size: 15px;
+        font-size: 16px;
+        cursor: pointer;
       }
 
       .segmented button.active {
-        background: var(--accent);
+        background: #3f97df;
         color: #0b0b0b;
         font-weight: 700;
       }
 
       .form-card {
-        margin-top: 12px;
-        padding: 12px;
+        margin-top: 14px;
+        padding: 14px;
         border-radius: var(--radius-lg);
-        border: 1px solid rgba(217, 191, 114, 0.25);
+        border: 1px solid rgba(217, 193, 122, 0.35);
         background: var(--panel-2);
       }
 
       .input {
         width: 100%;
         border-radius: 999px;
-        border: 1px solid rgba(217, 191, 114, 0.35);
+        border: 1px solid rgba(217, 193, 122, 0.5);
         background: #14130f;
         color: var(--text);
-        padding: 10px 14px;
+        padding: 12px 16px;
         font-size: 14px;
+      }
+
+      .input:focus {
+        outline: none;
+        border-color: var(--gold);
+        box-shadow: 0 0 0 3px rgba(217, 193, 122, 0.15);
       }
 
       .radio-group {
         display: flex;
-        gap: 12px;
+        gap: 14px;
         flex-wrap: wrap;
-        margin: 10px 0 6px;
-        font-size: 14px;
+        margin: 12px 0 8px;
+        font-family: "Georgia", serif;
       }
 
       .primary-btn {
         width: 100%;
-        margin-top: 10px;
-        padding: 12px;
-        border-radius: 12px;
+        margin-top: 12px;
+        padding: 14px 16px;
+        border-radius: 14px;
         background: #6a5a3a;
         color: #14120c;
         border: none;
         font-size: 15px;
+        cursor: pointer;
         font-weight: 600;
+        transition: transform 0.18s ease, box-shadow 0.2s ease;
+      }
+
+      .primary-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
       }
 
       .primary-btn.active {
-        background: var(--accent);
+        background: linear-gradient(135deg, #5ab4ff, #2c7fd6);
         color: #ffffff;
+      }
+
+      .account-section {
+        margin-top: 12px;
+      }
+
+      .history-card {
+        border: 1px solid transparent;
+        background:
+          linear-gradient(180deg, rgba(29, 27, 23, 0.98), rgba(19, 18, 15, 0.98)) padding-box,
+          linear-gradient(135deg, rgba(226, 199, 122, 0.5), rgba(226, 199, 122, 0.08)) border-box;
+        border-radius: var(--radius-lg);
+        padding: 14px;
+        margin-bottom: 12px;
+      }
+
+      .admin-panel {
+        margin-top: 16px;
+        border-radius: var(--radius-lg);
+        border: 1px dashed rgba(217, 193, 122, 0.5);
+        padding: 14px;
+        display: none;
+      }
+
+      .admin-panel.active {
+        display: block;
+      }
+
+      .admin-title {
+        margin: 8px 0;
+        font-weight: 600;
+        font-size: 15px;
+        letter-spacing: 0.3px;
+      }
+
+      .admin-grid {
+        display: grid;
+        gap: 10px;
+      }
+
+      .admin-grid input,
+      .admin-grid select {
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(217, 193, 122, 0.4);
+        background: #14130f;
+        color: var(--text);
+      }
+
+      .admin-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+
+      .admin-check {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: var(--text-dim);
+      }
+
+      .admin-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .admin-card {
+        border: 1px solid rgba(217, 193, 122, 0.25);
+        border-radius: 14px;
+        padding: 10px;
+        background: #1a1916;
+      }
+
+      .admin-card .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 13px;
+        color: var(--text-dim);
+      }
+
+      .admin-card .row strong {
+        color: var(--text);
+      }
+
+      .admin-card .actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .chip {
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(217, 193, 122, 0.4);
+        background: rgba(20, 19, 16, 0.9);
+        color: var(--text);
+        font-size: 13px;
       }
 
       .bottom-nav {
@@ -357,20 +525,21 @@
         border-top: 1px solid rgba(255, 255, 255, 0.08);
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
+        padding: 10px 12px 14px;
       }
 
       .nav-item {
         display: grid;
         place-items: center;
         color: var(--gold-2);
-        font-size: 13px;
+        font-size: 14px;
         gap: 6px;
+        cursor: pointer;
       }
 
       .nav-item svg {
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
       }
 
       .nav-item.active {
@@ -378,7 +547,28 @@
       }
 
       .nav-item.center {
+        position: relative;
         transform: translateY(-6px);
+        color: var(--gold-2);
+      }
+
+      .nav-item.center svg {
+        width: 26px;
+        height: 26px;
+      }
+
+      .nav-item.center.active {
+        color: var(--champagne);
+      }
+
+      .nav-item.center.active::before {
+        content: "";
+        position: absolute;
+        inset: -12px 8px auto;
+        height: 56px;
+        background: radial-gradient(circle, rgba(226, 199, 122, 0.2), transparent 70%);
+        border-radius: 999px;
+        z-index: -1;
       }
 
       .modal {
@@ -397,34 +587,58 @@
 
       .modal-card {
         width: min(520px, 92vw);
-        background: var(--panel);
+        background:
+          linear-gradient(180deg, rgba(33, 31, 26, 0.95), rgba(18, 16, 13, 0.95)) padding-box,
+          linear-gradient(135deg, rgba(226, 199, 122, 0.7), rgba(226, 199, 122, 0.2), rgba(90, 70, 30, 0.5)) border-box;
         border-radius: var(--radius-xl);
-        border: 1px solid rgba(217, 191, 114, 0.25);
-        padding: 16px;
+        border: 1px solid transparent;
+        padding: 18px;
         box-shadow: var(--shadow);
+        animation: popIn 0.4s ease;
+      }
+
+      .modal-card h3 {
+        margin: 0 0 6px;
+        font-size: 22px;
+      }
+
+      .modal-card p {
+        color: var(--text-dim);
+        font-family: "Georgia", serif;
+      }
+
+      .modal-footer {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
       }
 
       .modal-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 10px;
       }
 
       .modal-close {
-        width: 34px;
-        height: 34px;
+        width: 36px;
+        height: 36px;
         border-radius: 10px;
-        border: 1px solid rgba(217, 191, 114, 0.35);
+        border: 1px solid rgba(217, 193, 122, 0.4);
         background: transparent;
         color: var(--text);
+        cursor: pointer;
       }
 
       .modal-media {
         margin-top: 10px;
-        height: 170px;
-        border-radius: 14px;
+        height: 180px;
+        border-radius: 18px;
         background: linear-gradient(130deg, rgba(89, 60, 255, 0.6), rgba(25, 12, 40, 0.95));
         position: relative;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
       }
 
       .modal-media[data-tone="teal"] {
@@ -435,23 +649,31 @@
         background: linear-gradient(130deg, rgba(255, 196, 90, 0.6), rgba(55, 30, 8, 0.95));
       }
 
+      .modal-media::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.5));
+      }
+
       .modal-badge {
         position: absolute;
-        left: 10px;
-        top: 10px;
-        padding: 6px 10px;
+        left: 12px;
+        top: 12px;
+        padding: 8px 12px;
         border-radius: 999px;
         background: rgba(0, 0, 0, 0.5);
-        border: 1px solid rgba(217, 191, 114, 0.35);
-        font-size: 11px;
+        border: 1px solid rgba(217, 193, 122, 0.35);
+        font-size: 12px;
       }
 
       .modal-section-title {
-        margin-top: 12px;
+        margin-top: 14px;
         font-weight: 600;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
         font-size: 12px;
         color: var(--text-dim);
-        text-transform: uppercase;
       }
 
       .size-grid {
@@ -466,16 +688,17 @@
         align-items: center;
         justify-content: space-between;
         gap: 8px;
-        padding: 8px 12px;
+        padding: 10px 12px;
         border-radius: 999px;
-        border: 1px solid rgba(217, 191, 114, 0.35);
-        background: #161511;
+        border: 1px solid rgba(217, 193, 122, 0.45);
+        background: rgba(18, 17, 14, 0.9);
         color: var(--text);
         font-size: 13px;
+        cursor: pointer;
       }
 
       .size-btn.active {
-        background: var(--gold);
+        background: linear-gradient(135deg, #f0d98f, #c7a457);
         color: #1a1406;
         border-color: transparent;
       }
@@ -485,7 +708,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 12px;
-        margin-top: 10px;
+        margin-top: 12px;
         font-size: 14px;
       }
 
@@ -500,8 +723,8 @@
       }
 
       .qty-control button {
-        width: 26px;
-        height: 26px;
+        width: 28px;
+        height: 28px;
         border-radius: 50%;
         border: none;
         cursor: pointer;
@@ -524,29 +747,60 @@
       }
 
       .square-btn {
-        width: 44px;
-        height: 44px;
+        width: 46px;
+        height: 46px;
         border-radius: 12px;
-        border: 1px solid rgba(217, 191, 114, 0.35);
-        background: #161511;
+        border: 1px solid rgba(217, 193, 122, 0.45);
+        background: rgba(15, 14, 11, 0.9);
         color: var(--gold);
+        cursor: pointer;
         display: grid;
         place-items: center;
       }
 
+      .ghost-btn {
+        border: 1px solid rgba(217, 193, 122, 0.4);
+        background: transparent;
+        color: var(--text);
+        padding: 10px 14px;
+        border-radius: 12px;
+        cursor: pointer;
+      }
+
+      .ghost-btn:hover {
+        border-color: rgba(217, 193, 122, 0.8);
+      }
+
       .solid-btn {
         border: none;
-        background: var(--gold);
+        background: linear-gradient(135deg, #f2dc9a, #c9a85a);
         color: #1a1406;
         padding: 10px 14px;
         border-radius: 12px;
+        cursor: pointer;
         flex: 1;
-        font-weight: 600;
       }
 
-      @media (max-width: 520px) {
-        .product-grid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
+      @keyframes glowLine {
+        0%,
+        100% {
+          opacity: 0.5;
+          transform: scaleX(0.9);
+        }
+        50% {
+          opacity: 1;
+          transform: scaleX(1.05);
+        }
+      }
+
+      @keyframes fade {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
       }
     </style>
@@ -554,18 +808,11 @@
   <body>
     <div class="app">
       <header class="topbar">
-        <button class="icon-btn" aria-label="Fermer">✕</button>
         <div class="brand">
           <h1>Calidad</h1>
           <div class="subtitle">Sélection Premium</div>
         </div>
-        <button class="icon-btn" aria-label="Plus">•••</button>
       </header>
-
-      <section class="categories">
-        <button class="cat-toggle" title="Catégories">≡</button>
-        <div class="cat-scroll" id="categoryPills"></div>
-      </section>
 
       <main>
         <section id="menuView" class="view active">
@@ -629,22 +876,30 @@
               />
               <button class="primary-btn" id="adminUnlock">Déverrouiller</button>
               <div class="admin-panel" id="adminPanel">
-                <div style="margin-bottom: 8px;">Gérer les produits</div>
+                <div class="admin-title">Gestion complète des produits</div>
                 <div class="admin-grid">
                   <input id="pName" placeholder="Nom du produit" />
-                  <input id="pPrice" placeholder="Prix (ex: 350.00)" />
-                  <input id="pCategory" placeholder="Catégorie" />
+                  <input id="pCategory" placeholder="Catégorie (ex: Premium)" />
+                  <input id="pPrice" placeholder="Prix par défaut (ex: 350)" />
+                  <input id="pImage" placeholder="Image URL (https://...)" />
                   <select id="pTone">
                     <option value="violet">Violet</option>
                     <option value="teal">Teal</option>
                     <option value="gold">Gold</option>
                   </select>
-                  <textarea id="pDesc" placeholder="Description" rows="3" style="border-radius: 12px; padding: 10px; background: #14130f; color: var(--text); border: 1px solid rgba(217,191,114,0.4);"></textarea>
+                  <input id="pBadge" placeholder="Badge (ex: Static us 🇺🇸)" />
+                  <textarea id="pDesc" placeholder="Description complète" rows="3" style="border-radius: 12px; padding: 10px; background: #14130f; color: var(--text); border: 1px solid rgba(217,193,122,0.4);"></textarea>
+                  <textarea id="pSizes" placeholder="Tailles et prix (ex: 1g=40, 5g=200, 10g=350)" rows="2" style="border-radius: 12px; padding: 10px; background: #14130f; color: var(--text); border: 1px solid rgba(217,193,122,0.4);"></textarea>
+                  <label class="admin-check"><input type="checkbox" id="pActive" checked /> Produit actif</label>
                 </div>
                 <div class="admin-actions">
                   <button class="primary-btn" id="addProduct">Ajouter</button>
+                  <button class="ghost-btn" id="updateProduct" disabled>Mettre à jour</button>
+                  <button class="ghost-btn" id="resetProduct">Réinitialiser</button>
                   <button class="ghost-btn" id="clearProducts">Supprimer tous</button>
                 </div>
+                <div class="admin-title">Catalogue actuel</div>
+                <div class="admin-list" id="adminList"></div>
               </div>
             </div>
           </div>
@@ -714,10 +969,42 @@
         { label: "50g", price: 1450 }
       ];
       const defaultProducts = [
-        { id: 1, name: "Lemon cherry gelato", price: 350, category: "Premium", tone: "gold", desc: "Arômes sucrés, texture crémeuse, finition propre et intense." },
-        { id: 2, name: "Brides maid", price: 300, category: "Cali", tone: "violet", desc: "Parfum floral, notes fruitées, sélection top shelf." },
-        { id: 3, name: "Autum", price: 320, category: "Cali", tone: "violet", desc: "Équilibre parfait entre douceur et puissance." },
-        { id: 4, name: "Ocean mint", price: 280, category: "Fresh", tone: "teal", desc: "Fraîcheur mentholée et finale douce." }
+        {
+          id: 1,
+          name: "Lemon cherry gelato",
+          price: 350,
+          category: "Premium",
+          tone: "gold",
+          badge: "Static us 🇺🇸",
+          desc: "Arômes sucrés, texture crémeuse, finition propre et intense."
+        },
+        {
+          id: 2,
+          name: "Brides maid",
+          price: 300,
+          category: "Cali",
+          tone: "violet",
+          badge: "Static us 🇺🇸",
+          desc: "Parfum floral, notes fruitées, sélection top shelf."
+        },
+        {
+          id: 3,
+          name: "Autum",
+          price: 320,
+          category: "Cali",
+          tone: "violet",
+          badge: "Static us 🇺🇸",
+          desc: "Équilibre parfait entre douceur et puissance."
+        },
+        {
+          id: 4,
+          name: "Ocean mint",
+          price: 280,
+          category: "Fresh",
+          tone: "teal",
+          badge: "Static us 🇺🇸",
+          desc: "Fraîcheur mentholée et finale douce."
+        }
       ];
 
       const storageKey = "calidad_products";
@@ -725,7 +1012,6 @@
       const cartKey = "calidad_cart";
 
       const productGrid = document.getElementById("productGrid");
-      const categoryPills = document.getElementById("categoryPills");
       const cartItems = document.getElementById("cartItems");
       const totalItems = document.getElementById("totalItems");
       const totalPrice = document.getElementById("totalPrice");
@@ -741,11 +1027,27 @@
       const modalTotal = document.getElementById("modalTotal");
       const goToCartBtn = document.getElementById("goToCart");
       const addToCartBtn = document.getElementById("addToCart");
+      const adminList = document.getElementById("adminList");
+      const updateProductBtn = document.getElementById("updateProduct");
+      const resetProductBtn = document.getElementById("resetProduct");
+      const pName = document.getElementById("pName");
+      const pCategory = document.getElementById("pCategory");
+      const pPrice = document.getElementById("pPrice");
+      const pImage = document.getElementById("pImage");
+      const pTone = document.getElementById("pTone");
+      const pBadge = document.getElementById("pBadge");
+      const pDesc = document.getElementById("pDesc");
+      const pSizes = document.getElementById("pSizes");
+      const pActive = document.getElementById("pActive");
 
       let products = JSON.parse(localStorage.getItem(storageKey)) || defaultProducts;
-      products = products.map((p) =>
-        p.sizes && p.sizes.length ? p : { ...p, sizes: defaultSizes }
-      );
+      products = products.map((p) => ({
+        active: p.active !== false,
+        badge: p.badge || "",
+        image: p.image || "",
+        ...p,
+        sizes: p.sizes && p.sizes.length ? p.sizes : defaultSizes
+      }));
       let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
       cart = cart.map((item) => ({
         ...item,
@@ -754,7 +1056,7 @@
       let selectedProduct = null;
       let selectedSize = null;
       let selectedQty = 1;
-      let selectedCategory = "Toutes";
+      let editingId = null;
 
       const toneMap = { violet: "", teal: "teal", gold: "gold" };
 
@@ -766,42 +1068,30 @@
         localStorage.setItem(cartKey, JSON.stringify(cart));
       }
 
-      function renderCategories() {
-        const cats = ["Toutes", ...new Set(products.map((p) => p.category))];
-        categoryPills.innerHTML = "";
-        cats.forEach((cat) => {
-          const pill = document.createElement("button");
-          pill.className = "pill" + (cat === selectedCategory ? " active" : "");
-          pill.textContent = cat;
-          pill.addEventListener("click", () => {
-            selectedCategory = cat;
-            renderCategories();
-            renderProducts();
-          });
-          categoryPills.appendChild(pill);
-        });
-      }
-
       function renderProducts() {
         productGrid.innerHTML = "";
-        const list =
-          selectedCategory === "Toutes"
-            ? products
-            : products.filter((p) => p.category === selectedCategory);
+        const list = products.filter((p) => p.active !== false);
         list.forEach((item, index) => {
           const card = document.createElement("article");
-          card.className = "product-card";
+          card.className = "product-card card-reveal";
+          card.style.setProperty("--d", `${260 + index * 90}ms`);
           const sizes = item.sizes && item.sizes.length ? item.sizes : defaultSizes;
           const minPrice = Math.min(...sizes.map((s) => s.price));
+          const badge = item.badge || `${item.category || "Produit"} 🇺🇸`;
           card.innerHTML = `
             <div class="product-media" data-tone="${toneMap[item.tone] || ""}">
-              <span>${item.category}</span>
+              <span>${badge}</span>
             </div>
             <div class="product-body">
               <div class="product-title">${item.name}</div>
               <div class="product-meta">À partir de ${minPrice.toFixed(2)} €</div>
             </div>
           `;
+          const media = card.querySelector(".product-media");
+          if (item.image) {
+            media.style.backgroundImage = `linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.6)), url('${item.image}')`;
+            media.removeAttribute("data-tone");
+          }
           card.addEventListener("click", () => openProduct(item));
           productGrid.appendChild(card);
         });
@@ -815,8 +1105,15 @@
         selectedSize = sizes[0];
         modalTitle.textContent = item.name;
         modalDesc.textContent = item.desc;
-        modalMedia.setAttribute("data-tone", toneMap[item.tone] || "");
-        modalBadge.textContent = `${item.category} 🇺🇸`;
+        const badge = item.badge || `${item.category || "Produit"} 🇺🇸`;
+        modalBadge.textContent = badge;
+        if (item.image) {
+          modalMedia.style.backgroundImage = `linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.6)), url('${item.image}')`;
+          modalMedia.removeAttribute("data-tone");
+        } else {
+          modalMedia.style.backgroundImage = "";
+          modalMedia.setAttribute("data-tone", toneMap[item.tone] || "");
+        }
         renderSizes(sizes);
         updateModalTotal();
         modal.classList.add("active");
@@ -867,11 +1164,12 @@
         cartItems.innerHTML = "";
         let totalQty = 0;
         let total = 0;
-        cart.forEach((item) => {
+        cart.forEach((item, index) => {
           totalQty += item.qty;
           total += item.price * item.qty;
           const row = document.createElement("div");
-          row.className = "cart-item";
+          row.className = "cart-item card-reveal";
+          row.style.setProperty("--d", `${120 + index * 90}ms`);
           row.innerHTML = `
             <div>
               <h3>${item.name} ${item.size ? "— " + item.size : ""}</h3>
@@ -934,8 +1232,9 @@
         item.addEventListener("click", () => {
           navItems.forEach((n) => n.classList.remove("active"));
           item.classList.add("active");
-          views.forEach((v) => v.classList.remove("active"));
-          document.getElementById(item.dataset.target).classList.add("active");
+          views.forEach((v) => v.classList.remove("active", "in-view"));
+          const targetView = document.getElementById(item.dataset.target);
+          targetView.classList.add("active", "in-view");
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
       });
@@ -950,7 +1249,9 @@
         const items = cart
           .map((i) => `${i.name}${i.size ? " " + i.size : ""} x${i.qty}`)
           .join(", ");
-        if (type === "meetup") return `Bonjour, je veux commander: ${items}. Retrait: Meetup.`;
+        if (type === "meetup") {
+          return `Bonjour, je veux commander: ${items}. Retrait: Meetup.`;
+        }
         const housing = [...radios].find((r) => r.checked)?.value || "";
         return `Bonjour, je veux commander: ${items}. Retrait: Livraison. Adresse: ${addressInput.value}. Logement: ${housing}.`;
       }
@@ -1005,46 +1306,193 @@
           .join("");
       }
 
+      function parseSizesInput(raw, fallbackPrice) {
+        if (!raw || !raw.trim()) return defaultSizes;
+        const parts = raw.split(/[,;\n]+/).map((p) => p.trim()).filter(Boolean);
+        const sizes = [];
+        parts.forEach((p) => {
+          let label = "";
+          let price = NaN;
+          const match = p.match(/(.+?)[=:x-]\s*([0-9]+(?:\.[0-9]+)?)/i);
+          if (match) {
+            label = match[1].trim();
+            price = parseFloat(match[2]);
+          } else {
+            const bits = p.split(/\s+/);
+            if (bits.length >= 2) {
+              label = bits[0];
+              price = parseFloat(bits[1]);
+            }
+          }
+          if (label && !Number.isNaN(price)) {
+            sizes.push({ label, price });
+          }
+        });
+        if (!sizes.length && !Number.isNaN(fallbackPrice)) {
+          return [{ label: "10g", price: fallbackPrice }];
+        }
+        return sizes.length ? sizes : defaultSizes;
+      }
+
+      function buildProductFromForm() {
+        const name = pName.value.trim();
+        const category = pCategory.value.trim() || "Standard";
+        const price = parseFloat(pPrice.value);
+        const tone = pTone.value;
+        const desc = pDesc.value.trim();
+        const image = pImage.value.trim();
+        const badge = pBadge.value.trim();
+        const sizes = parseSizesInput(pSizes.value, price);
+        const active = pActive.checked;
+        if (!name) return null;
+        const basePrice = !Number.isNaN(price) ? price : sizes[0]?.price || 0;
+        return {
+          name,
+          category,
+          price: basePrice,
+          tone,
+          desc,
+          image,
+          badge,
+          sizes,
+          active
+        };
+      }
+
+      function resetAdminForm() {
+        pName.value = "";
+        pCategory.value = "";
+        pPrice.value = "";
+        pImage.value = "";
+        pBadge.value = "";
+        pDesc.value = "";
+        pSizes.value = "";
+        pTone.value = "violet";
+        pActive.checked = true;
+        editingId = null;
+        updateProductBtn.disabled = true;
+      }
+
+      function fillAdminForm(product) {
+        pName.value = product.name || "";
+        pCategory.value = product.category || "";
+        pPrice.value = product.price || "";
+        pImage.value = product.image || "";
+        pBadge.value = product.badge || "";
+        pDesc.value = product.desc || "";
+        pSizes.value = (product.sizes || [])
+          .map((s) => `${s.label}=${s.price}`)
+          .join(", ");
+        pTone.value = product.tone || "violet";
+        pActive.checked = product.active !== false;
+        editingId = product.id;
+        updateProductBtn.disabled = false;
+      }
+
+      function renderAdminList() {
+        if (!adminList) return;
+        adminList.innerHTML = "";
+        if (!products.length) {
+          adminList.innerHTML = `<div class="admin-card">Aucun produit dans le catalogue.</div>`;
+          return;
+        }
+        products.forEach((product) => {
+          const card = document.createElement("div");
+          card.className = "admin-card";
+          const prices = (product.sizes || []).map((s) => s.price).sort((a, b) => a - b);
+          const priceRange =
+            prices.length > 1 && prices[0] !== prices[prices.length - 1]
+              ? `${prices[0].toFixed(2)} € - ${prices[prices.length - 1].toFixed(2)} €`
+              : `${(product.price || prices[0] || 0).toFixed(2)} €`;
+          card.innerHTML = `
+            <div class="row">
+              <strong>${product.name}</strong>
+              <span>${product.active !== false ? "Actif" : "Inactif"}</span>
+            </div>
+            <div class="row">
+              <span>${product.category || "Sans catégorie"}</span>
+              <span>${priceRange}</span>
+            </div>
+            <div class="row">
+              <span>${product.badge || ""}</span>
+              <span>${product.image ? "Image OK" : "Sans image"}</span>
+            </div>
+            <div class="actions">
+              <button class="ghost-btn edit-btn">Modifier</button>
+              <button class="ghost-btn toggle-btn">${product.active !== false ? "Désactiver" : "Activer"}</button>
+              <button class="ghost-btn delete-btn">Supprimer</button>
+            </div>
+          `;
+          card.querySelector(".edit-btn").addEventListener("click", () => fillAdminForm(product));
+          card.querySelector(".toggle-btn").addEventListener("click", () => {
+            product.active = product.active === false;
+            saveProducts();
+            renderProducts();
+            renderAdminList();
+          });
+          card.querySelector(".delete-btn").addEventListener("click", () => {
+            if (!confirm("Supprimer ce produit ?")) return;
+            products = products.filter((p) => p.id !== product.id);
+            saveProducts();
+            renderProducts();
+            renderAdminList();
+          });
+          adminList.appendChild(card);
+        });
+      }
+
       document.getElementById("adminUnlock").addEventListener("click", () => {
         const code = document.getElementById("adminCode").value.trim();
         const panel = document.getElementById("adminPanel");
-        if (code === adminSecret) panel.classList.add("active");
-        else { panel.classList.remove("active"); alert("Code invalide."); }
+        if (code === adminSecret) {
+          panel.classList.add("active");
+        } else {
+          panel.classList.remove("active");
+          alert("Code invalide.");
+        }
       });
 
       document.getElementById("addProduct").addEventListener("click", () => {
-        const name = document.getElementById("pName").value.trim();
-        const price = parseFloat(document.getElementById("pPrice").value);
-        const category = document.getElementById("pCategory").value.trim();
-        const tone = document.getElementById("pTone").value;
-        const desc = document.getElementById("pDesc").value.trim();
-        if (!name || !price || !category) return;
-        products.push({
-          id: Date.now(),
-          name,
-          price,
-          category,
-          tone,
-          desc,
-          sizes: [{ label: "10g", price }]
-        });
+        const product = buildProductFromForm();
+        if (!product) return;
+        products.push({ id: Date.now(), ...product });
         saveProducts();
-        renderCategories();
         renderProducts();
+        renderAdminList();
+        resetAdminForm();
+      });
+
+      updateProductBtn.addEventListener("click", () => {
+        if (!editingId) return;
+        const product = buildProductFromForm();
+        if (!product) return;
+        const idx = products.findIndex((p) => p.id === editingId);
+        if (idx === -1) return;
+        products[idx] = { ...products[idx], ...product, id: editingId };
+        saveProducts();
+        renderProducts();
+        renderAdminList();
+        resetAdminForm();
+      });
+
+      resetProductBtn.addEventListener("click", () => {
+        resetAdminForm();
       });
 
       document.getElementById("clearProducts").addEventListener("click", () => {
+        if (!confirm("Supprimer tous les produits ?")) return;
         products = [];
         saveProducts();
-        renderCategories();
         renderProducts();
+        renderAdminList();
+        resetAdminForm();
       });
 
-      renderCategories();
       renderProducts();
       renderCart();
       renderOrders();
       updateContactLink("meetup");
+      renderAdminList();
     </script>
   </body>
 </html>
