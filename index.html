@@ -36,6 +36,8 @@
 
       html {
         scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
       }
 
       body {
@@ -49,6 +51,8 @@
         color: var(--text);
         min-height: 100vh;
         position: relative;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
       }
 
       body::before {
@@ -69,8 +73,7 @@
         position: fixed;
         inset: 0;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E");
-        mix-blend-mode: soft-light;
-        opacity: 0.35;
+        opacity: 0.25;
         pointer-events: none;
         z-index: -1;
       }
@@ -88,7 +91,6 @@
         background: rgba(15, 14, 11, 0.75);
         border: 1px solid rgba(217, 193, 122, 0.2);
         box-shadow: 0 22px 60px rgba(0, 0, 0, 0.55);
-        backdrop-filter: blur(10px);
       }
 
       .topbar {
@@ -562,7 +564,6 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         padding: 10px 12px 14px;
-        backdrop-filter: blur(12px);
       }
 
       .nav-item {
@@ -616,7 +617,6 @@
         place-items: center;
         padding: 16px;
         z-index: 10;
-        backdrop-filter: blur(6px);
       }
 
       .modal.active {
