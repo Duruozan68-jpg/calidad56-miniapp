@@ -23,7 +23,7 @@
       --green:#3bd28a;
       --blue:#2da9ff;
       --danger:#e04b4b;
-      --shadow:0 20px 60px rgba(0,0,0,.55);
+      --shadow:0 22px 60px rgba(0,0,0,.58);
       --radius:22px;
       --radius-sm:16px;
       --pad:18px;
@@ -39,6 +39,8 @@
         radial-gradient(1200px 900px at 50% -10%, #2e2a1f 0%, #12100d 45%, #0a0907 100%);
       color:var(--text);
       overflow-x:hidden;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior: none;
     }
 
     body::before{
@@ -62,15 +64,15 @@
       z-index:1;
     }
 
-    .fade-up{
-      animation: fadeUp .7s ease both;
-    }
+    .fade-up{ animation: fadeUp .75s ease both; }
+    .fade-delay-1{ animation-delay:.08s; }
+    .fade-delay-2{ animation-delay:.16s; }
     @keyframes fadeUp{
       from{opacity:0; transform:translateY(18px);}
       to{opacity:1; transform:translateY(0);}
     }
     @media (prefers-reduced-motion: reduce){
-      .fade-up{animation:none;}
+      .fade-up{ animation:none; }
     }
 
     .hero{
@@ -82,13 +84,13 @@
       font-size:42px;
       letter-spacing:2px;
       color:var(--gold);
-      text-shadow:0 2px 14px rgba(0,0,0,.55);
+      text-shadow:0 2px 18px rgba(0,0,0,.6);
       margin:6px 0 6px;
     }
     .brand-sub{
       font-family:"Cormorant Garamond", serif;
       font-size:13px;
-      letter-spacing:5px;
+      letter-spacing:6px;
       text-transform:uppercase;
       color:var(--muted);
     }
@@ -151,6 +153,13 @@
       width:100%;
     }
     .product-card:hover{ transform:translateY(-2px); border-color:var(--gold-2); }
+    .product-card::before{
+      content:"";
+      position:absolute; inset:0;
+      border-radius:18px;
+      background:linear-gradient(160deg, rgba(214,179,106,.08), transparent 40%, transparent 60%, rgba(214,179,106,.08));
+      pointer-events:none;
+    }
     .product-media{
       height:130px;
       background:
@@ -176,7 +185,7 @@
       z-index:2;
     }
     .product-body{ padding:10px 12px 14px; }
-    .product-title{ font-size:16px; margin:2px 0 6px; }
+    .product-title{ font-size:16px; margin:2px 0 6px; font-weight:700; }
     .product-sub{ font-size:12px; color:var(--muted); }
 
     .row{ display:flex; gap:10px; align-items:center; }
@@ -258,7 +267,7 @@
       background:#1b1a16;
       margin-bottom:10px;
     }
-    .cart-title{ font-size:16px; margin:0 0 4px; }
+    .cart-title{ font-size:16px; margin:0 0 4px; font-weight:700; }
     .cart-meta{ color:var(--muted); font-size:12px; }
 
     .qty{
@@ -280,7 +289,7 @@
     .bottom-nav{
       position:fixed; left:0; right:0; bottom:0;
       padding:10px 16px calc(10px + env(safe-area-inset-bottom));
-      background:linear-gradient(180deg, rgba(12,11,9,0) 0%, rgba(12,11,9,.85) 35%, rgba(12,11,9,.98) 100%);
+      background:linear-gradient(180deg, rgba(12,11,9,0) 0%, rgba(12,11,9,.86) 35%, rgba(12,11,9,.98) 100%);
       border-top:1px solid #2b261d;
       display:flex; gap:12px; justify-content:space-between;
       z-index:50;
@@ -293,11 +302,20 @@
       color:var(--muted);
       font-size:12px;
       cursor:pointer;
+      background:transparent;
+      border:1px solid transparent;
     }
     .nav-btn.active{
       color:var(--gold);
       background:rgba(214,179,106,.08);
       border:1px solid rgba(214,179,106,.35);
+    }
+    .nav-btn.primary{
+      flex:1.2;
+      background:linear-gradient(180deg, #2a261e, #1c1a14);
+      border:1px solid var(--gold-2);
+      color:var(--gold);
+      font-weight:700;
     }
     .nav-icon{ display:block; font-size:20px; margin-bottom:4px; }
 
@@ -312,7 +330,7 @@
     .modal.show{ display:flex; }
     .modal-card{
       width:100%;
-      max-width:420px;
+      max-width:440px;
       background:#171612;
       border:1px solid var(--gold-2);
       border-radius:22px;
@@ -326,7 +344,7 @@
       background:transparent; border:none; color:#fff; font-size:26px; cursor:pointer;
     }
     .modal-media{
-      height:190px; border-radius:14px; overflow:hidden;
+      height:200px; border-radius:14px; overflow:hidden;
       background:
         radial-gradient(150px 100px at 20% 20%, rgba(214,179,106,.4), transparent 60%),
         radial-gradient(180px 140px at 80% 30%, rgba(63,185,119,.2), transparent 70%),
@@ -366,12 +384,8 @@
     .hidden{ display:none; }
 
     /* Admin */
-    .admin-lock{
-      display:flex; gap:8px; align-items:center;
-    }
-    .admin-list{
-      display:flex; flex-direction:column; gap:8px; margin-top:10px;
-    }
+    .admin-lock{ display:flex; gap:8px; align-items:center; }
+    .admin-list{ display:flex; flex-direction:column; gap:8px; margin-top:10px; }
     .admin-card{
       border:1px solid var(--line);
       border-radius:14px;
@@ -379,15 +393,9 @@
       background:#1a1814;
       display:flex; justify-content:space-between; gap:8px; align-items:center;
     }
-    .admin-card .meta{
-      font-size:12px; color:var(--muted);
-    }
-    .admin-actions{
-      display:flex; gap:6px;
-    }
-    .tiny{
-      padding:6px 10px; font-size:12px; border-radius:10px;
-    }
+    .admin-card .meta{ font-size:12px; color:var(--muted); }
+    .admin-actions{ display:flex; gap:6px; }
+    .tiny{ padding:6px 10px; font-size:12px; border-radius:10px; }
   </style>
 </head>
 <body>
@@ -398,7 +406,7 @@
       <div class="divider"></div>
     </header>
 
-    <section id="page-home" class="fade-up">
+    <section id="page-home" class="fade-up fade-delay-1">
       <div class="section-title">Produits disponibles</div>
       <div class="section-sub">Selection premium, qualite controlee</div>
       <div id="product-grid" class="grid"></div>
@@ -427,9 +435,7 @@
 
         <div id="meetup-box" class="hidden" style="margin-top:12px;">
           <div class="section-sub">Commande prete a envoyer</div>
-          <button class="btn green block" id="btn-meetup">
-            Commander par Telegram (Meetup)
-          </button>
+          <button class="btn green block" id="btn-meetup">Commander par Telegram (Meetup)</button>
         </div>
 
         <div id="delivery-box" class="hidden" style="margin-top:12px;">
@@ -449,9 +455,7 @@
             </label>
           </div>
 
-          <button class="btn blue block" id="btn-delivery" style="margin-top:12px;">
-            Commander par Telegram (Livraison)
-          </button>
+          <button class="btn blue block" id="btn-delivery" style="margin-top:12px;">Commander par Telegram (Livraison)</button>
         </div>
       </div>
     </section>
@@ -484,9 +488,6 @@
 
           <label class="label">Badge (optionnel)</label>
           <input class="input" id="admin-badge" placeholder="Ex: Static us 🇺🇸" />
-
-          <label class="label">Prix base (affichage)</label>
-          <input class="input" id="admin-price" placeholder="Ex: 40" />
 
           <label class="label">Image (URL)</label>
           <input class="input" id="admin-image" placeholder="https://..." />
@@ -549,18 +550,18 @@
   </div>
 
   <nav class="bottom-nav">
-    <div class="nav-btn active" data-target="home">
-      <span class="nav-icon">🏠</span>
-      Menu
-    </div>
-    <div class="nav-btn" data-target="cart">
+    <button class="nav-btn" data-target="cart">
       <span class="nav-icon">🛒</span>
       Panier
-    </div>
-    <div class="nav-btn" data-target="account">
+    </button>
+    <button class="nav-btn primary active" data-target="home">
+      <span class="nav-icon">🏠</span>
+      Menu
+    </button>
+    <button class="nav-btn" data-target="account">
       <span class="nav-icon">👤</span>
       Compte
-    </div>
+    </button>
   </nav>
 
   <script>
@@ -573,20 +574,21 @@
     const SECRETARY_URL = "https://t.me/Calidad_Secretaire";
 
     const STORAGE = {
-      products: "calidad_products_v3",
-      cart: "calidad_cart_v3",
-      orders: "calidad_orders_v3",
+      products: "calidad_products_uluxe",
+      cart: "calidad_cart_uluxe",
+      orders: "calidad_orders_uluxe",
       admin: "calidad_admin_ok"
     };
 
     const DEFAULT_PRODUCTS = [
       { id:"p1", name:"Brides maid", category:"Static us", badge:"Static us 🇺🇸", image:"", description:"Fleur premium, texture dense, aromes complexes, finition propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
-      { id:"p2", name:"Autumn", category:"Static us", badge:"Static us 🇺🇸", image:"", description:"Selection haut de gamme, effet equilibré, rendu propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
+      { id:"p2", name:"Autumn", category:"Static us", badge:"Static us 🇺🇸", image:"", description:"Selection haut de gamme, effet equilibre, rendu propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
       { id:"p3", name:"OG Kush", category:"Static us", badge:"Static us 🇺🇸", image:"", description:"Note kush classique, puissance constante, selection premium.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
-      { id:"p4", name:"Lemon Cherry", category:"Static us", badge:"Static us 🇺🇸", image:"", description:"Profil citronné, finition propre, choix elite.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true }
+      { id:"p4", name:"Lemon Cherry", category:"Static us", badge:"Static us 🇺🇸", image:"", description:"Profil citronne, finition propre, choix elite.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true }
     ];
 
     const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));
 
     let products = load(STORAGE.products, DEFAULT_PRODUCTS);
     let cart = load(STORAGE.cart, []);
@@ -617,15 +619,36 @@
         const card = document.createElement("button");
         card.className = "product-card";
         card.type = "button";
-        card.innerHTML = `
-          <div class="product-media" style="${p.image ? `background-image:url('${p.image}'); background-size:cover; background-position:center;` : ""}">
-            <div class="product-badge">${p.badge || p.category || ""}</div>
-          </div>
-          <div class="product-body">
-            <div class="product-title">${p.name}</div>
-            <div class="product-sub">${priceRange(p.sizes)}</div>
-          </div>
-        `;
+
+        const media = document.createElement("div");
+        media.className = "product-media";
+        if (p.image){
+          media.style.backgroundImage = `url('${esc(p.image)}')`;
+          media.style.backgroundSize = "cover";
+          media.style.backgroundPosition = "center";
+        }
+
+        const badge = document.createElement("div");
+        badge.className = "product-badge";
+        badge.textContent = p.badge || p.category || "";
+
+        const body = document.createElement("div");
+        body.className = "product-body";
+
+        const title = document.createElement("div");
+        title.className = "product-title";
+        title.textContent = p.name;
+
+        const sub = document.createElement("div");
+        sub.className = "product-sub";
+        sub.textContent = priceRange(p.sizes);
+
+        media.appendChild(badge);
+        body.appendChild(title);
+        body.appendChild(sub);
+        card.appendChild(media);
+        card.appendChild(body);
+
         card.onclick = () => openModal(p);
         grid.appendChild(card);
       });
@@ -640,7 +663,7 @@
       $("modal-desc").textContent = product.description || "";
       const media = $("modal-media");
       if (product.image){
-        media.style.backgroundImage = `url('${product.image}')`;
+        media.style.backgroundImage = `url('${esc(product.image)}')`;
         media.style.backgroundSize = "cover";
         media.style.backgroundPosition = "center";
       } else {
@@ -658,7 +681,7 @@
       (currentProduct.sizes || []).forEach(s => {
         const btn = document.createElement("div");
         btn.className = "size-btn" + (selectedSize && selectedSize.label === s.label ? " active" : "");
-        btn.innerHTML = `<span>${s.label}</span><strong>${s.price}€</strong>`;
+        btn.innerHTML = `<span>${esc(s.label)}</span><strong>${esc(s.price)}€</strong>`;
         btn.onclick = () => { selectedSize = s; renderSizes(); };
         wrap.appendChild(btn);
       });
@@ -694,8 +717,8 @@
         row.innerHTML = `
           <div class="row space">
             <div>
-              <div class="cart-title">${item.name}</div>
-              <div class="cart-meta">${item.size} - ${item.price}€</div>
+              <div class="cart-title">${esc(item.name)}</div>
+              <div class="cart-meta">${esc(item.size)} - ${esc(item.price)}€</div>
               <div class="cart-meta" style="margin-top:4px;">Total: ${(item.price * item.qty).toFixed(2)} €</div>
             </div>
             <div class="row" style="gap:8px;">
@@ -742,6 +765,9 @@
       });
       document.querySelectorAll(".nav-btn").forEach(btn=>{
         btn.classList.toggle("active", btn.dataset.target === name);
+        if (btn.classList.contains("primary")) {
+          btn.classList.toggle("active", btn.dataset.target === name);
+        }
       });
     }
 
@@ -757,36 +783,24 @@
 
     function buildOrderMessage(type){
       const total = cart.reduce((s,i)=>s+i.qty*i.price,0);
-      let msg = "Calidad - Nouvelle commande\\n";
-      msg += "Type: " + (type === "meetup" ? "Meetup" : "Livraison") + "\\n";
-      msg += "Articles:\\n";
+      let msg = "Calidad - Nouvelle commande\n";
+      msg += "Type: " + (type === "meetup" ? "Meetup" : "Livraison") + "\n";
+      msg += "Articles:\n";
       cart.forEach(i=>{
-        msg += `- ${i.name} (${i.size}) x${i.qty} = ${(i.price*i.qty).toFixed(2)}€\\n`;
+        msg += `- ${i.name} (${i.size}) x${i.qty} = ${(i.price*i.qty).toFixed(2)}€\n`;
       });
-      msg += "Total: " + total.toFixed(2) + "€\\n";
+      msg += "Total: " + total.toFixed(2) + "€\n";
 
       if (type === "delivery"){
         const addr = $("delivery-address").value.trim();
         const housing = document.querySelector("input[name='housing']:checked");
-        msg += "Adresse: " + (addr || "Non renseignee") + "\\n";
-        msg += "Logement: " + (housing ? housing.value : "Non renseigne") + "\\n";
+        msg += "Adresse: " + (addr || "Non renseignee") + "\n";
+        msg += "Logement: " + (housing ? housing.value : "Non renseigne") + "\n";
       }
       return msg;
     }
 
     function openSecretary(message){
-      if (cart.length){
-        orders.push({
-          id: "CMD-" + Date.now(),
-          date: new Date().toISOString(),
-          items: [...cart],
-          total: cart.reduce((s,i)=>s+i.qty*i.price,0),
-          type: pickupType || "meetup"
-        });
-        save(STORAGE.orders, orders);
-        renderOrders();
-      }
-
       try { navigator.clipboard.writeText(message); } catch(e){}
       try {
         if (window.Telegram && Telegram.WebApp) {
@@ -823,9 +837,9 @@
         div.innerHTML = `
           <div class="row space">
             <div>
-              <div class="cart-title">${o.id}</div>
+              <div class="cart-title">${esc(o.id)}</div>
               <div class="cart-meta">${new Date(o.date).toLocaleString()}</div>
-              <div class="cart-meta">Type: ${o.type}</div>
+              <div class="cart-meta">Type: ${esc(o.type)}</div>
             </div>
             <div style="color:var(--gold); font-weight:700;">${o.total.toFixed(2)} €</div>
           </div>
@@ -859,7 +873,6 @@
       $("admin-name").value = "";
       $("admin-category").value = "";
       $("admin-badge").value = "";
-      $("admin-price").value = "";
       $("admin-image").value = "";
       $("admin-desc").value = "";
       $("admin-sizes").value = "";
@@ -897,8 +910,8 @@
         card.className = "admin-card";
         card.innerHTML = `
           <div>
-            <div><strong>${p.name}</strong></div>
-            <div class="meta">${p.category || ""} - ${p.active ? "Actif" : "Inactif"}</div>
+            <div><strong>${esc(p.name)}</strong></div>
+            <div class="meta">${esc(p.category || "")} - ${p.active ? "Actif" : "Inactif"}</div>
           </div>
           <div class="admin-actions">
             <button class="btn tiny">Edit</button>
@@ -912,7 +925,6 @@
           $("admin-name").value = p.name;
           $("admin-category").value = p.category || "";
           $("admin-badge").value = p.badge || "";
-          $("admin-price").value = p.sizes?.[0]?.price || "";
           $("admin-image").value = p.image || "";
           $("admin-desc").value = p.description || "";
           $("admin-sizes").value = (p.sizes || []).map(s=>`${s.label}:${s.price}`).join(",");
