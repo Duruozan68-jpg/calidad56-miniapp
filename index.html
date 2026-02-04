@@ -319,7 +319,6 @@
     }
     .nav-icon{ display:block; font-size:20px; margin-bottom:4px; }
 
-    /* Modal */
     .modal{
       position:fixed; inset:0;
       background:rgba(0,0,0,.65);
@@ -383,7 +382,6 @@
 
     .hidden{ display:none; }
 
-    /* Admin */
     .admin-lock{ display:flex; gap:8px; align-items:center; }
     .admin-list{ display:flex; flex-direction:column; gap:8px; margin-top:10px; }
     .admin-card{
@@ -422,7 +420,7 @@
         </div>
         <div class="row space" style="margin-top:6px;">
           <div style="font-size:18px;">Total a payer</div>
-          <div id="cart-total" style="font-size:20px; color:var(--gold);">0.00 €</div>
+          <div id="cart-total" style="font-size:20px; color:var(--gold);">0.00 EUR</div>
         </div>
       </div>
 
@@ -487,7 +485,7 @@
           <input class="input" id="admin-category" placeholder="Ex: Static us" />
 
           <label class="label">Badge (optionnel)</label>
-          <input class="input" id="admin-badge" placeholder="Ex: Static us 🇺🇸" />
+          <input class="input" id="admin-badge" placeholder="Ex: Static us USA" />
 
           <label class="label">Image (URL)</label>
           <input class="input" id="admin-image" placeholder="https://..." />
@@ -581,10 +579,10 @@
     };
 
     const DEFAULT_PRODUCTS = [
-      { id:"p1", name:"Brides maid", category:"Static us", badge:"Static us 🇺🇸", image:"", description:"Fleur premium, texture dense, aromes complexes, finition propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
-      { id:"p2", name:"Autumn", category:"Static us", badge:"Static us 🇺🇸", image:"", description:"Selection haut de gamme, effet equilibre, rendu propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
-      { id:"p3", name:"OG Kush", category:"Static us", badge:"Static us 🇺🇸", image:"", description:"Note kush classique, puissance constante, selection premium.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
-      { id:"p4", name:"Lemon Cherry", category:"Static us", badge:"Static us 🇺🇸", image:"", description:"Profil citronne, finition propre, choix elite.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true }
+      { id:"p1", name:"Brides maid", category:"Static us", badge:"Static us USA", image:"", description:"Fleur premium, texture dense, aromes complexes, finition propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
+      { id:"p2", name:"Autumn", category:"Static us", badge:"Static us USA", image:"", description:"Selection haut de gamme, effet equilibre, rendu propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
+      { id:"p3", name:"OG Kush", category:"Static us", badge:"Static us USA", image:"", description:"Note kush classique, puissance constante, selection premium.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
+      { id:"p4", name:"Lemon Cherry", category:"Static us", badge:"Static us USA", image:"", description:"Profil citronne, finition propre, choix elite.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true }
     ];
 
     const $ = (id) => document.getElementById(id);
@@ -609,7 +607,7 @@
     function priceRange(sizes){
       if (!sizes || !sizes.length) return "";
       const min = Math.min(...sizes.map(s=>s.price));
-      return "A partir de " + min + "€";
+      return "A partir de " + min + " EUR";
     }
 
     function renderProducts(){
@@ -681,7 +679,7 @@
       (currentProduct.sizes || []).forEach(s => {
         const btn = document.createElement("div");
         btn.className = "size-btn" + (selectedSize && selectedSize.label === s.label ? " active" : "");
-        btn.innerHTML = `<span>${esc(s.label)}</span><strong>${esc(s.price)}€</strong>`;
+        btn.innerHTML = `<span>${esc(s.label)}</span><strong>${esc(s.price)} EUR</strong>`;
         btn.onclick = () => { selectedSize = s; renderSizes(); };
         wrap.appendChild(btn);
       });
@@ -718,8 +716,8 @@
           <div class="row space">
             <div>
               <div class="cart-title">${esc(item.name)}</div>
-              <div class="cart-meta">${esc(item.size)} - ${esc(item.price)}€</div>
-              <div class="cart-meta" style="margin-top:4px;">Total: ${(item.price * item.qty).toFixed(2)} €</div>
+              <div class="cart-meta">${esc(item.size)} - ${esc(item.price)} EUR</div>
+              <div class="cart-meta" style="margin-top:4px;">Total: ${(item.price * item.qty).toFixed(2)} EUR</div>
             </div>
             <div class="row" style="gap:8px;">
               <div class="qty">
@@ -740,7 +738,7 @@
       const count = cart.reduce((s,i)=>s+i.qty,0);
       const total = cart.reduce((s,i)=>s+i.qty*i.price,0);
       $("cart-count").textContent = count;
-      $("cart-total").textContent = total.toFixed(2) + " €";
+      $("cart-total").textContent = total.toFixed(2) + " EUR";
     }
 
     function updateQty(key, delta){
@@ -765,9 +763,6 @@
       });
       document.querySelectorAll(".nav-btn").forEach(btn=>{
         btn.classList.toggle("active", btn.dataset.target === name);
-        if (btn.classList.contains("primary")) {
-          btn.classList.toggle("active", btn.dataset.target === name);
-        }
       });
     }
 
@@ -787,9 +782,9 @@
       msg += "Type: " + (type === "meetup" ? "Meetup" : "Livraison") + "\n";
       msg += "Articles:\n";
       cart.forEach(i=>{
-        msg += `- ${i.name} (${i.size}) x${i.qty} = ${(i.price*i.qty).toFixed(2)}€\n`;
+        msg += `- ${i.name} (${i.size}) x${i.qty} = ${(i.price*i.qty).toFixed(2)} EUR\n`;
       });
-      msg += "Total: " + total.toFixed(2) + "€\n";
+      msg += "Total: " + total.toFixed(2) + " EUR\n";
 
       if (type === "delivery"){
         const addr = $("delivery-address").value.trim();
@@ -841,7 +836,7 @@
               <div class="cart-meta">${new Date(o.date).toLocaleString()}</div>
               <div class="cart-meta">Type: ${esc(o.type)}</div>
             </div>
-            <div style="color:var(--gold); font-weight:700;">${o.total.toFixed(2)} €</div>
+            <div style="color:var(--gold); font-weight:700;">${o.total.toFixed(2)} EUR</div>
           </div>
         `;
         wrap.appendChild(div);
