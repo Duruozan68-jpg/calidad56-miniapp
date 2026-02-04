@@ -33,7 +33,7 @@
       font-family:"Manrope", system-ui, -apple-system, sans-serif;
       background:
         linear-gradient(rgba(10,9,7,.78), rgba(10,9,7,.92)),
-        url("background.png?v=5") center/cover no-repeat,
+        url("background.png?v=6") center/cover no-repeat,
         radial-gradient(1200px 900px at 50% -10%, #2e2a1f 0%, #12100d 45%, #0a0907 100%);
       color:var(--text);
       overflow-x:hidden;
@@ -590,7 +590,7 @@
       }
     };
 
-    let products = storage.get(STORAGE.products, DEFAULT_PRODUCTS);
+    let products = normalizeProducts(storage.get(STORAGE.products, DEFAULT_PRODUCTS));
     let cart = storage.get(STORAGE.cart, []);
     let orders = storage.get(STORAGE.orders, []);
     let pickupType = null;
@@ -598,6 +598,29 @@
     let currentProduct = null;
     let selectedSize = null;
     let quantity = 1;
+
+    function normalizeProducts(list){
+      return list.map(p => {
+        const copy = {...p};
+        if (copy.image && !copy.mediaUrl) {
+          copy.mediaUrl = copy.image;
+        }
+        if (!copy.mediaType) {
+          copy.mediaType = isVideoUrl(copy.mediaUrl) ? "video" : "image";
+        }
+        return copy;
+      });
+    }
+
+    function isVideoUrl(url){
+      if (!url) return false;
+      return /\.(mp4|webm|mov|m4v)$/i.test(url);
+    }
+
+    function guessMime(url){
+      if (/\.webm$/i.test(url)) return "video/webm";
+      return "video/mp4";
+    }
 
     function saveProducts(){ storage.set(STORAGE.products, products); }
     function saveCart(){ storage.set(STORAGE.cart, cart); }
@@ -637,13 +660,20 @@
 
       if (type === "video" && url){
         const v = document.createElement("video");
-        v.src = url;
+        v.preload = "metadata";
+        v.setAttribute("playsinline", "");
+        v.setAttribute("webkit-playsinline", "");
+        v.controls = isModal;
         v.muted = !isModal;
         v.loop = !isModal;
         v.autoplay = !isModal;
-        v.playsInline = true;
-        v.controls = isModal;
         if (product.poster) v.poster = product.poster;
+
+        const source = document.createElement("source");
+        source.src = url;
+        source.type = guessMime(url);
+        v.appendChild(source);
+
         container.appendChild(v);
 
         if (!isModal){
@@ -651,7 +681,19 @@
           badge.className = "video-badge";
           badge.textContent = "VIDEO";
           container.appendChild(badge);
+        } else {
+          setTimeout(() => { v.play().catch(()=>{}); }, 0);
         }
+
+        v.addEventListener("error", () => {
+          container.innerHTML = "";
+          const hint = document.createElement("div");
+          hint.style.color = "#fff";
+          hint.style.padding = "10px";
+          hint.style.fontSize = "12px";
+          hint.textContent = "Video non lisible. Utilise un lien direct .mp4 ou .webm.";
+          container.appendChild(hint);
+        });
       } else {
         const img = document.createElement("img");
         if (url) img.src = url;
@@ -807,7 +849,6 @@
       });
     }
 
-    // Pickup selection
     document.querySelectorAll("[data-pickup]").forEach(el=>{
       el.onclick = () => {
         pickupType = el.dataset.pickup;
@@ -856,7 +897,6 @@
 
     function placeOrder(type){
       if (!cart.length) return alert("Panier vide.");
-      pickupType = type;
 
       const total = cart.reduce((s,i)=>s+i.qty*i.price,0);
       orders.push({
