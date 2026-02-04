@@ -34,6 +34,10 @@
         box-sizing: border-box;
       }
 
+      html {
+        scroll-behavior: smooth;
+      }
+
       body {
         margin: 0;
         font-family: "Manrope", "Segoe UI", sans-serif;
@@ -126,6 +130,7 @@
         margin: 10px auto 0;
         background: linear-gradient(90deg, transparent, var(--gold), transparent);
         opacity: 0.8;
+        animation: glowLine 3.5s ease-in-out infinite;
       }
 
       .icon-btn {
@@ -623,6 +628,7 @@
         border: 1px solid transparent;
         padding: 18px;
         box-shadow: var(--shadow);
+        animation: popIn 0.4s ease;
       }
 
       .modal-card h3 {
@@ -664,6 +670,43 @@
         flex: 1;
       }
 
+      @keyframes reveal {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes cardIn {
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes popIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes glowLine {
+        0%,
+        100% {
+          opacity: 0.5;
+          transform: scaleX(0.9);
+        }
+        50% {
+          opacity: 1;
+          transform: scaleX(1.05);
+        }
+      }
+
       @keyframes fade {
         from {
           opacity: 0;
@@ -672,6 +715,39 @@
         to {
           opacity: 1;
           transform: translateY(0);
+        }
+      }
+
+      .view .reveal,
+      .view .card-reveal {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      .view .card-reveal {
+        transform: translateY(16px) scale(0.98);
+      }
+
+      .view.in-view .reveal {
+        animation: reveal 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+        animation-delay: var(--d, 0ms);
+      }
+
+      .view.in-view .card-reveal {
+        animation: cardIn 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+        animation-delay: var(--d, 0ms);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
+        .view .reveal,
+        .view .card-reveal {
+          opacity: 1 !important;
+          transform: none !important;
         }
       }
 
@@ -684,7 +760,7 @@
   </head>
   <body>
     <div class="app">
-      <header class="topbar">
+      <header class="topbar reveal" style="--d: 60ms;">
         <button class="icon-btn" aria-label="Fermer">✕</button>
         <div class="brand">
           <h1>Calidad</h1>
@@ -693,26 +769,26 @@
         <button class="icon-btn" aria-label="Plus">•••</button>
       </header>
 
-      <section class="categories">
+      <section class="categories reveal" style="--d: 140ms;">
         <button class="cat-toggle" title="Catégories">≡</button>
         <div class="cat-scroll" id="categoryPills"></div>
       </section>
 
       <main>
-        <section id="menuView" class="view active">
-          <div class="section-title">Produits disponibles</div>
+        <section id="menuView" class="view active in-view">
+          <div class="section-title reveal" style="--d: 220ms;">Produits disponibles</div>
           <div class="product-grid" id="productGrid"></div>
         </section>
 
         <section id="cartView" class="view">
-          <div class="cart-header">Mon panier</div>
+          <div class="cart-header reveal" style="--d: 80ms;">Mon panier</div>
           <div id="cartItems"></div>
-          <div class="totals">
+          <div class="totals reveal" style="--d: 180ms;">
             <div>Total Articles: <strong id="totalItems">0</strong></div>
             <div>Total à payer: <strong id="totalPrice">0.00 €</strong></div>
           </div>
 
-          <div class="pickup">
+          <div class="pickup reveal" style="--d: 260ms;">
             <div>Type de retrait de la commande</div>
             <div class="segmented" id="pickupTabs">
               <button class="active" data-type="meetup">Meetup</button>
@@ -740,9 +816,9 @@
         </section>
 
         <section id="accountView" class="view">
-          <div class="section-title">Mon compte</div>
+          <div class="section-title reveal" style="--d: 80ms;">Mon compte</div>
           <div class="account-section">
-            <div class="history-card">
+            <div class="history-card reveal" style="--d: 180ms;">
               <div>Historique des commandes</div>
               <div class="chip" id="orderCount">0 commande</div>
               <div id="orderHistory" style="margin-top: 10px; color: var(--text-dim);">
@@ -750,7 +826,7 @@
               </div>
             </div>
 
-            <div class="history-card">
+            <div class="history-card reveal" style="--d: 260ms;">
               <div>Accès Admin</div>
               <input
                 class="input"
@@ -877,9 +953,10 @@
       function renderProducts() {
         productGrid.innerHTML = "";
         const list = selectedCategory === "Toutes" ? products : products.filter((p) => p.category === selectedCategory);
-        list.forEach((item) => {
+        list.forEach((item, index) => {
           const card = document.createElement("article");
-          card.className = "product-card";
+          card.className = "product-card card-reveal";
+          card.style.setProperty("--d", `${260 + index * 90}ms`);
           card.innerHTML = `
             <div class="product-media" data-tone="${toneMap[item.tone] || ""}">
               <span>${item.category}</span>
@@ -914,11 +991,12 @@
         cartItems.innerHTML = "";
         let totalQty = 0;
         let total = 0;
-        cart.forEach((item) => {
+        cart.forEach((item, index) => {
           totalQty += item.qty;
           total += item.price * item.qty;
           const row = document.createElement("div");
-          row.className = "cart-item";
+          row.className = "cart-item card-reveal";
+          row.style.setProperty("--d", `${120 + index * 90}ms`);
           row.innerHTML = `
             <div>
               <h3>${item.name}</h3>
@@ -954,8 +1032,9 @@
         item.addEventListener("click", () => {
           navItems.forEach((n) => n.classList.remove("active"));
           item.classList.add("active");
-          views.forEach((v) => v.classList.remove("active"));
-          document.getElementById(item.dataset.target).classList.add("active");
+          views.forEach((v) => v.classList.remove("active", "in-view"));
+          const targetView = document.getElementById(item.dataset.target);
+          targetView.classList.add("active", "in-view");
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
       });
