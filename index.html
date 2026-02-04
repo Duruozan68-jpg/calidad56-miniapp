@@ -2,32 +2,25 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f0e0b" />
     <title>Calidad — Mini App</title>
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap");
       :root {
         color-scheme: dark;
-        --bg: #0b0b08;
-        --bg-2: #11100c;
-        --panel: #1a1915;
-        --panel-2: #22201b;
-        --gold: #e2c77a;
-        --gold-2: #b89649;
-        --gold-3: #7c5a26;
-        --champagne: #f3e7c3;
-        --text: #f5f3ee;
-        --text-dim: #c7c3ba;
-        --muted: #8f8b81;
-        --accent: #4aa9ff;
-        --success: #4bc17b;
-        --danger: #ff5b5b;
-        --shadow: 0 18px 50px rgba(0, 0, 0, 0.65);
-        --radius-xl: 30px;
-        --radius-lg: 22px;
-        --radius-md: 16px;
-        --radius-sm: 12px;
-        --ring: 0 0 0 1px rgba(217, 193, 122, 0.38) inset;
+        --bg: #0f0e0b;
+        --panel: #1a1916;
+        --panel-2: #23211d;
+        --gold: #d9bf72;
+        --gold-2: #b69045;
+        --text: #f3f1ea;
+        --text-dim: #c9c4b8;
+        --muted: #9b958b;
+        --accent: #3ea0ff;
+        --shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+        --radius-xl: 26px;
+        --radius-lg: 18px;
+        --radius-md: 14px;
       }
 
       * {
@@ -35,47 +28,23 @@
       }
 
       html {
-        scroll-behavior: smooth;
         -webkit-text-size-adjust: 100%;
         text-size-adjust: 100%;
       }
 
       body {
         margin: 0;
-        font-family: "Manrope", "Segoe UI", sans-serif;
-        background:
-          radial-gradient(70% 60% at 50% 0%, rgba(217, 193, 122, 0.15), transparent 60%),
-          radial-gradient(30% 30% at 10% 5%, rgba(255, 255, 255, 0.08), transparent 60%),
-          radial-gradient(30% 30% at 90% 5%, rgba(255, 255, 255, 0.08), transparent 60%),
-          linear-gradient(180deg, #0e0d0b, #0b0b09 50%, #0e0d0b 100%);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        background: linear-gradient(180deg, #0f0e0b, #0c0b09 60%, #0f0e0b);
         color: var(--text);
         min-height: 100vh;
-        position: relative;
-        -webkit-font-smoothing: antialiased;
-        text-rendering: optimizeLegibility;
       }
 
-      body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background:
-          radial-gradient(60% 40% at 20% 0%, rgba(255, 255, 255, 0.08), transparent 60%),
-          radial-gradient(50% 40% at 80% 0%, rgba(255, 255, 255, 0.08), transparent 60%),
-          radial-gradient(35% 30% at 50% 20%, rgba(226, 199, 122, 0.16), transparent 70%);
-        opacity: 0.7;
-        pointer-events: none;
-        z-index: -2;
-      }
-
-      body::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E");
-        opacity: 0.25;
-        pointer-events: none;
-        z-index: -1;
+      button, input, select, textarea {
+        font-family: inherit;
+        font-size: inherit;
+        -webkit-appearance: none;
+        appearance: none;
       }
 
       .app {
@@ -84,21 +53,12 @@
         padding: 16px 16px 120px;
       }
 
-      main {
-        margin-top: 18px;
-        padding: 16px;
-        border-radius: var(--radius-xl);
-        background: rgba(15, 14, 11, 0.75);
-        border: 1px solid rgba(217, 193, 122, 0.2);
-        box-shadow: 0 22px 60px rgba(0, 0, 0, 0.55);
-      }
-
       .topbar {
         display: grid;
         grid-template-columns: auto 1fr auto;
         align-items: center;
-        gap: 12px;
-        padding: 6px 0 8px;
+        gap: 10px;
+        margin-bottom: 10px;
       }
 
       .brand {
@@ -107,195 +67,107 @@
 
       .brand h1 {
         margin: 4px 0 0;
-        font-family: "Cormorant Garamond", "Georgia", serif;
-        font-weight: 700;
-        font-size: clamp(30px, 7vw, 52px);
-        letter-spacing: 2px;
+        font-size: clamp(28px, 7vw, 44px);
+        letter-spacing: 1px;
         color: var(--gold);
-        text-shadow: 0 10px 24px rgba(217, 193, 122, 0.35);
       }
 
       .brand .subtitle {
-        margin-top: 4px;
-        font-size: 12px;
+        font-size: 11px;
         letter-spacing: 2px;
         text-transform: uppercase;
         color: var(--muted);
       }
 
-      .brand {
-        position: relative;
-      }
-
-      .brand::after {
-        content: "";
-        display: block;
-        width: 80px;
-        height: 2px;
-        margin: 10px auto 0;
-        background: linear-gradient(90deg, transparent, var(--gold), transparent);
-        opacity: 0.8;
-        animation: glowLine 3.5s ease-in-out infinite;
-      }
-
       .icon-btn {
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
-        background:
-          linear-gradient(160deg, rgba(33, 31, 26, 0.9), rgba(15, 14, 11, 0.9)) padding-box,
-          linear-gradient(120deg, rgba(226, 199, 122, 0.5), rgba(226, 199, 122, 0.05)) border-box;
-        border: 1px solid transparent;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: #161511;
         color: var(--text);
         display: grid;
         place-items: center;
-        cursor: pointer;
-        transition: transform 0.15s ease, border 0.2s ease;
-      }
-
-      .icon-btn:hover {
-        transform: translateY(-1px);
-        border-color: rgba(217, 193, 122, 0.6);
       }
 
       .categories {
-        margin-top: 14px;
         display: grid;
         grid-template-columns: auto 1fr;
-        align-items: center;
-        gap: 12px;
+        gap: 10px;
         padding: 12px;
         border-radius: var(--radius-xl);
-        background:
-          linear-gradient(160deg, rgba(30, 29, 25, 0.95), rgba(14, 13, 10, 0.92)) padding-box,
-          linear-gradient(120deg, rgba(226, 199, 122, 0.6), rgba(226, 199, 122, 0.1), rgba(120, 90, 35, 0.4)) border-box;
-        border: 1px solid transparent;
+        background: var(--panel);
+        border: 1px solid rgba(217, 191, 114, 0.2);
         box-shadow: var(--shadow);
       }
 
       .cat-toggle {
-        width: 44px;
-        height: 44px;
-        border-radius: 14px;
-        border: 1px solid transparent;
-        background:
-          linear-gradient(150deg, rgba(33, 31, 26, 0.9), rgba(15, 14, 11, 0.9)) padding-box,
-          linear-gradient(120deg, rgba(226, 199, 122, 0.6), rgba(226, 199, 122, 0.1)) border-box;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        border: 1px solid rgba(217, 191, 114, 0.3);
+        background: #1a1916;
         color: var(--gold);
         display: grid;
         place-items: center;
-        cursor: pointer;
       }
 
       .cat-scroll {
         display: flex;
-        gap: 10px;
+        gap: 8px;
         overflow-x: auto;
-        padding-bottom: 6px;
-        scroll-snap-type: x proximity;
-      }
-
-      .cat-scroll::-webkit-scrollbar {
-        height: 6px;
-      }
-
-      .cat-scroll::-webkit-scrollbar-thumb {
-        background: rgba(217, 193, 122, 0.3);
-        border-radius: 999px;
+        padding-bottom: 2px;
       }
 
       .pill {
-        padding: 10px 16px;
+        padding: 8px 14px;
         border-radius: 999px;
-        border: 1px solid rgba(217, 193, 122, 0.4);
-        background: rgba(20, 19, 16, 0.9);
+        border: 1px solid rgba(217, 191, 114, 0.35);
+        background: #181713;
         color: var(--text);
         white-space: nowrap;
         font-size: 13px;
-        font-weight: 500;
-        cursor: pointer;
-        scroll-snap-align: start;
       }
 
       .pill.active {
-        background: linear-gradient(135deg, #f0d98f, #c7a457);
+        background: var(--gold);
         color: #1a1406;
         border-color: transparent;
       }
 
-      .section-title {
-        margin: 22px 0 12px;
-        font-size: 24px;
-        font-weight: 600;
-        font-family: "Cormorant Garamond", "Georgia", serif;
-        letter-spacing: 0.3px;
-        position: relative;
-        padding-bottom: 8px;
+      main {
+        margin-top: 16px;
+        padding: 14px;
+        border-radius: var(--radius-xl);
+        background: #14130f;
+        border: 1px solid rgba(217, 191, 114, 0.15);
       }
 
-      .section-title::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 60px;
-        height: 2px;
-        background: linear-gradient(90deg, var(--gold), transparent);
+      .section-title {
+        margin: 10px 0 12px;
+        font-size: 20px;
+        font-weight: 600;
       }
 
       .product-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 14px;
+        gap: 12px;
       }
 
       .product-card {
-        background:
-          linear-gradient(180deg, rgba(28, 27, 23, 0.98), rgba(20, 19, 16, 0.98)) padding-box,
-          linear-gradient(135deg, rgba(226, 199, 122, 0.75), rgba(226, 199, 122, 0.15), rgba(90, 70, 30, 0.45)) border-box;
+        background: var(--panel);
         border-radius: var(--radius-lg);
-        border: 1px solid transparent;
+        border: 1px solid rgba(217, 191, 114, 0.25);
         overflow: hidden;
         box-shadow: var(--shadow);
         cursor: pointer;
-        transition: transform 0.2s ease, border 0.2s ease;
-        position: relative;
-      }
-
-      .product-card::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.12), transparent 70%);
-        opacity: 0;
-        transform: translateX(-20%);
-        transition: opacity 0.3s ease, transform 0.4s ease;
-        pointer-events: none;
-      }
-
-      .product-card:hover::after {
-        opacity: 1;
-        transform: translateX(10%);
-      }
-
-      .product-card:hover {
-        transform: translateY(-3px);
-        border-color: rgba(217, 193, 122, 0.7);
       }
 
       .product-media {
-        height: 140px;
+        height: 130px;
         background: linear-gradient(130deg, rgba(89, 60, 255, 0.6), rgba(25, 12, 40, 0.95));
-        display: grid;
-        place-items: center;
         position: relative;
-      }
-
-      .product-media::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.45));
       }
 
       .product-media[data-tone="teal"] {
@@ -307,34 +179,34 @@
       }
 
       .product-media span {
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
         background: rgba(0, 0, 0, 0.55);
-        padding: 8px 14px;
+        padding: 6px 10px;
         border-radius: 999px;
         border: 1px solid rgba(255, 255, 255, 0.1);
         font-size: 11px;
-        letter-spacing: 1.2px;
         text-transform: uppercase;
       }
 
       .product-body {
-        padding: 12px 14px 16px;
+        padding: 10px 12px 12px;
       }
 
       .product-title {
-        font-size: 17px;
+        font-size: 15px;
         font-weight: 600;
-        margin: 6px 0 6px;
+        margin: 2px 0 4px;
       }
 
       .product-meta {
         color: var(--text-dim);
-        font-size: 13px;
-        font-family: "Manrope", sans-serif;
+        font-size: 12px;
       }
 
       .view {
         display: none;
-        animation: fade 0.3s ease;
       }
 
       .view.active {
@@ -342,33 +214,31 @@
       }
 
       .cart-header {
-        font-family: "Cormorant Garamond", "Georgia", serif;
-        font-size: 30px;
-        margin: 16px 0 8px;
+        font-size: 24px;
+        margin: 10px 0 8px;
       }
 
       .cart-item {
-        padding: 16px;
+        padding: 14px;
         border-radius: var(--radius-lg);
-        border: 1px solid transparent;
-        background:
-          linear-gradient(180deg, rgba(30, 28, 24, 0.98), rgba(21, 19, 16, 0.98)) padding-box,
-          linear-gradient(135deg, rgba(226, 199, 122, 0.55), rgba(226, 199, 122, 0.1)) border-box;
+        border: 1px solid rgba(217, 191, 114, 0.25);
+        background: var(--panel);
         display: flex;
         justify-content: space-between;
-        gap: 12px;
+        gap: 10px;
         align-items: center;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
       }
 
       .cart-item h3 {
-        margin: 0 0 6px;
-        font-size: 18px;
+        margin: 0 0 4px;
+        font-size: 16px;
       }
 
       .cart-item p {
         margin: 0;
         color: var(--text-dim);
+        font-size: 13px;
       }
 
       .qty {
@@ -376,14 +246,14 @@
         align-items: center;
         gap: 8px;
         background: #202420;
-        padding: 6px 10px;
+        padding: 6px 8px;
         border-radius: 999px;
         border: 1px solid rgba(255, 255, 255, 0.12);
       }
 
       .qty button {
-        width: 28px;
-        height: 28px;
+        width: 26px;
+        height: 26px;
         border-radius: 50%;
         border: none;
         cursor: pointer;
@@ -401,157 +271,81 @@
       }
 
       .totals {
-        margin-top: 12px;
+        margin-top: 10px;
         display: grid;
-        gap: 10px;
-        font-size: 18px;
+        gap: 8px;
+        font-size: 16px;
       }
 
       .totals strong {
-        font-size: 24px;
-      }
-
-      .pickup {
-        margin-top: 18px;
+        font-size: 20px;
       }
 
       .segmented {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         border-radius: 999px;
-        border: 1px solid transparent;
-        background:
-          linear-gradient(180deg, rgba(26, 25, 21, 0.95), rgba(17, 16, 13, 0.95)) padding-box,
-          linear-gradient(120deg, rgba(226, 199, 122, 0.6), rgba(226, 199, 122, 0.1)) border-box;
+        border: 1px solid rgba(217, 191, 114, 0.3);
         overflow: hidden;
         margin-top: 10px;
+        background: #161511;
       }
 
       .segmented button {
-        padding: 12px 10px;
+        padding: 10px;
         border: none;
         background: transparent;
         color: var(--text);
-        font-size: 16px;
-        cursor: pointer;
+        font-size: 15px;
       }
 
       .segmented button.active {
-        background: #3f97df;
+        background: var(--accent);
         color: #0b0b0b;
         font-weight: 700;
       }
 
       .form-card {
-        margin-top: 14px;
-        padding: 14px;
+        margin-top: 12px;
+        padding: 12px;
         border-radius: var(--radius-lg);
-        border: 1px solid rgba(217, 193, 122, 0.35);
+        border: 1px solid rgba(217, 191, 114, 0.25);
         background: var(--panel-2);
       }
 
       .input {
         width: 100%;
         border-radius: 999px;
-        border: 1px solid rgba(217, 193, 122, 0.5);
+        border: 1px solid rgba(217, 191, 114, 0.35);
         background: #14130f;
         color: var(--text);
-        padding: 12px 16px;
+        padding: 10px 14px;
         font-size: 14px;
-      }
-
-      .input:focus {
-        outline: none;
-        border-color: var(--gold);
-        box-shadow: 0 0 0 3px rgba(217, 193, 122, 0.15);
       }
 
       .radio-group {
         display: flex;
-        gap: 14px;
+        gap: 12px;
         flex-wrap: wrap;
-        margin: 12px 0 8px;
-        font-family: "Georgia", serif;
+        margin: 10px 0 6px;
+        font-size: 14px;
       }
 
       .primary-btn {
         width: 100%;
-        margin-top: 12px;
-        padding: 14px 16px;
-        border-radius: 14px;
+        margin-top: 10px;
+        padding: 12px;
+        border-radius: 12px;
         background: #6a5a3a;
         color: #14120c;
         border: none;
         font-size: 15px;
-        cursor: pointer;
         font-weight: 600;
-        transition: transform 0.18s ease, box-shadow 0.2s ease;
-      }
-
-      .primary-btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
       }
 
       .primary-btn.active {
-        background: linear-gradient(135deg, #5ab4ff, #2c7fd6);
+        background: var(--accent);
         color: #ffffff;
-      }
-
-      .account-section {
-        margin-top: 12px;
-      }
-
-      .history-card {
-        border: 1px solid transparent;
-        background:
-          linear-gradient(180deg, rgba(29, 27, 23, 0.98), rgba(19, 18, 15, 0.98)) padding-box,
-          linear-gradient(135deg, rgba(226, 199, 122, 0.5), rgba(226, 199, 122, 0.08)) border-box;
-        border-radius: var(--radius-lg);
-        padding: 14px;
-        margin-bottom: 12px;
-      }
-
-      .admin-panel {
-        margin-top: 16px;
-        border-radius: var(--radius-lg);
-        border: 1px dashed rgba(217, 193, 122, 0.5);
-        padding: 14px;
-        display: none;
-      }
-
-      .admin-panel.active {
-        display: block;
-      }
-
-      .admin-grid {
-        display: grid;
-        gap: 10px;
-      }
-
-      .admin-grid input,
-      .admin-grid select {
-        padding: 10px 12px;
-        border-radius: 12px;
-        border: 1px solid rgba(217, 193, 122, 0.4);
-        background: #14130f;
-        color: var(--text);
-      }
-
-      .admin-actions {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 8px;
-      }
-
-      .chip {
-        padding: 8px 12px;
-        border-radius: 999px;
-        border: 1px solid rgba(217, 193, 122, 0.4);
-        background: rgba(20, 19, 16, 0.9);
-        color: var(--text);
-        font-size: 13px;
       }
 
       .bottom-nav {
@@ -563,21 +357,20 @@
         border-top: 1px solid rgba(255, 255, 255, 0.08);
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        padding: 10px 12px 14px;
+        padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
       }
 
       .nav-item {
         display: grid;
         place-items: center;
         color: var(--gold-2);
-        font-size: 14px;
+        font-size: 13px;
         gap: 6px;
-        cursor: pointer;
       }
 
       .nav-item svg {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
       }
 
       .nav-item.active {
@@ -585,28 +378,7 @@
       }
 
       .nav-item.center {
-        position: relative;
         transform: translateY(-6px);
-        color: var(--gold-2);
-      }
-
-      .nav-item.center svg {
-        width: 26px;
-        height: 26px;
-      }
-
-      .nav-item.center.active {
-        color: var(--champagne);
-      }
-
-      .nav-item.center.active::before {
-        content: "";
-        position: absolute;
-        inset: -12px 8px auto;
-        height: 56px;
-        background: radial-gradient(circle, rgba(226, 199, 122, 0.2), transparent 70%);
-        border-radius: 999px;
-        z-index: -1;
       }
 
       .modal {
@@ -625,56 +397,34 @@
 
       .modal-card {
         width: min(520px, 92vw);
-        background:
-          linear-gradient(180deg, rgba(33, 31, 26, 0.95), rgba(18, 16, 13, 0.95)) padding-box,
-          linear-gradient(135deg, rgba(226, 199, 122, 0.7), rgba(226, 199, 122, 0.2), rgba(90, 70, 30, 0.5)) border-box;
+        background: var(--panel);
         border-radius: var(--radius-xl);
-        border: 1px solid transparent;
-        padding: 18px;
+        border: 1px solid rgba(217, 191, 114, 0.25);
+        padding: 16px;
         box-shadow: var(--shadow);
-        animation: popIn 0.4s ease;
-      }
-
-      .modal-card h3 {
-        margin: 0 0 6px;
-        font-size: 22px;
-      }
-
-      .modal-card p {
-        color: var(--text-dim);
-        font-family: "Georgia", serif;
-      }
-
-      .modal-footer {
-        display: flex;
-        gap: 10px;
-        margin-top: 14px;
       }
 
       .modal-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 10px;
       }
 
       .modal-close {
-        width: 36px;
-        height: 36px;
+        width: 34px;
+        height: 34px;
         border-radius: 10px;
-        border: 1px solid rgba(217, 193, 122, 0.4);
+        border: 1px solid rgba(217, 191, 114, 0.35);
         background: transparent;
         color: var(--text);
-        cursor: pointer;
       }
 
       .modal-media {
         margin-top: 10px;
-        height: 180px;
-        border-radius: 18px;
+        height: 170px;
+        border-radius: 14px;
         background: linear-gradient(130deg, rgba(89, 60, 255, 0.6), rgba(25, 12, 40, 0.95));
         position: relative;
-        overflow: hidden;
       }
 
       .modal-media[data-tone="teal"] {
@@ -685,31 +435,23 @@
         background: linear-gradient(130deg, rgba(255, 196, 90, 0.6), rgba(55, 30, 8, 0.95));
       }
 
-      .modal-media::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.5));
-      }
-
       .modal-badge {
         position: absolute;
-        left: 12px;
-        top: 12px;
-        padding: 8px 12px;
+        left: 10px;
+        top: 10px;
+        padding: 6px 10px;
         border-radius: 999px;
         background: rgba(0, 0, 0, 0.5);
-        border: 1px solid rgba(217, 193, 122, 0.35);
-        font-size: 12px;
+        border: 1px solid rgba(217, 191, 114, 0.35);
+        font-size: 11px;
       }
 
       .modal-section-title {
-        margin-top: 14px;
+        margin-top: 12px;
         font-weight: 600;
-        letter-spacing: 0.6px;
-        text-transform: uppercase;
         font-size: 12px;
         color: var(--text-dim);
+        text-transform: uppercase;
       }
 
       .size-grid {
@@ -724,17 +466,16 @@
         align-items: center;
         justify-content: space-between;
         gap: 8px;
-        padding: 10px 12px;
+        padding: 8px 12px;
         border-radius: 999px;
-        border: 1px solid rgba(217, 193, 122, 0.45);
-        background: rgba(18, 17, 14, 0.9);
+        border: 1px solid rgba(217, 191, 114, 0.35);
+        background: #161511;
         color: var(--text);
         font-size: 13px;
-        cursor: pointer;
       }
 
       .size-btn.active {
-        background: linear-gradient(135deg, #f0d98f, #c7a457);
+        background: var(--gold);
         color: #1a1406;
         border-color: transparent;
       }
@@ -744,7 +485,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 12px;
-        margin-top: 12px;
+        margin-top: 10px;
         font-size: 14px;
       }
 
@@ -759,8 +500,8 @@
       }
 
       .qty-control button {
-        width: 28px;
-        height: 28px;
+        width: 26px;
+        height: 26px;
         border-radius: 50%;
         border: none;
         cursor: pointer;
@@ -783,119 +524,24 @@
       }
 
       .square-btn {
-        width: 46px;
-        height: 46px;
+        width: 44px;
+        height: 44px;
         border-radius: 12px;
-        border: 1px solid rgba(217, 193, 122, 0.45);
-        background: rgba(15, 14, 11, 0.9);
+        border: 1px solid rgba(217, 191, 114, 0.35);
+        background: #161511;
         color: var(--gold);
-        cursor: pointer;
         display: grid;
         place-items: center;
       }
 
-      .ghost-btn {
-        border: 1px solid rgba(217, 193, 122, 0.4);
-        background: transparent;
-        color: var(--text);
-        padding: 10px 14px;
-        border-radius: 12px;
-        cursor: pointer;
-      }
-
-      .ghost-btn:hover {
-        border-color: rgba(217, 193, 122, 0.8);
-      }
-
       .solid-btn {
         border: none;
-        background: linear-gradient(135deg, #f2dc9a, #c9a85a);
+        background: var(--gold);
         color: #1a1406;
         padding: 10px 14px;
         border-radius: 12px;
-        cursor: pointer;
         flex: 1;
-      }
-
-      @keyframes reveal {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes cardIn {
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-      }
-
-      @keyframes popIn {
-        from {
-          opacity: 0;
-          transform: translateY(6px) scale(0.98);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-      }
-
-      @keyframes glowLine {
-        0%,
-        100% {
-          opacity: 0.5;
-          transform: scaleX(0.9);
-        }
-        50% {
-          opacity: 1;
-          transform: scaleX(1.05);
-        }
-      }
-
-      @keyframes fade {
-        from {
-          opacity: 0;
-          transform: translateY(8px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .view .reveal,
-      .view .card-reveal {
-        opacity: 0;
-        transform: translateY(14px);
-      }
-
-      .view .card-reveal {
-        transform: translateY(16px) scale(0.98);
-      }
-
-      .view.in-view .reveal {
-        animation: reveal 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
-        animation-delay: var(--d, 0ms);
-      }
-
-      .view.in-view .card-reveal {
-        animation: cardIn 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
-        animation-delay: var(--d, 0ms);
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        * {
-          animation: none !important;
-          transition: none !important;
-          scroll-behavior: auto !important;
-        }
-        .view .reveal,
-        .view .card-reveal {
-          opacity: 1 !important;
-          transform: none !important;
-        }
+        font-weight: 600;
       }
 
       @media (max-width: 520px) {
@@ -907,7 +553,7 @@
   </head>
   <body>
     <div class="app">
-      <header class="topbar reveal" style="--d: 60ms;">
+      <header class="topbar">
         <button class="icon-btn" aria-label="Fermer">✕</button>
         <div class="brand">
           <h1>Calidad</h1>
@@ -916,26 +562,26 @@
         <button class="icon-btn" aria-label="Plus">•••</button>
       </header>
 
-      <section class="categories reveal" style="--d: 140ms;">
+      <section class="categories">
         <button class="cat-toggle" title="Catégories">≡</button>
         <div class="cat-scroll" id="categoryPills"></div>
       </section>
 
       <main>
-        <section id="menuView" class="view active in-view">
-          <div class="section-title reveal" style="--d: 220ms;">Produits disponibles</div>
+        <section id="menuView" class="view active">
+          <div class="section-title">Produits disponibles</div>
           <div class="product-grid" id="productGrid"></div>
         </section>
 
         <section id="cartView" class="view">
-          <div class="cart-header reveal" style="--d: 80ms;">Mon panier</div>
+          <div class="cart-header">Mon panier</div>
           <div id="cartItems"></div>
-          <div class="totals reveal" style="--d: 180ms;">
+          <div class="totals">
             <div>Total Articles: <strong id="totalItems">0</strong></div>
             <div>Total à payer: <strong id="totalPrice">0.00 €</strong></div>
           </div>
 
-          <div class="pickup reveal" style="--d: 260ms;">
+          <div class="pickup">
             <div>Type de retrait de la commande</div>
             <div class="segmented" id="pickupTabs">
               <button class="active" data-type="meetup">Meetup</button>
@@ -963,9 +609,9 @@
         </section>
 
         <section id="accountView" class="view">
-          <div class="section-title reveal" style="--d: 80ms;">Mon compte</div>
+          <div class="section-title">Mon compte</div>
           <div class="account-section">
-            <div class="history-card reveal" style="--d: 180ms;">
+            <div class="history-card">
               <div>Historique des commandes</div>
               <div class="chip" id="orderCount">0 commande</div>
               <div id="orderHistory" style="margin-top: 10px; color: var(--text-dim);">
@@ -973,7 +619,7 @@
               </div>
             </div>
 
-            <div class="history-card reveal" style="--d: 260ms;">
+            <div class="history-card">
               <div>Accès Admin</div>
               <input
                 class="input"
@@ -993,7 +639,7 @@
                     <option value="teal">Teal</option>
                     <option value="gold">Gold</option>
                   </select>
-                  <textarea id="pDesc" placeholder="Description" rows="3" style="border-radius: 12px; padding: 10px; background: #14130f; color: var(--text); border: 1px solid rgba(217,193,122,0.4);"></textarea>
+                  <textarea id="pDesc" placeholder="Description" rows="3" style="border-radius: 12px; padding: 10px; background: #14130f; color: var(--text); border: 1px solid rgba(217,191,114,0.4);"></textarea>
                 </div>
                 <div class="admin-actions">
                   <button class="primary-btn" id="addProduct">Ajouter</button>
@@ -1068,38 +714,10 @@
         { label: "50g", price: 1450 }
       ];
       const defaultProducts = [
-        {
-          id: 1,
-          name: "Lemon cherry gelato",
-          price: 350,
-          category: "Premium",
-          tone: "gold",
-          desc: "Arômes sucrés, texture crémeuse, finition propre et intense."
-        },
-        {
-          id: 2,
-          name: "Brides maid",
-          price: 300,
-          category: "Cali",
-          tone: "violet",
-          desc: "Parfum floral, notes fruitées, sélection top shelf."
-        },
-        {
-          id: 3,
-          name: "Autum",
-          price: 320,
-          category: "Cali",
-          tone: "violet",
-          desc: "Équilibre parfait entre douceur et puissance."
-        },
-        {
-          id: 4,
-          name: "Ocean mint",
-          price: 280,
-          category: "Fresh",
-          tone: "teal",
-          desc: "Fraîcheur mentholée et finale douce."
-        }
+        { id: 1, name: "Lemon cherry gelato", price: 350, category: "Premium", tone: "gold", desc: "Arômes sucrés, texture crémeuse, finition propre et intense." },
+        { id: 2, name: "Brides maid", price: 300, category: "Cali", tone: "violet", desc: "Parfum floral, notes fruitées, sélection top shelf." },
+        { id: 3, name: "Autum", price: 320, category: "Cali", tone: "violet", desc: "Équilibre parfait entre douceur et puissance." },
+        { id: 4, name: "Ocean mint", price: 280, category: "Fresh", tone: "teal", desc: "Fraîcheur mentholée et finale douce." }
       ];
 
       const storageKey = "calidad_products";
@@ -1172,8 +790,7 @@
             : products.filter((p) => p.category === selectedCategory);
         list.forEach((item, index) => {
           const card = document.createElement("article");
-          card.className = "product-card card-reveal";
-          card.style.setProperty("--d", `${260 + index * 90}ms`);
+          card.className = "product-card";
           const sizes = item.sizes && item.sizes.length ? item.sizes : defaultSizes;
           const minPrice = Math.min(...sizes.map((s) => s.price));
           card.innerHTML = `
@@ -1250,12 +867,11 @@
         cartItems.innerHTML = "";
         let totalQty = 0;
         let total = 0;
-        cart.forEach((item, index) => {
+        cart.forEach((item) => {
           totalQty += item.qty;
           total += item.price * item.qty;
           const row = document.createElement("div");
-          row.className = "cart-item card-reveal";
-          row.style.setProperty("--d", `${120 + index * 90}ms`);
+          row.className = "cart-item";
           row.innerHTML = `
             <div>
               <h3>${item.name} ${item.size ? "— " + item.size : ""}</h3>
@@ -1318,9 +934,8 @@
         item.addEventListener("click", () => {
           navItems.forEach((n) => n.classList.remove("active"));
           item.classList.add("active");
-          views.forEach((v) => v.classList.remove("active", "in-view"));
-          const targetView = document.getElementById(item.dataset.target);
-          targetView.classList.add("active", "in-view");
+          views.forEach((v) => v.classList.remove("active"));
+          document.getElementById(item.dataset.target).classList.add("active");
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
       });
@@ -1335,9 +950,7 @@
         const items = cart
           .map((i) => `${i.name}${i.size ? " " + i.size : ""} x${i.qty}`)
           .join(", ");
-        if (type === "meetup") {
-          return `Bonjour, je veux commander: ${items}. Retrait: Meetup.`;
-        }
+        if (type === "meetup") return `Bonjour, je veux commander: ${items}. Retrait: Meetup.`;
         const housing = [...radios].find((r) => r.checked)?.value || "";
         return `Bonjour, je veux commander: ${items}. Retrait: Livraison. Adresse: ${addressInput.value}. Logement: ${housing}.`;
       }
@@ -1395,12 +1008,8 @@
       document.getElementById("adminUnlock").addEventListener("click", () => {
         const code = document.getElementById("adminCode").value.trim();
         const panel = document.getElementById("adminPanel");
-        if (code === adminSecret) {
-          panel.classList.add("active");
-        } else {
-          panel.classList.remove("active");
-          alert("Code invalide.");
-        }
+        if (code === adminSecret) panel.classList.add("active");
+        else { panel.classList.remove("active"); alert("Code invalide."); }
       });
 
       document.getElementById("addProduct").addEventListener("click", () => {
@@ -1410,7 +1019,7 @@
         const tone = document.getElementById("pTone").value;
         const desc = document.getElementById("pDesc").value.trim();
         if (!name || !price || !category) return;
-        const newProduct = {
+        products.push({
           id: Date.now(),
           name,
           price,
@@ -1418,8 +1027,7 @@
           tone,
           desc,
           sizes: [{ label: "10g", price }]
-        };
-        products.push(newProduct);
+        });
         saveProducts();
         renderCategories();
         renderProducts();
