@@ -318,8 +318,15 @@
       position:relative;
     }
     .modal-close{
-      position:absolute; right:12px; top:12px;
-      background:transparent; border:none; color:#fff; font-size:26px; cursor:pointer;
+      position:absolute;
+      left:12px;
+      top:12px;
+      right:auto;
+      background:transparent;
+      border:none;
+      color:#fff;
+      font-size:26px;
+      cursor:pointer;
     }
     .modal-media{
       height:200px; border-radius:14px; overflow:hidden;
@@ -412,7 +419,7 @@
 
         <div id="meetup-box" class="hidden" style="margin-top:12px;">
           <div class="section-sub">Commande prete a envoyer</div>
-          <button class="btn green block" id="btn-meetup">Commander par Telegram (Meetup)</button>
+          <button class="btn green block" id="btn-meetup" type="button">Commander par Telegram (Meetup)</button>
         </div>
 
         <div id="delivery-box" class="hidden" style="margin-top:12px;">
@@ -426,7 +433,7 @@
             <label class="row" style="gap:6px;"><input type="radio" name="housing" value="Hotel" /> Hotel</label>
           </div>
 
-          <button class="btn blue block" id="btn-delivery" style="margin-top:12px;">Commander par Telegram (Livraison)</button>
+          <button class="btn blue block" id="btn-delivery" type="button" style="margin-top:12px;">Commander par Telegram (Livraison)</button>
         </div>
       </div>
     </section>
@@ -496,7 +503,7 @@
 
   <div id="product-modal" class="modal">
     <div class="modal-card">
-      <button class="modal-close" id="modal-close">&times;</button>
+      <button class="modal-close" id="modal-close" type="button" aria-label="Fermer">×</button>
       <div class="modal-media" id="modal-media"></div>
       <div class="product-title" id="modal-title">Produit</div>
       <div class="section-sub" id="modal-desc"></div>
@@ -507,29 +514,25 @@
       <div class="row space" style="margin:8px 0;">
         <div class="section-sub">Quantite</div>
         <div class="qty">
-          <button class="minus" id="qty-minus">-</button>
+          <button class="minus" id="qty-minus" type="button">-</button>
           <span id="qty-value">1</span>
-          <button class="plus" id="qty-plus">+</button>
+          <button class="plus" id="qty-plus" type="button">+</button>
         </div>
       </div>
 
-      <button class="btn gold block" id="add-to-cart">Ajouter au panier</button>
+      <button class="btn gold block" id="add-to-cart" type="button">Ajouter au panier</button>
       <div class="square-cart" id="go-cart" title="Aller au panier">🛒</div>
     </div>
   </div>
 
   <nav class="bottom-nav">
-    <button class="nav-btn" data-target="cart"><span class="nav-icon">🛒</span>Panier<span class="nav-badge" id="nav-count">0</span></button>
-    <button class="nav-btn primary active" data-target="home"><span class="nav-icon">🏠</span>Menu</button>
-    <button class="nav-btn" data-target="account"><span class="nav-icon">👤</span>Compte</button>
+    <button class="nav-btn" data-target="cart" type="button"><span class="nav-icon">🛒</span>Panier<span class="nav-badge" id="nav-count">0</span></button>
+    <button class="nav-btn primary active" data-target="home" type="button"><span class="nav-icon">🏠</span>Menu</button>
+    <button class="nav-btn" data-target="account" type="button"><span class="nav-icon">👤</span>Compte</button>
   </nav>
 
   <script>
-    function setVh(){ document.documentElement.style.setProperty("--vh", (window.innerHeight * 0.01) + "px"); }
-    setVh(); window.addEventListener("resize", setVh);
-
     const ADMIN_CODE = "2810";
-    const SECRETARY_URL = "https://t.me/Calidad_Secretaire";
 
     const STORAGE = {
       products: "calidad_products_ultra",
@@ -571,7 +574,6 @@
     let currentProduct = null;
     let selectedSize = null;
     let quantity = 1;
-    let pickupType = null;
 
     function saveProducts(){ storage.set(STORAGE.products, products); }
     function saveCart(){ storage.set(STORAGE.cart, cart); }
@@ -715,11 +717,11 @@
             </div>
             <div class="row" style="gap:8px;">
               <div class="qty">
-                <button class="minus">-</button>
+                <button class="minus" type="button">-</button>
                 <span>${item.qty}</span>
-                <button class="plus">+</button>
+                <button class="plus" type="button">+</button>
               </div>
-              <button class="btn tiny" style="border-color:#5d2a2a; color:#ffb3b3;">X</button>
+              <button class="btn tiny" type="button" style="border-color:#5d2a2a; color:#ffb3b3;">X</button>
             </div>
           </div>
         `;
@@ -762,81 +764,6 @@
       });
     }
 
-    document.querySelectorAll("[data-pickup]").forEach(el=>{
-      el.onclick = () => {
-        pickupType = el.dataset.pickup;
-        document.querySelectorAll("[data-pickup]").forEach(p=>p.classList.remove("active"));
-        el.classList.add("active");
-        $("meetup-box").classList.toggle("hidden", pickupType !== "meetup");
-        $("delivery-box").classList.toggle("hidden", pickupType !== "delivery");
-      };
-    });
-
-    function buildOrderMessage(type){
-      const total = cart.reduce((s,i)=>s+i.qty*i.price,0);
-      let msg = "Calidad - Nouvelle commande\n";
-      msg += "Type: " + (type === "meetup" ? "Meetup" : "Livraison") + "\n";
-      msg += "Articles:\n";
-      cart.forEach(i=>{
-        msg += `- ${i.name} (${i.size}) x${i.qty} = ${(i.price*i.qty).toFixed(2)} EUR\n`;
-      });
-      msg += "Total: " + total.toFixed(2) + " EUR\n";
-
-      if (type === "delivery"){
-        const addr = $("delivery-address").value.trim();
-        const housing = document.querySelector("input[name='housing']:checked");
-        msg += "Adresse: " + (addr || "Non renseignee") + "\n";
-        msg += "Logement: " + (housing ? housing.value : "Non renseigne") + "\n";
-      }
-      return msg;
-    }
-
-    function placeOrder(type){
-      if (!cart.length) return alert("Panier vide.");
-      pickupType = type;
-
-      const total = cart.reduce((s,i)=>s+i.qty*i.price,0);
-      orders.push({
-        id: "CMD-" + Date.now(),
-        date: new Date().toISOString(),
-        type,
-        total,
-        items: [...cart]
-      });
-      saveOrders();
-      renderOrders();
-
-      const share = "https://t.me/share/url?url=&text=" + encodeURIComponent(buildOrderMessage(type));
-      window.open(share, "_blank");
-    }
-
-    $("btn-meetup").onclick = () => placeOrder("meetup");
-    $("btn-delivery").onclick = () => placeOrder("delivery");
-
-    function renderOrders(){
-      const wrap = $("order-list");
-      wrap.innerHTML = "";
-      if (!orders.length){
-        wrap.innerHTML = `<div class="section-sub">Aucune commande.</div>`;
-        return;
-      }
-      orders.slice().reverse().forEach(o=>{
-        const div = document.createElement("div");
-        div.className = "cart-item";
-        div.innerHTML = `
-          <div class="row space">
-            <div>
-              <div class="cart-title">${esc(o.id)}</div>
-              <div class="cart-meta">${new Date(o.date).toLocaleString()}</div>
-              <div class="cart-meta">Type: ${esc(o.type)}</div>
-            </div>
-            <div style="color:var(--gold); font-weight:700;">${o.total.toFixed(2)} EUR</div>
-          </div>
-        `;
-        wrap.appendChild(div);
-      });
-    }
-
     function adminUnlocked(){ return localStorage.getItem(STORAGE.admin) === "1"; }
     function unlockAdmin(){
       const code = $("admin-code").value.trim();
@@ -871,7 +798,6 @@
       const basePrice = Number(String($("admin-price").value).replace(",", "."));
 
       let sizes = parseSizesInput(sizesInput);
-
       if (!sizes.length && Number.isFinite(basePrice) && basePrice > 0){
         sizes = [{ label: "1g", price: basePrice }];
       }
@@ -918,9 +844,9 @@
             <div class="meta">${esc(p.category || "")} - ${p.active ? "Actif" : "Inactif"}</div>
           </div>
           <div class="admin-actions">
-            <button class="btn tiny">Edit</button>
-            <button class="btn tiny">${p.active ? "Off" : "On"}</button>
-            <button class="btn tiny" style="border-color:#5d2a2a; color:#ffb3b3;">Del</button>
+            <button class="btn tiny" type="button">Edit</button>
+            <button class="btn tiny" type="button">${p.active ? "Off" : "On"}</button>
+            <button class="btn tiny" type="button" style="border-color:#5d2a2a; color:#ffb3b3;">Del</button>
           </div>
         `;
         const btns = card.querySelectorAll("button");
@@ -961,9 +887,9 @@
       }
     };
 
-    $("modal-close").onclick = () => $("product-modal").classList.remove("show");
+    $("modal-close").onclick = closeModal;
     $("add-to-cart").onclick = addToCart;
-    $("go-cart").onclick = () => { $("product-modal").classList.remove("show"); showPage("cart"); };
+    $("go-cart").onclick = () => { closeModal(); showPage("cart"); };
     $("qty-minus").onclick = () => { quantity = Math.max(1, quantity-1); $("qty-value").textContent = quantity; };
     $("qty-plus").onclick = () => { quantity += 1; $("qty-value").textContent = quantity; };
 
