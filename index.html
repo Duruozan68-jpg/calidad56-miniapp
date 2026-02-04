@@ -11,12 +11,9 @@
 
     :root{
       --bg:#0b0a08;
-      --bg-2:#12100d;
       --panel:#191814;
-      --panel-2:#1f1d18;
       --gold:#d6b36a;
       --gold-2:#b8934c;
-      --gold-3:#8f6b2d;
       --text:#f6f1e7;
       --muted:#b9b2a5;
       --line:#3a3429;
@@ -25,20 +22,18 @@
       --danger:#e04b4b;
       --shadow:0 22px 60px rgba(0,0,0,.58);
       --radius:22px;
-      --radius-sm:16px;
-      --pad:18px;
       --vh:1vh;
     }
 
-    * { box-sizing: border-box; }
-    html, body { height:100%; }
+    *{ box-sizing:border-box; }
+    html, body{ height:100%; }
 
     body{
       margin:0;
       font-family:"Manrope", system-ui, -apple-system, sans-serif;
       background:
-        linear-gradient(rgba(10,9,7,.75), rgba(10,9,7,.9)),
-        url("background.png?v=3") center/cover no-repeat,
+        linear-gradient(rgba(10,9,7,.78), rgba(10,9,7,.92)),
+        url("background.png?v=4") center/cover no-repeat,
         radial-gradient(1200px 900px at 50% -10%, #2e2a1f 0%, #12100d 45%, #0a0907 100%);
       color:var(--text);
       overflow-x:hidden;
@@ -67,28 +62,14 @@
       z-index:1;
     }
 
-    .fade-up{ animation: fadeUp .75s ease both; }
-    .fade-delay-1{ animation-delay:.08s; }
-    .fade-delay-2{ animation-delay:.16s; }
-    @keyframes fadeUp{
-      from{opacity:0; transform:translateY(18px);}
-      to{opacity:1; transform:translateY(0);}
-    }
-    @media (prefers-reduced-motion: reduce){
-      .fade-up{ animation:none; }
-    }
-
-    .hero{
-      padding:26px 18px 6px;
-      text-align:center;
-    }
+    .hero{ padding:26px 18px 6px; text-align:center; }
     .brand{
       font-family:"Cinzel", serif;
       font-size:42px;
       letter-spacing:2px;
       color:var(--gold);
       text-shadow:0 2px 18px rgba(0,0,0,.6);
-      margin:6px 0 6px;
+      margin:6px 0;
     }
     .brand-sub{
       font-family:"Cormorant Garamond", serif;
@@ -126,12 +107,6 @@
       position:relative;
       overflow:hidden;
     }
-    .panel::after{
-      content:"";
-      position:absolute; inset:0;
-      background:linear-gradient(120deg, rgba(214,179,106,.08), transparent 35%, transparent 65%, rgba(214,179,106,.08));
-      pointer-events:none;
-    }
 
     .grid{
       display:grid;
@@ -147,22 +122,11 @@
       border-radius:18px;
       overflow:hidden;
       box-shadow:var(--shadow);
-      position:relative;
       cursor:pointer;
       transition:transform .2s ease, border-color .2s ease;
-      text-align:left;
-      padding:0;
-      color:inherit;
       width:100%;
     }
     .product-card:hover{ transform:translateY(-2px); border-color:var(--gold-2); }
-    .product-card::before{
-      content:"";
-      position:absolute; inset:0;
-      border-radius:18px;
-      background:linear-gradient(160deg, rgba(214,179,106,.08), transparent 40%, transparent 60%, rgba(214,179,106,.08));
-      pointer-events:none;
-    }
     .product-media{
       height:130px;
       background:
@@ -212,18 +176,19 @@
       color:#1a140b;
       border-color:transparent;
     }
-    .btn.blue{
-      background:linear-gradient(180deg, #35b7ff, #1f8ad2);
-      color:#fff; border-color:transparent;
-    }
     .btn.green{
       background:linear-gradient(180deg, #48d08a, #2f9b65);
       color:#0f2017; border-color:transparent;
+    }
+    .btn.blue{
+      background:linear-gradient(180deg, #35b7ff, #1f8ad2);
+      color:#fff; border-color:transparent;
     }
     .btn.gray{
       background:linear-gradient(180deg, #2c2a25, #1d1b16);
       color:#fff; border-color:#3a362c;
     }
+    .btn.tiny{ padding:6px 10px; font-size:12px; border-radius:10px; }
 
     .input, .textarea{
       width:100%;
@@ -322,7 +287,6 @@
       font-weight:700;
     }
     .nav-icon{ display:block; font-size:20px; margin-bottom:4px; }
-
     .nav-badge{
       position:absolute; top:6px; right:22px;
       min-width:18px; height:18px;
@@ -352,7 +316,6 @@
       padding:16px;
       box-shadow:var(--shadow);
       position:relative;
-      animation: fadeUp .25s ease both;
     }
     .modal-close{
       position:absolute; right:12px; top:12px;
@@ -409,25 +372,24 @@
     }
     .admin-card .meta{ font-size:12px; color:var(--muted); }
     .admin-actions{ display:flex; gap:6px; }
-    .tiny{ padding:6px 10px; font-size:12px; border-radius:10px; }
     .admin-error{ color:#ffb3b3; font-size:12px; margin-top:8px; }
   </style>
 </head>
 <body>
   <div class="app">
-    <header class="hero fade-up">
+    <header class="hero">
       <div class="brand">Calidad</div>
       <div class="brand-sub">SELECTION PREMIUM</div>
       <div class="divider"></div>
     </header>
 
-    <section id="page-home" class="fade-up fade-delay-1">
+    <section id="page-home">
       <div class="section-title">Produits disponibles</div>
       <div class="section-sub">Selection premium, qualite controlee</div>
       <div id="product-grid" class="grid"></div>
     </section>
 
-    <section id="page-cart" class="fade-up hidden">
+    <section id="page-cart" class="hidden">
       <div class="section-title">Mon Panier</div>
       <div class="panel">
         <div id="cart-items"></div>
@@ -459,15 +421,9 @@
 
           <label class="label">Type de logement</label>
           <div class="row" style="gap:12px; flex-wrap:wrap;">
-            <label class="row" style="gap:6px;">
-              <input type="radio" name="housing" value="Maison" /> Maison
-            </label>
-            <label class="row" style="gap:6px;">
-              <input type="radio" name="housing" value="Appartement" /> Appartement
-            </label>
-            <label class="row" style="gap:6px;">
-              <input type="radio" name="housing" value="Hotel" /> Hotel
-            </label>
+            <label class="row" style="gap:6px;"><input type="radio" name="housing" value="Maison" /> Maison</label>
+            <label class="row" style="gap:6px;"><input type="radio" name="housing" value="Appartement" /> Appartement</label>
+            <label class="row" style="gap:6px;"><input type="radio" name="housing" value="Hotel" /> Hotel</label>
           </div>
 
           <button class="btn blue block" id="btn-delivery" style="margin-top:12px;">Commander par Telegram (Livraison)</button>
@@ -475,7 +431,7 @@
       </div>
     </section>
 
-    <section id="page-account" class="fade-up hidden">
+    <section id="page-account" class="hidden">
       <div class="section-title">Mon Compte</div>
 
       <div class="panel">
@@ -485,11 +441,11 @@
 
       <div class="panel">
         <div class="section-title" style="margin:0 0 8px;">Admin Panel</div>
-        <div class="section-sub">Acces reserve</div>
+        <div class="section-sub">Acces reserve (code: 2810)</div>
 
         <div id="admin-lock" class="admin-lock" style="margin-top:10px;">
           <input class="input" id="admin-code" placeholder="Code admin" />
-          <button class="btn gold" id="admin-unlock">OK</button>
+          <button class="btn gold" id="admin-unlock" type="button">OK</button>
         </div>
 
         <div id="admin-area" class="hidden" style="margin-top:12px;">
@@ -524,9 +480,9 @@
           </div>
 
           <div class="row" style="gap:8px; flex-wrap:wrap;">
-            <button class="btn green" id="admin-save">Ajouter / Mettre a jour</button>
-            <button class="btn gray" id="admin-reset">Nouveau produit</button>
-            <button class="btn" id="admin-clear">Vider catalogue</button>
+            <button class="btn green" id="admin-save" type="button">Ajouter / Mettre a jour</button>
+            <button class="btn gray" id="admin-reset" type="button">Nouveau produit</button>
+            <button class="btn" id="admin-clear" type="button">Vider catalogue</button>
           </div>
 
           <div id="admin-error" class="admin-error"></div>
@@ -563,26 +519,14 @@
   </div>
 
   <nav class="bottom-nav">
-    <button class="nav-btn" data-target="cart">
-      <span class="nav-icon">🛒</span>
-      Panier
-      <span class="nav-badge" id="nav-count">0</span>
-    </button>
-    <button class="nav-btn primary active" data-target="home">
-      <span class="nav-icon">🏠</span>
-      Menu
-    </button>
-    <button class="nav-btn" data-target="account">
-      <span class="nav-icon">👤</span>
-      Compte
-    </button>
+    <button class="nav-btn" data-target="cart"><span class="nav-icon">🛒</span>Panier<span class="nav-badge" id="nav-count">0</span></button>
+    <button class="nav-btn primary active" data-target="home"><span class="nav-icon">🏠</span>Menu</button>
+    <button class="nav-btn" data-target="account"><span class="nav-icon">👤</span>Compte</button>
   </nav>
 
   <script>
     function setVh(){ document.documentElement.style.setProperty("--vh", (window.innerHeight * 0.01) + "px"); }
     setVh(); window.addEventListener("resize", setVh);
-
-    try { if (window.Telegram && Telegram.WebApp) Telegram.WebApp.expand(); } catch(e){}
 
     const ADMIN_CODE = "2810";
     const SECRETARY_URL = "https://t.me/Calidad_Secretaire";
@@ -595,7 +539,7 @@
     };
 
     const DEFAULT_PRODUCTS = [
-      { id:"p1", name:"Brides maid", category:"Static us", badge:"Static us USA", image:"", description:"Fleur premium, texture dense, aromes complexes, finition propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
+      { id:"p1", name:"Brides Maid", category:"Static us", badge:"Static us USA", image:"", description:"Fleur premium, texture dense, aromes complexes, finition propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
       { id:"p2", name:"Autumn", category:"Static us", badge:"Static us USA", image:"", description:"Selection haut de gamme, effet equilibre, rendu propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
       { id:"p3", name:"OG Kush", category:"Static us", badge:"Static us USA", image:"", description:"Kush classique, puissance stable, finition premium.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350}], active:true },
       { id:"p4", name:"Lemon Cherry", category:"Static us", badge:"Static us USA", image:"", description:"Profil citronne, selection elite, rendu propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350}], active:true }
@@ -604,21 +548,34 @@
     const $ = (id) => document.getElementById(id);
     const esc = (s) => String(s ?? "").replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));
 
-    let products = load(STORAGE.products, DEFAULT_PRODUCTS);
-    let cart = load(STORAGE.cart, []);
-    let orders = load(STORAGE.orders, []);
+    const storage = {
+      get(key, fallback){
+        try{
+          const v = localStorage.getItem(key);
+          if (!v) return fallback;
+          return JSON.parse(v);
+        }catch{ return fallback; }
+      },
+      set(key, val){
+        try{
+          localStorage.setItem(key, JSON.stringify(val));
+          return true;
+        }catch{ return false; }
+      }
+    };
+
+    let products = storage.get(STORAGE.products, DEFAULT_PRODUCTS);
+    let cart = storage.get(STORAGE.cart, []);
+    let orders = storage.get(STORAGE.orders, []);
+
     let currentProduct = null;
     let selectedSize = null;
     let quantity = 1;
     let pickupType = null;
 
-    function load(key, fallback){
-      try{
-        const v = JSON.parse(localStorage.getItem(key));
-        return Array.isArray(v) || typeof v === "object" ? v : fallback;
-      }catch{ return fallback; }
-    }
-    function save(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
+    function saveProducts(){ storage.set(STORAGE.products, products); }
+    function saveCart(){ storage.set(STORAGE.cart, cart); }
+    function saveOrders(){ storage.set(STORAGE.orders, orders); }
 
     function priceRange(sizes){
       if (!sizes || !sizes.length) return "";
@@ -634,9 +591,9 @@
 
       const sizes = [];
       for (const raw of parts){
-        const numMatch = raw.match(/(\d+(?:[.,]\d+)?)/g);
-        if (!numMatch) continue;
-        const price = Number(numMatch[numMatch.length - 1].replace(",", "."));
+        const nums = raw.match(/(\d+(?:[.,]\d+)?)/g);
+        if (!nums) continue;
+        const price = Number(nums[nums.length - 1].replace(",", "."));
         if (!Number.isFinite(price)) continue;
 
         const sizeMatch = raw.match(/(\d+(?:[.,]\d+)?\s*(?:g|kg|mg|ml|l|oz))/i);
@@ -735,7 +692,7 @@
         price: selectedSize.price,
         qty: quantity
       });
-      save(STORAGE.cart, cart);
+      saveCart();
       renderCart();
       closeModal();
       showPage("cart");
@@ -785,12 +742,12 @@
       if (!item) return;
       item.qty += delta;
       if (item.qty <= 0) cart = cart.filter(i => i.key !== key);
-      save(STORAGE.cart, cart);
+      saveCart();
       renderCart();
     }
     function removeItem(key){
       cart = cart.filter(i => i.key !== key);
-      save(STORAGE.cart, cart);
+      saveCart();
       renderCart();
     }
 
@@ -846,22 +803,10 @@
         total,
         items: [...cart]
       });
-      save(STORAGE.orders, orders);
+      saveOrders();
       renderOrders();
 
-      openSecretary(buildOrderMessage(type));
-    }
-
-    function openSecretary(message){
-      try { navigator.clipboard.writeText(message); } catch(e){}
-      try {
-        if (window.Telegram && Telegram.WebApp) {
-          Telegram.WebApp.openTelegramLink(SECRETARY_URL);
-          alert("Message copie. Colle-le dans la conversation du secretaire.");
-          return;
-        }
-      } catch(e){}
-      const share = "https://t.me/share/url?url=&text=" + encodeURIComponent(message);
+      const share = "https://t.me/share/url?url=&text=" + encodeURIComponent(buildOrderMessage(type));
       window.open(share, "_blank");
     }
 
@@ -955,7 +900,7 @@
       if (idx >= 0) products[idx] = product;
       else products.push(product);
 
-      save(STORAGE.products, products);
+      saveProducts();
       renderProducts();
       renderAdminList();
       resetAdminForm();
@@ -991,13 +936,13 @@
         };
         btns[1].onclick = () => {
           p.active = !p.active;
-          save(STORAGE.products, products);
+          saveProducts();
           renderProducts();
           renderAdminList();
         };
         btns[2].onclick = () => {
           products = products.filter(x=>x.id!==p.id);
-          save(STORAGE.products, products);
+          saveProducts();
           renderProducts();
           renderAdminList();
         };
@@ -1010,15 +955,15 @@
     $("admin-clear").onclick = () => {
       if (confirm("Vider tout le catalogue ?")){
         products = [];
-        save(STORAGE.products, products);
+        saveProducts();
         renderProducts();
         renderAdminList();
       }
     };
 
-    $("modal-close").onclick = closeModal;
+    $("modal-close").onclick = () => $("product-modal").classList.remove("show");
     $("add-to-cart").onclick = addToCart;
-    $("go-cart").onclick = () => { closeModal(); showPage("cart"); };
+    $("go-cart").onclick = () => { $("product-modal").classList.remove("show"); showPage("cart"); };
     $("qty-minus").onclick = () => { quantity = Math.max(1, quantity-1); $("qty-value").textContent = quantity; };
     $("qty-plus").onclick = () => { quantity += 1; $("qty-value").textContent = quantity; };
 
