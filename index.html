@@ -101,7 +101,6 @@
 
       .brand {
         text-align: center;
-        position: relative;
       }
 
       .brand h1 {
@@ -120,6 +119,10 @@
         letter-spacing: 2px;
         text-transform: uppercase;
         color: var(--muted);
+      }
+
+      .brand {
+        position: relative;
       }
 
       .brand::after {
@@ -257,10 +260,6 @@
         position: relative;
       }
 
-      .product-card:hover {
-        transform: translateY(-3px);
-      }
-
       .product-card::after {
         content: "";
         position: absolute;
@@ -277,6 +276,11 @@
         transform: translateX(10%);
       }
 
+      .product-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(217, 193, 122, 0.7);
+      }
+
       .product-media {
         height: 140px;
         background: linear-gradient(130deg, rgba(89, 60, 255, 0.6), rgba(25, 12, 40, 0.95));
@@ -285,19 +289,19 @@
         position: relative;
       }
 
+      .product-media::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.45));
+      }
+
       .product-media[data-tone="teal"] {
         background: linear-gradient(130deg, rgba(28, 230, 190, 0.55), rgba(10, 55, 50, 0.95));
       }
 
       .product-media[data-tone="gold"] {
         background: linear-gradient(130deg, rgba(255, 196, 90, 0.6), rgba(55, 30, 8, 0.95));
-      }
-
-      .product-media::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.45));
       }
 
       .product-media span {
@@ -647,6 +651,149 @@
         margin-top: 14px;
       }
 
+      .modal-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .modal-close {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        border: 1px solid rgba(217, 193, 122, 0.4);
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .modal-media {
+        margin-top: 10px;
+        height: 180px;
+        border-radius: 18px;
+        background: linear-gradient(130deg, rgba(89, 60, 255, 0.6), rgba(25, 12, 40, 0.95));
+        position: relative;
+        overflow: hidden;
+      }
+
+      .modal-media[data-tone="teal"] {
+        background: linear-gradient(130deg, rgba(28, 230, 190, 0.55), rgba(10, 55, 50, 0.95));
+      }
+
+      .modal-media[data-tone="gold"] {
+        background: linear-gradient(130deg, rgba(255, 196, 90, 0.6), rgba(55, 30, 8, 0.95));
+      }
+
+      .modal-media::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.5));
+      }
+
+      .modal-badge {
+        position: absolute;
+        left: 12px;
+        top: 12px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(217, 193, 122, 0.35);
+        font-size: 12px;
+      }
+
+      .modal-section-title {
+        margin-top: 14px;
+        font-weight: 600;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        font-size: 12px;
+        color: var(--text-dim);
+      }
+
+      .size-grid {
+        margin-top: 8px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .size-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(217, 193, 122, 0.45);
+        background: rgba(18, 17, 14, 0.9);
+        color: var(--text);
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      .size-btn.active {
+        background: linear-gradient(135deg, #f0d98f, #c7a457);
+        color: #1a1406;
+        border-color: transparent;
+      }
+
+      .qty-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 12px;
+        font-size: 14px;
+      }
+
+      .qty-control {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #202420;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .qty-control button {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        color: #fff;
+        font-size: 16px;
+      }
+
+      .qty-control .minus {
+        background: #d83030;
+      }
+
+      .qty-control .plus {
+        background: #e6c67a;
+        color: #1a1508;
+      }
+
+      .price-total {
+        font-weight: 700;
+        color: var(--gold);
+      }
+
+      .square-btn {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        border: 1px solid rgba(217, 193, 122, 0.45);
+        background: rgba(15, 14, 11, 0.9);
+        color: var(--gold);
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+      }
+
       .ghost-btn {
         border: 1px solid rgba(217, 193, 122, 0.4);
         background: transparent;
@@ -885,10 +1032,27 @@
 
     <div class="modal" id="productModal">
       <div class="modal-card">
-        <h3 id="modalTitle">Produit</h3>
+        <div class="modal-top">
+          <h3 id="modalTitle">Produit</h3>
+          <button class="modal-close" id="closeModal">✕</button>
+        </div>
+        <div class="modal-media" id="modalMedia">
+          <div class="modal-badge" id="modalBadge">Static us 🇺🇸</div>
+        </div>
+        <div class="modal-section-title">Prix</div>
+        <div class="size-grid" id="sizeGrid"></div>
+        <div class="qty-row">
+          <span>Quantité</span>
+          <div class="qty-control">
+            <button class="minus" id="qtyMinus">−</button>
+            <strong id="qtyValue">1</strong>
+            <button class="plus" id="qtyPlus">+</button>
+          </div>
+          <div class="price-total" id="modalTotal">0.00 €</div>
+        </div>
         <p id="modalDesc"></p>
         <div class="modal-footer">
-          <button class="ghost-btn" id="closeModal">Fermer</button>
+          <button class="square-btn" id="goToCart">🛒</button>
           <button class="solid-btn" id="addToCart">Ajouter au panier</button>
         </div>
       </div>
@@ -897,12 +1061,45 @@
     <script>
       const adminSecret = "2810";
       const secretaryLink = "https://t.me/Calidad_Secretaire";
-
+      const defaultSizes = [
+        { label: "1g", price: 40 },
+        { label: "5g", price: 200 },
+        { label: "10g", price: 350 },
+        { label: "50g", price: 1450 }
+      ];
       const defaultProducts = [
-        { id: 1, name: "Lemon cherry gelato", price: 350, category: "Premium", tone: "gold", desc: "Arômes sucrés, texture crémeuse, finition propre et intense." },
-        { id: 2, name: "Brides maid", price: 300, category: "Cali", tone: "violet", desc: "Parfum floral, notes fruitées, sélection top shelf." },
-        { id: 3, name: "Autum", price: 320, category: "Cali", tone: "violet", desc: "Équilibre parfait entre douceur et puissance." },
-        { id: 4, name: "Ocean mint", price: 280, category: "Fresh", tone: "teal", desc: "Fraîcheur mentholée et finale douce." }
+        {
+          id: 1,
+          name: "Lemon cherry gelato",
+          price: 350,
+          category: "Premium",
+          tone: "gold",
+          desc: "Arômes sucrés, texture crémeuse, finition propre et intense."
+        },
+        {
+          id: 2,
+          name: "Brides maid",
+          price: 300,
+          category: "Cali",
+          tone: "violet",
+          desc: "Parfum floral, notes fruitées, sélection top shelf."
+        },
+        {
+          id: 3,
+          name: "Autum",
+          price: 320,
+          category: "Cali",
+          tone: "violet",
+          desc: "Équilibre parfait entre douceur et puissance."
+        },
+        {
+          id: 4,
+          name: "Ocean mint",
+          price: 280,
+          category: "Fresh",
+          tone: "teal",
+          desc: "Fraîcheur mentholée et finale douce."
+        }
       ];
 
       const storageKey = "calidad_products";
@@ -917,11 +1114,28 @@
       const modal = document.getElementById("productModal");
       const modalTitle = document.getElementById("modalTitle");
       const modalDesc = document.getElementById("modalDesc");
+      const sizeGrid = document.getElementById("sizeGrid");
+      const modalMedia = document.getElementById("modalMedia");
+      const modalBadge = document.getElementById("modalBadge");
+      const qtyValue = document.getElementById("qtyValue");
+      const qtyMinus = document.getElementById("qtyMinus");
+      const qtyPlus = document.getElementById("qtyPlus");
+      const modalTotal = document.getElementById("modalTotal");
+      const goToCartBtn = document.getElementById("goToCart");
       const addToCartBtn = document.getElementById("addToCart");
 
       let products = JSON.parse(localStorage.getItem(storageKey)) || defaultProducts;
+      products = products.map((p) =>
+        p.sizes && p.sizes.length ? p : { ...p, sizes: defaultSizes }
+      );
       let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+      cart = cart.map((item) => ({
+        ...item,
+        key: item.key || `${item.id}-${item.size || "default"}`
+      }));
       let selectedProduct = null;
+      let selectedSize = null;
+      let selectedQty = 1;
       let selectedCategory = "Toutes";
 
       const toneMap = { violet: "", teal: "teal", gold: "gold" };
@@ -952,18 +1166,23 @@
 
       function renderProducts() {
         productGrid.innerHTML = "";
-        const list = selectedCategory === "Toutes" ? products : products.filter((p) => p.category === selectedCategory);
+        const list =
+          selectedCategory === "Toutes"
+            ? products
+            : products.filter((p) => p.category === selectedCategory);
         list.forEach((item, index) => {
           const card = document.createElement("article");
           card.className = "product-card card-reveal";
           card.style.setProperty("--d", `${260 + index * 90}ms`);
+          const sizes = item.sizes && item.sizes.length ? item.sizes : defaultSizes;
+          const minPrice = Math.min(...sizes.map((s) => s.price));
           card.innerHTML = `
             <div class="product-media" data-tone="${toneMap[item.tone] || ""}">
               <span>${item.category}</span>
             </div>
             <div class="product-body">
               <div class="product-title">${item.name}</div>
-              <div class="product-meta">${item.price.toFixed(2)} €</div>
+              <div class="product-meta">À partir de ${minPrice.toFixed(2)} €</div>
             </div>
           `;
           card.addEventListener("click", () => openProduct(item));
@@ -973,15 +1192,55 @@
 
       function openProduct(item) {
         selectedProduct = item;
+        selectedQty = 1;
+        qtyValue.textContent = selectedQty;
+        const sizes = item.sizes && item.sizes.length ? item.sizes : defaultSizes;
+        selectedSize = sizes[0];
         modalTitle.textContent = item.name;
         modalDesc.textContent = item.desc;
+        modalMedia.setAttribute("data-tone", toneMap[item.tone] || "");
+        modalBadge.textContent = `${item.category} 🇺🇸`;
+        renderSizes(sizes);
+        updateModalTotal();
         modal.classList.add("active");
       }
 
+      function renderSizes(sizes) {
+        sizeGrid.innerHTML = "";
+        sizes.forEach((size) => {
+          const btn = document.createElement("button");
+          btn.className = "size-btn" + (size.label === selectedSize.label ? " active" : "");
+          btn.innerHTML = `<span>${size.label}</span><span>${size.price.toFixed(2)} €</span>`;
+          btn.addEventListener("click", () => {
+            selectedSize = size;
+            [...sizeGrid.children].forEach((el) => el.classList.remove("active"));
+            btn.classList.add("active");
+            updateModalTotal();
+          });
+          sizeGrid.appendChild(btn);
+        });
+      }
+
+      function updateModalTotal() {
+        const total = selectedSize ? selectedSize.price * selectedQty : 0;
+        modalTotal.textContent = total.toFixed(2) + " €";
+      }
+
       function addToCart(item) {
-        const existing = cart.find((c) => c.id === item.id);
-        if (existing) existing.qty += 1;
-        else cart.push({ ...item, qty: 1 });
+        const key = `${item.id}-${selectedSize?.label || "default"}`;
+        const existing = cart.find((c) => c.key === key);
+        if (existing) {
+          existing.qty += selectedQty;
+        } else {
+          cart.push({
+            key,
+            id: item.id,
+            name: item.name,
+            size: selectedSize?.label || "",
+            price: selectedSize?.price || item.price,
+            qty: selectedQty
+          });
+        }
         saveCart();
         renderCart();
         modal.classList.remove("active");
@@ -999,7 +1258,7 @@
           row.style.setProperty("--d", `${120 + index * 90}ms`);
           row.innerHTML = `
             <div>
-              <h3>${item.name}</h3>
+              <h3>${item.name} ${item.size ? "— " + item.size : ""}</h3>
               <p>${item.qty} x ${item.price.toFixed(2)} €</p>
             </div>
             <div class="qty">
@@ -1008,23 +1267,50 @@
               <button class="plus">+</button>
             </div>
           `;
-          row.querySelector(".minus").addEventListener("click", () => changeQty(item.id, -1));
-          row.querySelector(".plus").addEventListener("click", () => changeQty(item.id, 1));
+          row.querySelector(".minus").addEventListener("click", () => changeQty(item.key, -1));
+          row.querySelector(".plus").addEventListener("click", () => changeQty(item.key, 1));
           cartItems.appendChild(row);
         });
         totalItems.textContent = totalQty;
         totalPrice.textContent = total.toFixed(2) + " €";
       }
 
-      function changeQty(id, delta) {
-        cart = cart.map((item) => item.id === id ? { ...item, qty: Math.max(0, item.qty + delta) } : item).filter((item) => item.qty > 0);
+      function changeQty(key, delta) {
+        cart = cart
+          .map((item) =>
+            item.key === key ? { ...item, qty: Math.max(0, item.qty + delta) } : item
+          )
+          .filter((item) => item.qty > 0);
         saveCart();
         renderCart();
       }
 
-      addToCartBtn.addEventListener("click", () => { if (selectedProduct) addToCart(selectedProduct); });
-      document.getElementById("closeModal").addEventListener("click", () => modal.classList.remove("active"));
-      modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("active"); });
+      qtyMinus.addEventListener("click", () => {
+        selectedQty = Math.max(1, selectedQty - 1);
+        qtyValue.textContent = selectedQty;
+        updateModalTotal();
+      });
+
+      qtyPlus.addEventListener("click", () => {
+        selectedQty += 1;
+        qtyValue.textContent = selectedQty;
+        updateModalTotal();
+      });
+
+      goToCartBtn.addEventListener("click", () => {
+        if (selectedProduct) addToCart(selectedProduct);
+        document.querySelector('[data-target="cartView"]').click();
+      });
+
+      addToCartBtn.addEventListener("click", () => {
+        if (selectedProduct) addToCart(selectedProduct);
+      });
+      document.getElementById("closeModal").addEventListener("click", () => {
+        modal.classList.remove("active");
+      });
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) modal.classList.remove("active");
+      });
 
       const navItems = document.querySelectorAll(".nav-item");
       const views = document.querySelectorAll(".view");
@@ -1046,8 +1332,12 @@
       const radios = document.querySelectorAll('input[name="housing"]');
 
       function buildMessage(type) {
-        const items = cart.map((i) => `${i.name} x${i.qty}`).join(", ");
-        if (type === "meetup") return `Bonjour, je veux commander: ${items}. Retrait: Meetup.`;
+        const items = cart
+          .map((i) => `${i.name}${i.size ? " " + i.size : ""} x${i.qty}`)
+          .join(", ");
+        if (type === "meetup") {
+          return `Bonjour, je veux commander: ${items}. Retrait: Meetup.`;
+        }
         const housing = [...radios].find((r) => r.checked)?.value || "";
         return `Bonjour, je veux commander: ${items}. Retrait: Livraison. Adresse: ${addressInput.value}. Logement: ${housing}.`;
       }
@@ -1055,7 +1345,8 @@
       function updateContactLink(type) {
         const msg = encodeURIComponent(buildMessage(type));
         primaryAction.onclick = () => {
-          window.open(`${secretaryLink}?text=${msg}`, "_blank");
+          const url = `${secretaryLink}?text=${msg}`;
+          window.open(url, "_blank");
           saveOrder(buildMessage(type));
         };
       }
@@ -1094,14 +1385,22 @@
           orderHistory.textContent = "Aucune commande enregistrée.";
           return;
         }
-        orderHistory.innerHTML = orders.slice(-5).reverse().map((o) => `<div style="margin-bottom:6px;">${o.date} — ${o.message}</div>`).join("");
+        orderHistory.innerHTML = orders
+          .slice(-5)
+          .reverse()
+          .map((o) => `<div style="margin-bottom:6px;">${o.date} — ${o.message}</div>`)
+          .join("");
       }
 
       document.getElementById("adminUnlock").addEventListener("click", () => {
         const code = document.getElementById("adminCode").value.trim();
         const panel = document.getElementById("adminPanel");
-        if (code === adminSecret) panel.classList.add("active");
-        else { panel.classList.remove("active"); alert("Code invalide."); }
+        if (code === adminSecret) {
+          panel.classList.add("active");
+        } else {
+          panel.classList.remove("active");
+          alert("Code invalide.");
+        }
       });
 
       document.getElementById("addProduct").addEventListener("click", () => {
@@ -1111,7 +1410,16 @@
         const tone = document.getElementById("pTone").value;
         const desc = document.getElementById("pDesc").value.trim();
         if (!name || !price || !category) return;
-        products.push({ id: Date.now(), name, price, category, tone, desc });
+        const newProduct = {
+          id: Date.now(),
+          name,
+          price,
+          category,
+          tone,
+          desc,
+          sizes: [{ label: "10g", price }]
+        };
+        products.push(newProduct);
         saveProducts();
         renderCategories();
         renderProducts();
