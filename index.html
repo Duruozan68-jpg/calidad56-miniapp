@@ -304,6 +304,7 @@
       cursor:pointer;
       background:transparent;
       border:1px solid transparent;
+      position:relative;
     }
     .nav-btn.active{
       color:var(--gold);
@@ -318,6 +319,18 @@
       font-weight:700;
     }
     .nav-icon{ display:block; font-size:20px; margin-bottom:4px; }
+
+    .nav-badge{
+      position:absolute; top:6px; right:22px;
+      min-width:18px; height:18px;
+      padding:0 5px;
+      background:var(--gold);
+      color:#111;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:700;
+      display:inline-flex; align-items:center; justify-content:center;
+    }
 
     .modal{
       position:fixed; inset:0;
@@ -394,6 +407,12 @@
     .admin-card .meta{ font-size:12px; color:var(--muted); }
     .admin-actions{ display:flex; gap:6px; }
     .tiny{ padding:6px 10px; font-size:12px; border-radius:10px; }
+
+    .admin-error{
+      color:#ffb3b3;
+      font-size:12px;
+      margin-top:8px;
+    }
   </style>
 </head>
 <body>
@@ -490,11 +509,14 @@
           <label class="label">Image (URL)</label>
           <input class="input" id="admin-image" placeholder="https://..." />
 
+          <label class="label">Prix rapide (si tu ne veux pas entrer plusieurs tailles)</label>
+          <input class="input" id="admin-price" placeholder="Ex: 40" />
+
+          <label class="label">Tailles (format libre)</label>
+          <input class="input" id="admin-sizes" placeholder="Ex: 1g - 40, 5g - 200, 10g - 350" />
+
           <label class="label">Description</label>
           <textarea class="textarea" id="admin-desc" placeholder="Description du produit"></textarea>
-
-          <label class="label">Tailles (format: 1g:40,5g:200,10g:350)</label>
-          <input class="input" id="admin-sizes" placeholder="1g:40,5g:200,10g:350" />
 
           <div class="row" style="margin:10px 0;">
             <label class="row" style="gap:6px;">
@@ -509,15 +531,10 @@
             <button class="btn" id="admin-clear">Vider catalogue</button>
           </div>
 
+          <div id="admin-error" class="admin-error"></div>
+
           <div class="section-sub" style="margin-top:12px;">Catalogue</div>
           <div id="admin-list" class="admin-list"></div>
-
-          <div class="section-sub" style="margin-top:12px;">Import / Export JSON</div>
-          <textarea class="textarea" id="admin-json" placeholder="JSON produits"></textarea>
-          <div class="row" style="gap:8px; margin-top:8px;">
-            <button class="btn" id="admin-export">Exporter</button>
-            <button class="btn" id="admin-import">Importer</button>
-          </div>
         </div>
       </div>
     </section>
@@ -551,6 +568,7 @@
     <button class="nav-btn" data-target="cart">
       <span class="nav-icon">🛒</span>
       Panier
+      <span class="nav-badge" id="nav-count">0</span>
     </button>
     <button class="nav-btn primary active" data-target="home">
       <span class="nav-icon">🏠</span>
@@ -572,17 +590,15 @@
     const SECRETARY_URL = "https://t.me/Calidad_Secretaire";
 
     const STORAGE = {
-      products: "calidad_products_uluxe",
-      cart: "calidad_cart_uluxe",
-      orders: "calidad_orders_uluxe",
+      products: "calidad_products_ultra",
+      cart: "calidad_cart_ultra",
+      orders: "calidad_orders_ultra",
       admin: "calidad_admin_ok"
     };
 
     const DEFAULT_PRODUCTS = [
       { id:"p1", name:"Brides maid", category:"Static us", badge:"Static us USA", image:"", description:"Fleur premium, texture dense, aromes complexes, finition propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
-      { id:"p2", name:"Autumn", category:"Static us", badge:"Static us USA", image:"", description:"Selection haut de gamme, effet equilibre, rendu propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
-      { id:"p3", name:"OG Kush", category:"Static us", badge:"Static us USA", image:"", description:"Note kush classique, puissance constante, selection premium.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true },
-      { id:"p4", name:"Lemon Cherry", category:"Static us", badge:"Static us USA", image:"", description:"Profil citronne, finition propre, choix elite.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true }
+      { id:"p2", name:"Autumn", category:"Static us", badge:"Static us USA", image:"", description:"Selection haut de gamme, effet equilibre, rendu propre.", sizes:[{label:"1g",price:40},{label:"5g",price:200},{label:"10g",price:350},{label:"50g",price:1450}], active:true }
     ];
 
     const $ = (id) => document.getElementById(id);
@@ -608,6 +624,27 @@
       if (!sizes || !sizes.length) return "";
       const min = Math.min(...sizes.map(s=>s.price));
       return "A partir de " + min + " EUR";
+    }
+
+    function parseSizesInput(text){
+      const parts = String(text || "")
+        .split(/[\n,;]+/)
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      const sizes = [];
+      for (const raw of parts){
+        const numMatch = raw.match(/(\d+(?:[.,]\d+)?)/g);
+        if (!numMatch) continue;
+        const price = Number(numMatch[numMatch.length - 1].replace(",", "."));
+        if (!Number.isFinite(price)) continue;
+
+        const sizeMatch = raw.match(/(\d+(?:[.,]\d+)?\s*(?:g|kg|mg|ml|l|oz))/i);
+        let label = sizeMatch ? sizeMatch[1].replace(/\s+/g,"") : raw.split(/[:=-]/)[0].trim();
+        if (!label) label = "Option " + (sizes.length + 1);
+        sizes.push({ label, price });
+      }
+      return sizes;
     }
 
     function renderProducts(){
@@ -739,6 +776,8 @@
       const total = cart.reduce((s,i)=>s+i.qty*i.price,0);
       $("cart-count").textContent = count;
       $("cart-total").textContent = total.toFixed(2) + " EUR";
+      $("nav-count").textContent = count;
+      $("nav-count").style.display = count ? "inline-flex" : "none";
     }
 
     function updateQty(key, delta){
@@ -795,6 +834,24 @@
       return msg;
     }
 
+    function placeOrder(type){
+      if (!cart.length) return alert("Panier vide.");
+      pickupType = type;
+
+      const total = cart.reduce((s,i)=>s+i.qty*i.price,0);
+      orders.push({
+        id: "CMD-" + Date.now(),
+        date: new Date().toISOString(),
+        type,
+        total,
+        items: [...cart]
+      });
+      save(STORAGE.orders, orders);
+      renderOrders();
+
+      openSecretary(buildOrderMessage(type));
+    }
+
     function openSecretary(message){
       try { navigator.clipboard.writeText(message); } catch(e){}
       try {
@@ -808,16 +865,8 @@
       window.open(share, "_blank");
     }
 
-    $("btn-meetup").onclick = () => {
-      if (!cart.length) return alert("Panier vide.");
-      pickupType = "meetup";
-      openSecretary(buildOrderMessage("meetup"));
-    };
-    $("btn-delivery").onclick = () => {
-      if (!cart.length) return alert("Panier vide.");
-      pickupType = "delivery";
-      openSecretary(buildOrderMessage("delivery"));
-    };
+    $("btn-meetup").onclick = () => placeOrder("meetup");
+    $("btn-delivery").onclick = () => placeOrder("delivery");
 
     function renderOrders(){
       const wrap = $("order-list");
@@ -855,14 +904,6 @@
     }
     $("admin-unlock").onclick = unlockAdmin;
 
-    function parseSizesInput(text){
-      return text.split(",").map(p=>{
-        const [label,price] = p.split(":").map(s=>s.trim());
-        if (!label || !price) return null;
-        return {label, price: Number(price)};
-      }).filter(Boolean);
-    }
-
     function resetAdminForm(){
       $("admin-id").value = "";
       $("admin-name").value = "";
@@ -871,26 +912,49 @@
       $("admin-image").value = "";
       $("admin-desc").value = "";
       $("admin-sizes").value = "";
+      $("admin-price").value = "";
       $("admin-active").checked = true;
+      $("admin-error").textContent = "";
     }
 
     function saveAdminProduct(){
+      $("admin-error").textContent = "";
+
       const id = $("admin-id").value || ("p" + Date.now());
+      const name = $("admin-name").value.trim();
+      const sizesInput = $("admin-sizes").value.trim();
+      const basePrice = Number(String($("admin-price").value).replace(",", "."));
+
+      let sizes = parseSizesInput(sizesInput);
+
+      if (!sizes.length && Number.isFinite(basePrice) && basePrice > 0){
+        sizes = [{ label: "1g", price: basePrice }];
+      }
+
+      if (!name){
+        $("admin-error").textContent = "Nom du produit manquant.";
+        return;
+      }
+      if (!sizes.length){
+        $("admin-error").textContent = "Ajoute au moins un prix. Exemple: 1g - 40, 5g - 200";
+        return;
+      }
+
       const product = {
         id,
-        name: $("admin-name").value.trim(),
+        name,
         category: $("admin-category").value.trim(),
         badge: $("admin-badge").value.trim(),
         image: $("admin-image").value.trim(),
         description: $("admin-desc").value.trim(),
-        sizes: parseSizesInput($("admin-sizes").value),
+        sizes,
         active: $("admin-active").checked
       };
-      if (!product.name) return alert("Nom manquant");
-      if (!product.sizes.length) return alert("Tailles invalides");
+
       const idx = products.findIndex(p=>p.id===id);
       if (idx >= 0) products[idx] = product;
       else products.push(product);
+
       save(STORAGE.products, products);
       renderProducts();
       renderAdminList();
@@ -922,7 +986,7 @@
           $("admin-badge").value = p.badge || "";
           $("admin-image").value = p.image || "";
           $("admin-desc").value = p.description || "";
-          $("admin-sizes").value = (p.sizes || []).map(s=>`${s.label}:${s.price}`).join(",");
+          $("admin-sizes").value = (p.sizes || []).map(s=>`${s.label} - ${s.price}`).join(", ");
           $("admin-active").checked = !!p.active;
         };
         btns[1].onclick = () => {
@@ -949,21 +1013,6 @@
         save(STORAGE.products, products);
         renderProducts();
         renderAdminList();
-      }
-    };
-    $("admin-export").onclick = () => {
-      $("admin-json").value = JSON.stringify(products, null, 2);
-    };
-    $("admin-import").onclick = () => {
-      try {
-        const data = JSON.parse($("admin-json").value);
-        if (!Array.isArray(data)) throw new Error();
-        products = data;
-        save(STORAGE.products, products);
-        renderProducts();
-        renderAdminList();
-      } catch {
-        alert("JSON invalide");
       }
     };
 
