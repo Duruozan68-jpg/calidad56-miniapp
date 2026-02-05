@@ -26,7 +26,7 @@
       --danger: #df3b3b;
       --shadow: 0 14px 40px rgba(0,0,0,0.35);
       --radius: 20px;
-      --bg-image: url("background.png?v=8");
+      --bg-image: url("background.png?v=9");
     }
 
     * { box-sizing: border-box; }
@@ -182,6 +182,8 @@
     .admin-list { margin-top: 12px; display: grid; gap: 8px; }
     .admin-item { padding: 10px; border: 1px solid rgba(201,164,92,0.3); border-radius: 12px; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,10,0.5); }
     .admin-box { border: 1px solid rgba(201,164,92,0.25); border-radius: 14px; padding: 12px; margin-top: 10px; background: rgba(0,0,0,0.3); }
+    .price-edit-grid { display: grid; gap: 8px; margin-top: 8px; }
+    .price-edit-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
     .toast {
       position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
@@ -301,13 +303,23 @@
               <input id="p-category" class="input" placeholder="Catégorie (optionnel)" />
               <input id="p-badge" class="input" placeholder="Badge (ex: Static US)" />
 
-              <div class="row">
-                <input id="p-1g" class="input" placeholder="Prix 1g (EUR)" />
-                <input id="p-5g" class="input" placeholder="Prix 5g (EUR)" />
-              </div>
-              <div class="row">
-                <input id="p-10g" class="input" placeholder="Prix 10g (EUR)" />
-                <input id="p-50g" class="input" placeholder="Prix 50g (EUR)" />
+              <div class="price-edit-grid">
+                <div class="price-edit-row">
+                  <input id="price-label-1" class="input" placeholder="Grammes (ex: 1g)" />
+                  <input id="price-value-1" class="input" placeholder="Prix (EUR)" />
+                </div>
+                <div class="price-edit-row">
+                  <input id="price-label-2" class="input" placeholder="Grammes (ex: 5g)" />
+                  <input id="price-value-2" class="input" placeholder="Prix (EUR)" />
+                </div>
+                <div class="price-edit-row">
+                  <input id="price-label-3" class="input" placeholder="Grammes (ex: 10g)" />
+                  <input id="price-value-3" class="input" placeholder="Prix (EUR)" />
+                </div>
+                <div class="price-edit-row">
+                  <input id="price-label-4" class="input" placeholder="Grammes (ex: 50g)" />
+                  <input id="price-value-4" class="input" placeholder="Prix (EUR)" />
+                </div>
               </div>
 
               <div class="row" style="margin-top:8px;">
@@ -604,7 +616,7 @@
       const p = state.selectedProduct;
       if (!p) return;
       const opt = (p.prices || [])[state.selectedOptionIndex];
-      if (!opt) return;
+      if (!opt) return toast("Aucun prix défini");
 
       const key = `${p.id}_${opt.label}`;
       const existing = state.cart.find(i => i.key === key);
@@ -692,18 +704,11 @@
     }
 
     function openSecretary(message) {
-      if (!message || !state.cart.length) {
-        toast("Panier vide");
-        return;
-      }
+      if (!message || !state.cart.length) return toast("Panier vide");
       const url = `${SECRETARY_URL}?text=${encodeURIComponent(message)}`;
-      if (window.Telegram?.WebApp?.openTelegramLink) {
-        window.Telegram.WebApp.openTelegramLink(url);
-      } else if (window.Telegram?.WebApp?.openLink) {
-        window.Telegram.WebApp.openLink(url);
-      } else {
-        window.open(url, "_blank");
-      }
+      if (window.Telegram?.WebApp?.openTelegramLink) window.Telegram.WebApp.openTelegramLink(url);
+      else if (window.Telegram?.WebApp?.openLink) window.Telegram.WebApp.openLink(url);
+      else window.open(url, "_blank");
       if (navigator.clipboard) navigator.clipboard.writeText(message).catch(() => {});
       saveOrderHistory(message);
     }
@@ -755,14 +760,14 @@
 
     function getPriceInputs() {
       const prices = [];
-      const p1 = Number($("p-1g").value);
-      const p5 = Number($("p-5g").value);
-      const p10 = Number($("p-10g").value);
-      const p50 = Number($("p-50g").value);
-      if (p1) prices.push({ label: "1g", price: p1 });
-      if (p5) prices.push({ label: "5g", price: p5 });
-      if (p10) prices.push({ label: "10g", price: p10 });
-      if (p50) prices.push({ label: "50g", price: p50 });
+      for (let i = 1; i <= 4; i++) {
+        const label = $(`price-label-${i}`).value.trim();
+        const priceRaw = $(`price-value-${i}`).value.trim();
+        const price = Number(priceRaw);
+        if (label && priceRaw !== "" && !Number.isNaN(price)) {
+          prices.push({ label, price });
+        }
+      }
       return prices;
     }
 
@@ -770,6 +775,9 @@
       if (!state.adminAuthorized) return toast("Admin non autorisé");
       const name = $("p-name").value.trim();
       if (!name) return toast("Nom requis");
+
+      const prices = getPriceInputs();
+      if (!prices.length) return toast("Ajoute au moins 1 prix");
 
       const product = {
         name,
@@ -782,7 +790,7 @@
         badge: $("p-badge").value.trim(),
         active: $("p-active").checked,
         featured: $("p-featured").checked,
-        prices: getPriceInputs(),
+        prices,
         updatedAt: Date.now()
       };
 
@@ -799,7 +807,11 @@
 
     function clearAdminForm() {
       state.editingId = null;
-      ["p-name","p-desc","p-media-url","p-poster","p-origin","p-category","p-badge","p-1g","p-5g","p-10g","p-50g"].forEach(id => $(id).value = "");
+      ["p-name","p-desc","p-media-url","p-poster","p-origin","p-category","p-badge"].forEach(id => $(id).value = "");
+      for (let i = 1; i <= 4; i++) {
+        $(`price-label-${i}`).value = "";
+        $(`price-value-${i}`).value = "";
+      }
       $("p-active").checked = true;
       $("p-featured").checked = false;
     }
@@ -929,11 +941,18 @@
         $("p-badge").value = p.badge || "";
         $("p-active").checked = p.active !== false;
         $("p-featured").checked = !!p.featured;
-        const prices = p.prices || [];
-        $("p-1g").value = prices.find(x => x.label === "1g")?.price || "";
-        $("p-5g").value = prices.find(x => x.label === "5g")?.price || "";
-        $("p-10g").value = prices.find(x => x.label === "10g")?.price || "";
-        $("p-50g").value = prices.find(x => x.label === "50g")?.price || "";
+
+        for (let i = 1; i <= 4; i++) {
+          $(`price-label-${i}`).value = "";
+          $(`price-value-${i}`).value = "";
+        }
+        (p.prices || []).forEach((pr, idx) => {
+          const i = idx + 1;
+          if (i <= 4) {
+            $(`price-label-${i}`).value = pr.label || "";
+            $(`price-value-${i}`).value = pr.price ?? "";
+          }
+        });
       }
       if (delId) deleteProduct(delId);
     });
