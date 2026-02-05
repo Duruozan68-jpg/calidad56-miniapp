@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0b0b" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -15,8 +16,8 @@
   <style>
     :root {
       --bg: #0b0b0b;
-      --card: rgba(18, 18, 18, 0.7);
-      --card-strong: rgba(15, 15, 15, 0.9);
+      --card: rgba(18, 18, 18, 0.78);
+      --card-strong: rgba(12, 12, 12, 0.92);
       --gold: #c9a45c;
       --gold-2: #a9853a;
       --text: #f7f4ee;
@@ -26,6 +27,7 @@
       --success: #4cb77b;
       --shadow: 0 14px 40px rgba(0,0,0,0.35);
       --radius: 20px;
+      --bg-image: url("background.png?v=5");
     }
 
     * { box-sizing: border-box; }
@@ -37,8 +39,8 @@
       background:
         radial-gradient(1200px 700px at 70% 10%, rgba(201,164,92,0.15), transparent 60%),
         radial-gradient(900px 600px at 10% 20%, rgba(201,164,92,0.08), transparent 60%),
-        linear-gradient(180deg, rgba(0,0,0,0.85), rgba(0,0,0,0.95)),
-        url("background.png?v=3") center/cover fixed no-repeat;
+        linear-gradient(180deg, rgba(0,0,0,0.84), rgba(0,0,0,0.95)),
+        var(--bg-image) center/cover fixed no-repeat;
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -57,8 +59,8 @@
 
     .header {
       text-align: center;
-      margin-top: 10px;
-      margin-bottom: 18px;
+      margin-top: 6px;
+      margin-bottom: 16px;
     }
 
     .brand {
@@ -92,11 +94,40 @@
       margin: 0 0 8px;
     }
 
+    .subtle-line {
+      height: 2px;
+      width: 40px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 8px auto 0;
+      border-radius: 999px;
+      opacity: 0.8;
+    }
+
     .divider {
       height: 1px;
       background: rgba(201,164,92,0.35);
       margin: 16px 0;
     }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 110px;
+      gap: 10px;
+      margin-top: 10px;
+      margin-bottom: 12px;
+    }
+
+    .input, .select, .textarea {
+      width: 100%;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(201,164,92,0.35);
+      border-radius: 12px;
+      padding: 12px;
+      color: #fff;
+      outline: none;
+    }
+
+    .textarea { min-height: 90px; }
 
     .grid {
       display: grid;
@@ -120,6 +151,11 @@
       box-shadow: 0 12px 35px rgba(0,0,0,0.4);
     }
 
+    .card.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     @keyframes floatIn {
       from { opacity: 0; transform: translateY(14px); }
       to { opacity: 1; transform: translateY(0); }
@@ -131,6 +167,21 @@
       object-fit: cover;
       display: block;
       background: #111;
+    }
+
+    .media-wrap {
+      position: relative;
+    }
+
+    .play-icon {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      color: rgba(255,255,255,0.8);
+      font-size: 28px;
+      text-shadow: 0 0 12px rgba(0,0,0,0.6);
     }
 
     .card-body {
@@ -154,7 +205,7 @@
       font-size: 12px;
     }
 
-    .video-badge {
+    .badge {
       position: absolute;
       top: 10px;
       left: 10px;
@@ -201,9 +252,7 @@
       color: #fff;
     }
 
-    .nav-icon {
-      font-size: 20px;
-    }
+    .nav-icon { font-size: 20px; }
 
     .btn {
       width: 100%;
@@ -241,6 +290,7 @@
       display: flex;
       gap: 10px;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     .between {
@@ -281,6 +331,28 @@
     .qty .minus { background: #9b1f1f; color: #fff; }
     .qty .plus { background: #c9a45c; color: #1a1a1a; }
 
+    .segmented {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .seg-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(201,164,92,0.5);
+      background: rgba(0,0,0,0.3);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .seg-btn.active {
+      background: linear-gradient(135deg, #c9a45c, #a9853a);
+      color: #1a1a1a;
+      border: none;
+    }
+
     .modal {
       position: fixed;
       inset: 0;
@@ -318,13 +390,14 @@
       width: 34px;
       height: 34px;
       border-radius: 50%;
-      background: rgba(0,0,0,0.5);
-      border: 1px solid rgba(201,164,92,0.6);
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(201,164,92,0.7);
       color: #fff;
       display: grid;
       place-items: center;
       cursor: pointer;
       z-index: 2;
+      font-weight: 700;
     }
 
     .modal-body { padding: 16px; }
@@ -350,17 +423,6 @@
       color: #fff;
     }
 
-    .input, .select, .textarea {
-      width: 100%;
-      background: rgba(0,0,0,0.35);
-      border: 1px solid rgba(201,164,92,0.35);
-      border-radius: 12px;
-      padding: 12px;
-      color: #fff;
-    }
-
-    .textarea { min-height: 90px; }
-
     .admin-panel {
       margin-top: 10px;
       border: 1px dashed rgba(201,164,92,0.4);
@@ -384,6 +446,14 @@
       background: rgba(10,10,10,0.5);
     }
 
+    .toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
     .toast {
       position: fixed;
       bottom: 90px;
@@ -405,6 +475,7 @@
     @media (max-width: 420px) {
       .brand { font-size: 28px; }
       .grid { grid-template-columns: 1fr 1fr; }
+      .toolbar { grid-template-columns: 1fr; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -417,13 +488,26 @@
     <header class="header">
       <h1 class="brand">Calidad</h1>
       <div class="brand-sub">Sélection premium</div>
+      <div class="subtle-line"></div>
     </header>
 
     <main>
       <section id="menu-view" class="view active">
         <div class="section">
           <h2 class="section-title">Produits disponibles</h2>
+
+          <div class="toolbar">
+            <input id="search" class="input" placeholder="Rechercher un produit..." />
+            <select id="sort" class="select">
+              <option value="featured">Trier</option>
+              <option value="price-asc">Prix ↑</option>
+              <option value="price-desc">Prix ↓</option>
+              <option value="name">Nom A‑Z</option>
+            </select>
+          </div>
+
           <div class="grid" id="product-grid"></div>
+          <div id="empty-products" class="muted" style="display:none; margin-top:10px;">Aucun produit trouvé.</div>
         </div>
       </section>
 
@@ -443,9 +527,9 @@
 
           <div class="divider"></div>
           <div class="section-title" style="font-size:18px;">Type de retrait</div>
-          <div class="row" style="margin-top:10px;">
-            <button id="pickup-meetup" class="btn">Meetup</button>
-            <button id="pickup-delivery" class="btn">Livraison</button>
+          <div class="segmented">
+            <button class="seg-btn" data-pickup="Meetup">Meetup</button>
+            <button class="seg-btn" data-pickup="Livraison">Livraison</button>
           </div>
 
           <div id="meetup-action" style="margin-top:12px; display:none;">
@@ -504,9 +588,17 @@
                 <input id="p-media-url" class="input" placeholder="URL média (ex: assets/bridesmaid.mp4)" />
               </div>
               <input id="p-poster" class="input" placeholder="Poster vidéo (optionnel)" />
-
               <input id="p-origin" class="input" placeholder="Origine (ex: USA)" />
               <input id="p-category" class="input" placeholder="Catégorie (optionnel)" />
+              <input id="p-badge" class="input" placeholder="Badge (ex: Static US)" />
+              <div class="row">
+                <input id="p-stock" class="input" placeholder="Stock (optionnel)" />
+                <input id="p-priority" class="input" placeholder="Priorité (ex: 10)" />
+              </div>
+              <div class="row">
+                <label class="toggle"><input id="p-active" type="checkbox" checked /> Actif</label>
+                <label class="toggle"><input id="p-featured" type="checkbox" /> Mis en avant</label>
+              </div>
 
               <div class="row">
                 <input id="p-1g" class="input" placeholder="Prix 1g (EUR)" />
@@ -545,6 +637,7 @@
       <div class="modal-body">
         <h3 id="modal-title"></h3>
         <div class="muted" id="modal-desc"></div>
+        <div class="muted" id="modal-stock" style="margin-top:6px;"></div>
 
         <div style="margin-top:12px;">
           <div class="section-title" style="font-size:16px;">Prix</div>
@@ -606,6 +699,85 @@
       editingId: null
     };
 
+    const DEFAULT_PRODUCTS = [
+      {
+        name: "Brides Maid",
+        description: "Fleur premium, texture dense, arômes complexes, finition propre.",
+        mediaType: "video",
+        mediaUrl: "assets/bridesmaid.mp4",
+        poster: "background.png",
+        origin: "USA",
+        category: "Premium",
+        badge: "Static US",
+        featured: true,
+        active: true,
+        priority: 10,
+        prices: [
+          { label: "1g", price: 40 },
+          { label: "5g", price: 200 },
+          { label: "10g", price: 350 },
+          { label: "50g", price: 1450 }
+        ]
+      },
+      {
+        name: "Autumn",
+        description: "Notes terreuses, effet stable, qualité top.",
+        mediaType: "image",
+        mediaUrl: "background.png",
+        poster: "background.png",
+        origin: "USA",
+        category: "Classic",
+        badge: "Premium",
+        featured: false,
+        active: true,
+        priority: 8,
+        prices: [
+          { label: "1g", price: 30 },
+          { label: "5g", price: 150 },
+          { label: "10g", price: 280 },
+          { label: "50g", price: 1200 }
+        ]
+      },
+      {
+        name: "OG Kush",
+        description: "Puissante, arômes marqués, parfaite soirée.",
+        mediaType: "image",
+        mediaUrl: "background.png",
+        poster: "background.png",
+        origin: "USA",
+        category: "Classic",
+        badge: "Top",
+        featured: false,
+        active: true,
+        priority: 6,
+        prices: [
+          { label: "1g", price: 35 },
+          { label: "5g", price: 170 },
+          { label: "10g", price: 320 },
+          { label: "50g", price: 1300 }
+        ]
+      },
+      {
+        name: "Lemon Cherry Gelato",
+        description: "Sucré, fruité, très propre.",
+        mediaType: "image",
+        mediaUrl: "background.png",
+        poster: "background.png",
+        origin: "USA",
+        category: "Premium",
+        badge: "Premium",
+        featured: true,
+        active: true,
+        priority: 9,
+        prices: [
+          { label: "1g", price: 40 },
+          { label: "5g", price: 200 },
+          { label: "10g", price: 350 },
+          { label: "50g", price: 1450 }
+        ]
+      }
+    ];
+
     const $ = (id) => document.getElementById(id);
 
     function toast(msg) {
@@ -632,52 +804,117 @@
       if (id === "account-view") $("nav-account").classList.add("active");
     }
 
-    function renderMedia(product, mode = "card") {
+    function resolveUrl(path) {
+      try { return new URL(path, window.location.href).href; } catch { return path; }
+    }
+
+    function createMedia(product, mode = "card") {
       const wrap = document.createElement("div");
-      if (product.mediaType === "video") {
+      wrap.className = "media-wrap";
+      const type = product.mediaType || "image";
+
+      if (type === "video") {
         const video = document.createElement("video");
-        video.src = product.mediaUrl || "";
+        video.className = "media";
         video.poster = product.poster || "background.png";
+        video.playsInline = true;
         video.muted = mode === "card";
         video.loop = mode === "card";
-        video.playsInline = true;
-        if (mode === "card") video.autoplay = true;
+        video.autoplay = mode === "card";
+        video.preload = "metadata";
         if (mode === "modal") video.controls = true;
-        video.className = "media";
+
+        const source = document.createElement("source");
+        source.src = resolveUrl(product.mediaUrl || "");
+        source.type = "video/mp4";
+        video.appendChild(source);
+
         wrap.appendChild(video);
+
+        if (mode === "card") {
+          const icon = document.createElement("div");
+          icon.className = "play-icon";
+          icon.textContent = "▶";
+          wrap.appendChild(icon);
+        }
       } else {
         const img = document.createElement("img");
-        img.src = product.mediaUrl || "background.png";
-        img.loading = "lazy";
         img.className = "media";
+        img.src = resolveUrl(product.mediaUrl || "background.png");
+        img.loading = "lazy";
         wrap.appendChild(img);
       }
+
       return wrap;
+    }
+
+    function minPrice(product) {
+      const prices = product.prices || [];
+      if (!prices.length) return 0;
+      return Math.min(...prices.map(p => Number(p.price) || 0));
+    }
+
+    function getVisibleProducts() {
+      const search = $("search").value.trim().toLowerCase();
+      const sort = $("sort").value;
+
+      let list = state.products.filter(p => p.active !== false);
+
+      if (search) {
+        list = list.filter(p =>
+          (p.name || "").toLowerCase().includes(search) ||
+          (p.category || "").toLowerCase().includes(search) ||
+          (p.badge || "").toLowerCase().includes(search)
+        );
+      }
+
+      if (sort === "price-asc") {
+        list.sort((a,b) => minPrice(a) - minPrice(b));
+      } else if (sort === "price-desc") {
+        list.sort((a,b) => minPrice(b) - minPrice(a));
+      } else if (sort === "name") {
+        list.sort((a,b) => (a.name || "").localeCompare(b.name || ""));
+      } else {
+        list.sort((a,b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0) || (b.priority || 0) - (a.priority || 0));
+      }
+
+      return list;
     }
 
     function renderProducts() {
       const grid = $("product-grid");
       grid.innerHTML = "";
-      state.products.forEach(p => {
+      const products = getVisibleProducts();
+      $("empty-products").style.display = products.length ? "none" : "block";
+
+      products.forEach(p => {
         const card = document.createElement("div");
         card.className = "card";
+        if (p.stock === 0) card.classList.add("disabled");
 
-        const mediaWrap = renderMedia(p, "card");
-        card.appendChild(mediaWrap);
+        card.appendChild(createMedia(p, "card"));
 
-        if (p.mediaType === "video") {
+        if (p.badge) {
           const badge = document.createElement("div");
-          badge.className = "video-badge";
-          badge.textContent = "VIDEO";
+          badge.className = "badge";
+          badge.textContent = p.badge;
           card.appendChild(badge);
         }
 
         const body = document.createElement("div");
         body.className = "card-body";
-        body.innerHTML = `
-          <div class="card-title">${p.name}</div>
-          <span class="chip">${p.origin || "Premium"}</span>
-        `;
+
+        const title = document.createElement("div");
+        title.className = "card-title";
+        title.textContent = p.name || "Produit";
+
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.textContent = p.origin || "Premium";
+
+        body.appendChild(title);
+        body.appendChild(chip);
+
         card.appendChild(body);
 
         card.addEventListener("click", () => openProductModal(p));
@@ -690,19 +927,20 @@
       state.selectedOptionIndex = 0;
       state.qty = 1;
 
-      $("modal-title").textContent = product.name;
+      $("modal-title").textContent = product.name || "";
       $("modal-desc").textContent = product.description || "";
+      $("modal-stock").textContent = product.stock === 0 ? "Rupture de stock" : "";
 
       const media = $("modal-media");
       media.innerHTML = "";
-      media.appendChild(renderMedia(product, "modal"));
+      media.appendChild(createMedia(product, "modal"));
 
       const priceGrid = $("modal-prices");
       priceGrid.innerHTML = "";
       (product.prices || []).forEach((opt, idx) => {
         const btn = document.createElement("div");
         btn.className = "price-option" + (idx === 0 ? " active" : "");
-        btn.innerHTML = `<strong>${opt.label}</strong><div>${formatPrice(opt.price)}</div>`;
+        btn.textContent = `${opt.label} - ${formatPrice(opt.price)}`;
         btn.addEventListener("click", () => {
           state.selectedOptionIndex = idx;
           [...priceGrid.children].forEach(c => c.classList.remove("active"));
@@ -722,8 +960,19 @@
     function addToCart() {
       const p = state.selectedProduct;
       if (!p) return;
+
+      if (p.stock === 0) {
+        toast("Rupture de stock");
+        return;
+      }
+
       const opt = (p.prices || [])[state.selectedOptionIndex];
       if (!opt) return;
+
+      const maxStock = Number(p.stock);
+      if (!Number.isNaN(maxStock) && maxStock > 0 && state.qty > maxStock) {
+        state.qty = maxStock;
+      }
 
       const key = `${p.id}_${opt.label}`;
       const existing = state.cart.find(i => i.key === key);
@@ -754,24 +1003,44 @@
 
         const row = document.createElement("div");
         row.className = "cart-item";
-        row.innerHTML = `
-          <div class="between">
-            <div>
-              <strong>${item.name}</strong>
-              <div class="muted">${item.optionLabel} • ${formatPrice(item.unitPrice)}</div>
-            </div>
-            <button class="btn btn-danger" data-remove="${item.key}">Supprimer</button>
-          </div>
-          <div class="between" style="margin-top:10px;">
-            <div class="muted">Total</div>
-            <div>${formatPrice(item.qty * item.unitPrice)}</div>
-          </div>
-          <div class="qty" style="margin-top:10px;">
-            <button class="minus" data-minus="${item.key}">-</button>
-            <span>${item.qty}</span>
-            <button class="plus" data-plus="${item.key}">+</button>
-          </div>
+
+        const top = document.createElement("div");
+        top.className = "between";
+
+        const left = document.createElement("div");
+        const name = document.createElement("strong");
+        name.textContent = item.name;
+        const meta = document.createElement("div");
+        meta.className = "muted";
+        meta.textContent = `${item.optionLabel} • ${formatPrice(item.unitPrice)}`;
+        left.appendChild(name);
+        left.appendChild(meta);
+
+        const del = document.createElement("button");
+        del.className = "btn btn-danger";
+        del.textContent = "Supprimer";
+        del.dataset.remove = item.key;
+
+        top.appendChild(left);
+        top.appendChild(del);
+
+        const total = document.createElement("div");
+        total.className = "between";
+        total.style.marginTop = "10px";
+        total.innerHTML = `<div class="muted">Total</div><div>${formatPrice(item.qty * item.unitPrice)}</div>`;
+
+        const qty = document.createElement("div");
+        qty.className = "qty";
+        qty.style.marginTop = "10px";
+        qty.innerHTML = `
+          <button class="minus" data-minus="${item.key}">-</button>
+          <span>${item.qty}</span>
+          <button class="plus" data-plus="${item.key}">+</button>
         `;
+
+        row.appendChild(top);
+        row.appendChild(total);
+        row.appendChild(qty);
         list.appendChild(row);
       });
 
@@ -823,7 +1092,21 @@
         return;
       }
       const url = `${SECRETARY_URL}?text=${encodeURIComponent(message)}`;
-      window.open(url, "_blank");
+
+      if (window.Telegram?.WebApp?.openTelegramLink) {
+        window.Telegram.WebApp.openTelegramLink(url);
+      } else if (window.Telegram?.WebApp?.openLink) {
+        window.Telegram.WebApp.openLink(url);
+      } else {
+        window.open(url, "_blank");
+      }
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(message).then(() => {
+          toast("Message copié");
+        }).catch(() => {});
+      }
+
       saveOrderHistory(message);
     }
 
@@ -861,7 +1144,10 @@
         const item = document.createElement("div");
         item.className = "admin-item";
         item.innerHTML = `
-          <div><strong>${p.name}</strong><div class="muted" style="font-size:12px;">${p.mediaType}</div></div>
+          <div>
+            <strong>${p.name}</strong>
+            <div class="muted" style="font-size:12px;">${p.mediaType || "image"} • ${p.active === false ? "Inactif" : "Actif"}</div>
+          </div>
           <div class="row">
             <button class="btn" data-edit="${p.id}">Modifier</button>
             <button class="btn btn-danger" data-del="${p.id}">Supprimer</button>
@@ -888,6 +1174,7 @@
       if (!state.adminAuthorized) return toast("Admin non autorisé");
       const name = $("p-name").value.trim();
       if (!name) return toast("Nom requis");
+
       const product = {
         name,
         description: $("p-desc").value.trim(),
@@ -896,6 +1183,11 @@
         poster: $("p-poster").value.trim() || "background.png",
         origin: $("p-origin").value.trim(),
         category: $("p-category").value.trim(),
+        badge: $("p-badge").value.trim(),
+        stock: $("p-stock").value.trim() ? Number($("p-stock").value.trim()) : null,
+        priority: $("p-priority").value.trim() ? Number($("p-priority").value.trim()) : 0,
+        active: $("p-active").checked,
+        featured: $("p-featured").checked,
         prices: getPriceInputs(),
         updatedAt: Date.now()
       };
@@ -914,7 +1206,9 @@
 
     function clearAdminForm() {
       state.editingId = null;
-      ["p-name","p-desc","p-media-url","p-poster","p-origin","p-category","p-1g","p-5g","p-10g","p-50g"].forEach(id => $(id).value = "");
+      ["p-name","p-desc","p-media-url","p-poster","p-origin","p-category","p-badge","p-stock","p-priority","p-1g","p-5g","p-10g","p-50g"].forEach(id => $(id).value = "");
+      $("p-active").checked = true;
+      $("p-featured").checked = false;
     }
 
     async function deleteProduct(id) {
@@ -925,76 +1219,15 @@
 
     async function seedDefaults() {
       if (!state.adminAuthorized) return toast("Admin non autorisé");
-      const defaults = [
-        {
-          name: "Brides Maid",
-          description: "Fleur premium, texture dense, arômes complexes, finition propre.",
-          mediaType: "video",
-          mediaUrl: "assets/bridesmaid.mp4",
-          poster: "background.png",
-          origin: "USA",
-          category: "Premium",
-          prices: [
-            { label: "1g", price: 40 },
-            { label: "5g", price: 200 },
-            { label: "10g", price: 350 },
-            { label: "50g", price: 1450 }
-          ]
-        },
-        {
-          name: "Autumn",
-          description: "Notes terreuses, effet stable, qualité top.",
-          mediaType: "image",
-          mediaUrl: "background.png",
-          poster: "background.png",
-          origin: "USA",
-          category: "Classic",
-          prices: [
-            { label: "1g", price: 30 },
-            { label: "5g", price: 150 },
-            { label: "10g", price: 280 },
-            { label: "50g", price: 1200 }
-          ]
-        },
-        {
-          name: "OG Kush",
-          description: "Puissante, arômes marqués, parfaite soirée.",
-          mediaType: "image",
-          mediaUrl: "background.png",
-          poster: "background.png",
-          origin: "USA",
-          category: "Classic",
-          prices: [
-            { label: "1g", price: 35 },
-            { label: "5g", price: 170 },
-            { label: "10g", price: 320 },
-            { label: "50g", price: 1300 }
-          ]
-        },
-        {
-          name: "Lemon Cherry Gelato",
-          description: "Sucré, fruité, très propre.",
-          mediaType: "image",
-          mediaUrl: "background.png",
-          poster: "background.png",
-          origin: "USA",
-          category: "Premium",
-          prices: [
-            { label: "1g", price: 40 },
-            { label: "5g", price: 200 },
-            { label: "10g", price: 350 },
-            { label: "50g", price: 1450 }
-          ]
-        }
-      ];
-
-      for (const p of defaults) {
+      if (!confirm("Ajouter les 4 produits par défaut ?")) return;
+      for (const p of DEFAULT_PRODUCTS) {
         const newRef = push(ref(db, "products"));
         await set(newRef, { ...p, createdAt: Date.now() });
       }
       toast("Produits initiaux ajoutés");
     }
 
+    // Firebase live sync
     onValue(ref(db, "products"), (snapshot) => {
       const data = snapshot.val() || {};
       state.products = Object.entries(data).map(([id, val]) => ({ id, ...val }));
@@ -1031,16 +1264,20 @@
     });
 
     // Pickup
-    $("pickup-meetup").addEventListener("click", () => {
-      state.pickupType = "Meetup";
-      $("meetup-action").style.display = "block";
-      $("delivery-form").style.display = "none";
-    });
-
-    $("pickup-delivery").addEventListener("click", () => {
-      state.pickupType = "Livraison";
-      $("meetup-action").style.display = "none";
-      $("delivery-form").style.display = "block";
+    document.querySelectorAll(".seg-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".seg-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const type = btn.dataset.pickup;
+        state.pickupType = type;
+        if (type === "Meetup") {
+          $("meetup-action").style.display = "block";
+          $("delivery-form").style.display = "none";
+        } else {
+          $("meetup-action").style.display = "none";
+          $("delivery-form").style.display = "block";
+        }
+      });
     });
 
     $("meetup-order").addEventListener("click", () => {
@@ -1107,18 +1344,32 @@
         $("p-poster").value = p.poster || "";
         $("p-origin").value = p.origin || "";
         $("p-category").value = p.category || "";
+        $("p-badge").value = p.badge || "";
+        $("p-stock").value = p.stock ?? "";
+        $("p-priority").value = p.priority ?? "";
+        $("p-active").checked = p.active !== false;
+        $("p-featured").checked = !!p.featured;
         const prices = p.prices || [];
-        const p1 = prices.find(x => x.label === "1g")?.price || "";
-        const p5 = prices.find(x => x.label === "5g")?.price || "";
-        const p10 = prices.find(x => x.label === "10g")?.price || "";
-        const p50 = prices.find(x => x.label === "50g")?.price || "";
-        $("p-1g").value = p1;
-        $("p-5g").value = p5;
-        $("p-10g").value = p10;
-        $("p-50g").value = p50;
+        $("p-1g").value = prices.find(x => x.label === "1g")?.price || "";
+        $("p-5g").value = prices.find(x => x.label === "5g")?.price || "";
+        $("p-10g").value = prices.find(x => x.label === "10g")?.price || "";
+        $("p-50g").value = prices.find(x => x.label === "50g")?.price || "";
       }
       if (delId) deleteProduct(delId);
     });
+
+    // Search + sort
+    $("search").addEventListener("input", renderProducts);
+    $("sort").addEventListener("change", renderProducts);
+
+    // Telegram WebApp polish
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      if (tg.setHeaderColor) tg.setHeaderColor("#0b0b0b");
+      if (tg.setBackgroundColor) tg.setBackgroundColor("#0b0b0b");
+    }
 
     renderProducts();
     renderCart();
