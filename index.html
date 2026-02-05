@@ -26,7 +26,7 @@
       --danger: #df3b3b;
       --shadow: 0 14px 40px rgba(0,0,0,0.35);
       --radius: 20px;
-      --bg-image: url("background.png?v=7");
+      --bg-image: url("background.png?v=8");
     }
 
     * { box-sizing: border-box; }
@@ -74,19 +74,6 @@
     .section-title { font-family: "Cinzel", serif; font-size: 22px; margin: 0 0 8px; }
     .divider { height: 1px; background: rgba(201,164,92,0.35); margin: 16px 0; }
 
-    .toolbar { display: grid; grid-template-columns: 1fr 110px; gap: 10px; margin-top: 10px; margin-bottom: 12px; }
-    .input, .select, .textarea {
-      width: 100%;
-      background: rgba(0,0,0,0.35);
-      border: 1px solid rgba(201,164,92,0.35);
-      border-radius: 12px;
-      padding: 12px;
-      color: #fff;
-      outline: none;
-    }
-
-    .textarea { min-height: 90px; }
-
     .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 
     .card {
@@ -116,19 +103,13 @@
 
     .bottom-nav {
       position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      left: 0; right: 0; bottom: 0;
       background: rgba(10,10,10,0.9);
       border-top: 1px solid rgba(201,164,92,0.3);
       padding: 8px 14px calc(8px + env(safe-area-inset-bottom));
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      backdrop-filter: blur(10px);
-      z-index: 50;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 8px; backdrop-filter: blur(10px); z-index: 50;
     }
-
     .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--gold); font-size: 12px; text-decoration: none; padding: 8px 0; border-radius: 14px; }
     .nav-btn.active { background: rgba(201,164,92,0.15); color: #fff; }
     .nav-icon { font-size: 20px; }
@@ -179,19 +160,19 @@
     }
     .modal.active { display: flex; }
     .modal-card {
-      width: 92vw; max-width: 420px; max-height: 72vh;
+      width: 92vw; max-width: 420px; max-height: 70vh;
       background: var(--card-strong);
       border-radius: 22px; border: 1px solid rgba(201,164,92,0.4);
       overflow: hidden; box-shadow: var(--shadow); animation: modalIn 0.3s ease; position: relative;
     }
-    .modal-scroll { max-height: 72vh; overflow-y: auto; }
+    .modal-scroll { max-height: 70vh; overflow-y: auto; }
     @keyframes modalIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
     .modal-close {
       position: absolute; top: 10px; left: 10px; width: 32px; height: 32px; border-radius: 50%;
       background: rgba(0,0,0,0.6); border: 1px solid rgba(201,164,92,0.7); color: #fff; display: grid; place-items: center;
       cursor: pointer; z-index: 2; font-weight: 700;
     }
-    .modal-media .media { width: 100%; height: 180px; object-fit: cover; }
+    .modal-media .media { width: 100%; height: 175px; object-fit: cover; }
     .modal-body { padding: 14px 16px 16px; }
     .price-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 8px; }
     .price-option { border: 1px solid rgba(201,164,92,0.5); border-radius: 14px; padding: 10px; text-align: center; cursor: pointer; transition: background 0.2s ease; }
@@ -213,9 +194,8 @@
     @media (max-width: 420px) {
       .brand { font-size: 28px; }
       .grid { grid-template-columns: 1fr 1fr; }
-      .toolbar { grid-template-columns: 1fr; }
-      .modal-card { max-height: 70vh; }
-      .modal-media .media { height: 165px; }
+      .modal-card { max-height: 68vh; }
+      .modal-media .media { height: 160px; }
     }
   </style>
 </head>
@@ -231,17 +211,6 @@
       <section id="menu-view" class="view active">
         <div class="section">
           <h2 class="section-title">Produits disponibles</h2>
-
-          <div class="toolbar">
-            <input id="search" class="input" placeholder="Rechercher un produit..." />
-            <select id="sort" class="select">
-              <option value="featured">Trier</option>
-              <option value="price-asc">Prix ↑</option>
-              <option value="price-desc">Prix ↓</option>
-              <option value="name">Nom A‑Z</option>
-            </select>
-          </div>
-
           <div class="grid" id="product-grid"></div>
           <div id="empty-products" class="muted" style="display:none; margin-top:10px;">Aucun produit trouvé.</div>
         </div>
@@ -269,7 +238,7 @@
           </div>
 
           <div id="meetup-action" style="margin-top:12px; display:none;">
-            <button class="btn btn-primary" id="meetup-order">Commander via Telegram (Meetup)</button>
+            <button class="btn btn-primary" id="meetup-order">Commander (Meetup)</button>
           </div>
 
           <div id="delivery-form" style="margin-top:12px; display:none;">
@@ -280,7 +249,7 @@
               <label class="chip"><input type="radio" name="housing" value="Appartement" /> Appartement</label>
               <label class="chip"><input type="radio" name="housing" value="Hôtel" /> Hôtel</label>
             </div>
-            <button class="btn btn-primary" id="delivery-order" style="margin-top:12px;">Commander via Telegram (Livraison)</button>
+            <button class="btn btn-primary" id="delivery-order" style="margin-top:12px;">Commander (Livraison)</button>
           </div>
         </div>
       </section>
@@ -389,7 +358,6 @@
           </div>
           <div class="row" style="margin-top:12px;">
             <button class="btn btn-gold" id="add-to-cart">Ajouter au panier</button>
-            <button class="btn" id="go-cart">Voir panier</button>
           </div>
         </div>
       </div>
@@ -517,17 +485,9 @@
       setTimeout(() => el.classList.remove("show"), 2200);
     }
 
-    function formatPrice(v) {
-      return `${Number(v || 0).toFixed(0)} €`;
-    }
-
-    function saveCart() {
-      localStorage.setItem("calidad_cart", JSON.stringify(state.cart));
-    }
-
-    function resolveUrl(path) {
-      try { return new URL(path, window.location.href).href; } catch { return path; }
-    }
+    function formatPrice(v) { return `${Number(v || 0).toFixed(0)} €`; }
+    function saveCart() { localStorage.setItem("calidad_cart", JSON.stringify(state.cart)); }
+    function resolveUrl(path) { try { return new URL(path, window.location.href).href; } catch { return path; } }
 
     function createMedia(product, mode = "card") {
       const wrap = document.createElement("div");
@@ -597,18 +557,12 @@
 
         const body = document.createElement("div");
         body.className = "card-body";
-
-        const title = document.createElement("div");
-        title.className = "card-title";
-        title.textContent = p.name || "Produit";
-        body.appendChild(title);
-
-        const chip = document.createElement("span");
-        chip.className = "chip";
-        chip.textContent = p.origin || "Premium";
-        body.appendChild(chip);
-
+        body.innerHTML = `
+          <div class="card-title">${p.name || "Produit"}</div>
+          <span class="chip">${p.origin || "Premium"}</span>
+        `;
         card.appendChild(body);
+
         card.addEventListener("click", () => openProductModal(p));
         grid.appendChild(card);
       });
@@ -655,14 +609,7 @@
       const key = `${p.id}_${opt.label}`;
       const existing = state.cart.find(i => i.key === key);
       if (existing) existing.qty += state.qty;
-      else state.cart.push({
-        key,
-        productId: p.id,
-        name: p.name,
-        optionLabel: opt.label,
-        unitPrice: opt.price,
-        qty: state.qty
-      });
+      else state.cart.push({ key, productId: p.id, name: p.name, optionLabel: opt.label, unitPrice: opt.price, qty: state.qty });
 
       saveCart();
       renderCart();
@@ -681,44 +628,24 @@
 
         const row = document.createElement("div");
         row.className = "cart-item";
-
-        const top = document.createElement("div");
-        top.className = "between";
-
-        const left = document.createElement("div");
-        const name = document.createElement("strong");
-        name.textContent = item.name;
-        const meta = document.createElement("div");
-        meta.className = "muted";
-        meta.textContent = `${item.optionLabel} • ${formatPrice(item.unitPrice)}`;
-        left.appendChild(name);
-        left.appendChild(meta);
-
-        const del = document.createElement("button");
-        del.className = "btn btn-danger";
-        del.textContent = "Supprimer";
-        del.dataset.remove = item.key;
-
-        top.appendChild(left);
-        top.appendChild(del);
-
-        const total = document.createElement("div");
-        total.className = "between";
-        total.style.marginTop = "10px";
-        total.innerHTML = `<div class="muted">Total</div><div>${formatPrice(item.qty * item.unitPrice)}</div>`;
-
-        const qty = document.createElement("div");
-        qty.className = "qty";
-        qty.style.marginTop = "10px";
-        qty.innerHTML = `
-          <button class="minus" data-minus="${item.key}">-</button>
-          <span>${item.qty}</span>
-          <button class="plus" data-plus="${item.key}">+</button>
+        row.innerHTML = `
+          <div class="between">
+            <div>
+              <strong>${item.name}</strong>
+              <div class="muted">${item.optionLabel} • ${formatPrice(item.unitPrice)}</div>
+            </div>
+            <button class="btn btn-danger" data-remove="${item.key}">Supprimer</button>
+          </div>
+          <div class="between" style="margin-top:10px;">
+            <div class="muted">Total</div>
+            <div>${formatPrice(item.qty * item.unitPrice)}</div>
+          </div>
+          <div class="qty" style="margin-top:10px;">
+            <button class="minus" data-minus="${item.key}">-</button>
+            <span>${item.qty}</span>
+            <button class="plus" data-plus="${item.key}">+</button>
+          </div>
         `;
-
-        row.appendChild(top);
-        row.appendChild(total);
-        row.appendChild(qty);
         list.appendChild(row);
       });
 
@@ -795,16 +722,12 @@
       history.forEach(h => {
         const item = document.createElement("div");
         item.className = "admin-item";
-        const left = document.createElement("div");
-        const date = document.createElement("strong");
-        date.textContent = new Date(h.date).toLocaleString();
-        const msg = document.createElement("div");
-        msg.className = "muted";
-        msg.style.fontSize = "12px";
-        msg.textContent = h.message.split("\\n")[0];
-        left.appendChild(date);
-        left.appendChild(msg);
-        item.appendChild(left);
+        item.innerHTML = `
+          <div>
+            <div><strong>${new Date(h.date).toLocaleString()}</strong></div>
+            <div class="muted" style="font-size:12px;">${h.message.split("\\n")[0]}</div>
+          </div>
+        `;
         container.appendChild(item);
       });
       if (!history.length) container.innerHTML = `<div class="muted">Aucune commande enregistrée.</div>`;
@@ -816,33 +739,16 @@
       state.products.forEach(p => {
         const item = document.createElement("div");
         item.className = "admin-item";
-
-        const left = document.createElement("div");
-        const t = document.createElement("strong");
-        t.textContent = p.name || "Produit";
-        const s = document.createElement("div");
-        s.className = "muted";
-        s.style.fontSize = "12px";
-        s.textContent = `${p.mediaType || "image"} • ${p.active === false ? "Inactif" : "Actif"}`;
-        left.appendChild(t);
-        left.appendChild(s);
-
-        const actions = document.createElement("div");
-        actions.className = "row";
-        const edit = document.createElement("button");
-        edit.className = "btn";
-        edit.textContent = "Modifier";
-        edit.dataset.edit = p.id;
-        const del = document.createElement("button");
-        del.className = "btn btn-danger";
-        del.textContent = "Supprimer";
-        del.dataset.del = p.id;
-
-        actions.appendChild(edit);
-        actions.appendChild(del);
-
-        item.appendChild(left);
-        item.appendChild(actions);
+        item.innerHTML = `
+          <div>
+            <strong>${p.name}</strong>
+            <div class="muted" style="font-size:12px;">${p.mediaType || "image"} • ${p.active === false ? "Inactif" : "Actif"}</div>
+          </div>
+          <div class="row">
+            <button class="btn" data-edit="${p.id}">Modifier</button>
+            <button class="btn btn-danger" data-del="${p.id}">Supprimer</button>
+          </div>
+        `;
         list.appendChild(item);
       });
     }
@@ -933,7 +839,6 @@
 
     $("modal-close").addEventListener("click", closeModal);
     $("add-to-cart").addEventListener("click", () => { addToCart(); closeModal(); });
-    $("go-cart").addEventListener("click", () => { closeModal(); setActiveView("cart-view"); renderCart(); });
     $("qty-minus").addEventListener("click", () => { if (state.qty > 1) state.qty--; $("qty-value").textContent = state.qty; });
     $("qty-plus").addEventListener("click", () => { state.qty++; $("qty-value").textContent = state.qty; });
 
@@ -1032,9 +937,6 @@
       }
       if (delId) deleteProduct(delId);
     });
-
-    $("search").addEventListener("input", renderProducts);
-    $("sort").addEventListener("change", renderProducts);
 
     const tg = window.Telegram?.WebApp;
     if (tg) {
