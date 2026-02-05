@@ -27,7 +27,7 @@
       --success: #4cb77b;
       --shadow: 0 14px 40px rgba(0,0,0,0.35);
       --radius: 20px;
-      --bg-image: url("background.png?v=5");
+      --bg-image: url("background.png?v=6");
     }
 
     * { box-sizing: border-box; }
@@ -78,6 +78,15 @@
       margin-top: 6px;
     }
 
+    .subtle-line {
+      height: 2px;
+      width: 40px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 8px auto 0;
+      border-radius: 999px;
+      opacity: 0.8;
+    }
+
     .section {
       background: var(--card);
       border: 1px solid rgba(201,164,92,0.35);
@@ -92,15 +101,6 @@
       font-family: "Cinzel", serif;
       font-size: 22px;
       margin: 0 0 8px;
-    }
-
-    .subtle-line {
-      height: 2px;
-      width: 40px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      margin: 8px auto 0;
-      border-radius: 999px;
-      opacity: 0.8;
     }
 
     .divider {
@@ -151,11 +151,6 @@
       box-shadow: 0 12px 35px rgba(0,0,0,0.4);
     }
 
-    .card.disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
     @keyframes floatIn {
       from { opacity: 0; transform: translateY(14px); }
       to { opacity: 1; transform: translateY(0); }
@@ -169,9 +164,7 @@
       background: #111;
     }
 
-    .media-wrap {
-      position: relative;
-    }
+    .media-wrap { position: relative; }
 
     .play-icon {
       position: absolute;
@@ -356,39 +349,44 @@
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.55);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 100;
-      padding: 18px;
+      padding: 12px;
     }
 
     .modal.active { display: flex; }
 
     .modal-card {
-      width: 100%;
-      max-width: 520px;
+      width: 92vw;
+      max-width: 430px;
+      max-height: 78vh;
       background: var(--card-strong);
       border-radius: 22px;
       border: 1px solid rgba(201,164,92,0.4);
       overflow: hidden;
-      position: relative;
       box-shadow: var(--shadow);
       animation: modalIn 0.3s ease;
     }
 
+    .modal-scroll {
+      max-height: 78vh;
+      overflow-y: auto;
+    }
+
     @keyframes modalIn {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(18px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     .modal-close {
       position: absolute;
-      top: 12px;
-      left: 12px;
-      width: 34px;
-      height: 34px;
+      top: 10px;
+      left: 10px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       background: rgba(0,0,0,0.6);
       border: 1px solid rgba(201,164,92,0.7);
@@ -400,7 +398,13 @@
       font-weight: 700;
     }
 
-    .modal-body { padding: 16px; }
+    .modal-media .media {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+    }
+
+    .modal-body { padding: 14px 16px 16px; }
 
     .price-grid {
       display: grid;
@@ -446,12 +450,12 @@
       background: rgba(10,10,10,0.5);
     }
 
-    .toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      color: var(--muted);
+    .admin-box {
+      border: 1px solid rgba(201,164,92,0.25);
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 10px;
+      background: rgba(0,0,0,0.3);
     }
 
     .toast {
@@ -476,6 +480,8 @@
       .brand { font-size: 28px; }
       .grid { grid-template-columns: 1fr 1fr; }
       .toolbar { grid-template-columns: 1fr; }
+      .modal-card { max-height: 74vh; }
+      .modal-media .media { height: 170px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -562,12 +568,15 @@
             <div class="section-title" style="font-size:16px;">Admin panel</div>
             <div class="muted" id="admin-status">Non connecté</div>
 
-            <div class="divider"></div>
-            <input id="admin-code" class="input" placeholder="Code admin (2810)" />
-            <button id="admin-unlock" class="btn">Déverrouiller</button>
+            <div class="admin-box">
+              <strong>Étape 1 — Code admin</strong>
+              <input id="admin-code" class="input" placeholder="Code admin (2810)" style="margin-top:8px;" />
+              <button id="admin-unlock" class="btn" style="margin-top:8px;">Déverrouiller</button>
+            </div>
 
-            <div id="admin-auth" style="margin-top:10px; display:none;">
-              <input id="admin-email" class="input" placeholder="Email admin" />
+            <div class="admin-box" id="admin-auth" style="display:none;">
+              <strong>Étape 2 — Connexion Firebase</strong>
+              <input id="admin-email" class="input" placeholder="Email admin" style="margin-top:8px;" />
               <input id="admin-password" class="input" type="password" placeholder="Mot de passe admin" style="margin-top:8px;" />
               <div class="row" style="margin-top:8px;">
                 <button id="admin-login" class="btn btn-primary">Connexion</button>
@@ -575,9 +584,10 @@
               </div>
             </div>
 
-            <div id="admin-form-wrap" style="margin-top:14px; display:none;">
-              <div class="section-title" style="font-size:15px;">Nouveau produit / Modifier</div>
-              <input id="p-name" class="input" placeholder="Nom du produit" />
+            <div class="admin-box" id="admin-form-wrap" style="display:none;">
+              <strong>Étape 3 — Gestion des produits</strong>
+
+              <input id="p-name" class="input" placeholder="Nom du produit" style="margin-top:10px;" />
               <textarea id="p-desc" class="textarea" placeholder="Description"></textarea>
 
               <div class="row">
@@ -591,14 +601,6 @@
               <input id="p-origin" class="input" placeholder="Origine (ex: USA)" />
               <input id="p-category" class="input" placeholder="Catégorie (optionnel)" />
               <input id="p-badge" class="input" placeholder="Badge (ex: Static US)" />
-              <div class="row">
-                <input id="p-stock" class="input" placeholder="Stock (optionnel)" />
-                <input id="p-priority" class="input" placeholder="Priorité (ex: 10)" />
-              </div>
-              <div class="row">
-                <label class="toggle"><input id="p-active" type="checkbox" checked /> Actif</label>
-                <label class="toggle"><input id="p-featured" type="checkbox" /> Mis en avant</label>
-              </div>
 
               <div class="row">
                 <input id="p-1g" class="input" placeholder="Prix 1g (EUR)" />
@@ -607,6 +609,11 @@
               <div class="row">
                 <input id="p-10g" class="input" placeholder="Prix 10g (EUR)" />
                 <input id="p-50g" class="input" placeholder="Prix 50g (EUR)" />
+              </div>
+
+              <div class="row" style="margin-top:8px;">
+                <label class="chip"><input id="p-active" type="checkbox" checked /> Actif</label>
+                <label class="chip"><input id="p-featured" type="checkbox" /> Mis en avant</label>
               </div>
 
               <div class="row" style="margin-top:10px;">
@@ -633,29 +640,27 @@
   <div class="modal" id="product-modal">
     <div class="modal-card">
       <button class="modal-close" id="modal-close">✕</button>
-      <div id="modal-media"></div>
-      <div class="modal-body">
-        <h3 id="modal-title"></h3>
-        <div class="muted" id="modal-desc"></div>
-        <div class="muted" id="modal-stock" style="margin-top:6px;"></div>
-
-        <div style="margin-top:12px;">
-          <div class="section-title" style="font-size:16px;">Prix</div>
-          <div class="price-grid" id="modal-prices"></div>
-        </div>
-
-        <div style="margin-top:12px;" class="row between">
-          <div class="muted">Quantité</div>
-          <div class="qty">
-            <button class="minus" id="qty-minus">-</button>
-            <span id="qty-value">1</span>
-            <button class="plus" id="qty-plus">+</button>
+      <div class="modal-scroll">
+        <div class="modal-media" id="modal-media"></div>
+        <div class="modal-body">
+          <h3 id="modal-title"></h3>
+          <div class="muted" id="modal-desc"></div>
+          <div style="margin-top:12px;">
+            <div class="section-title" style="font-size:16px;">Prix</div>
+            <div class="price-grid" id="modal-prices"></div>
           </div>
-        </div>
-
-        <div class="row" style="margin-top:12px;">
-          <button class="btn btn-gold" id="add-to-cart">Ajouter au panier</button>
-          <button class="btn" id="go-cart">Voir panier</button>
+          <div style="margin-top:12px;" class="row between">
+            <div class="muted">Quantité</div>
+            <div class="qty">
+              <button class="minus" id="qty-minus">-</button>
+              <span id="qty-value">1</span>
+              <button class="plus" id="qty-plus">+</button>
+            </div>
+          </div>
+          <div class="row" style="margin-top:12px;">
+            <button class="btn btn-gold" id="add-to-cart">Ajouter au panier</button>
+            <button class="btn" id="go-cart">Voir panier</button>
+          </div>
         </div>
       </div>
     </div>
@@ -693,7 +698,6 @@
       selectedProduct: null,
       selectedOptionIndex: 0,
       qty: 1,
-      pickupType: null,
       adminUnlocked: false,
       adminAuthorized: false,
       editingId: null
@@ -711,7 +715,6 @@
         badge: "Static US",
         featured: true,
         active: true,
-        priority: 10,
         prices: [
           { label: "1g", price: 40 },
           { label: "5g", price: 200 },
@@ -730,7 +733,6 @@
         badge: "Premium",
         featured: false,
         active: true,
-        priority: 8,
         prices: [
           { label: "1g", price: 30 },
           { label: "5g", price: 150 },
@@ -749,7 +751,6 @@
         badge: "Top",
         featured: false,
         active: true,
-        priority: 6,
         prices: [
           { label: "1g", price: 35 },
           { label: "5g", price: 170 },
@@ -768,7 +769,6 @@
         badge: "Premium",
         featured: true,
         active: true,
-        priority: 9,
         prices: [
           { label: "1g", price: 40 },
           { label: "5g", price: 200 },
@@ -793,15 +793,6 @@
 
     function saveCart() {
       localStorage.setItem("calidad_cart", JSON.stringify(state.cart));
-    }
-
-    function setActiveView(id) {
-      ["menu-view","cart-view","account-view"].forEach(v => $(v).classList.remove("active"));
-      $(id).classList.add("active");
-      ["nav-menu","nav-cart","nav-account"].forEach(n => $(n).classList.remove("active"));
-      if (id === "menu-view") $("nav-menu").classList.add("active");
-      if (id === "cart-view") $("nav-cart").classList.add("active");
-      if (id === "account-view") $("nav-account").classList.add("active");
     }
 
     function resolveUrl(path) {
@@ -848,49 +839,24 @@
       return wrap;
     }
 
-    function minPrice(product) {
-      const prices = product.prices || [];
-      if (!prices.length) return 0;
-      return Math.min(...prices.map(p => Number(p.price) || 0));
-    }
-
-    function getVisibleProducts() {
-      const search = $("search").value.trim().toLowerCase();
-      const sort = $("sort").value;
-
-      let list = state.products.filter(p => p.active !== false);
-
-      if (search) {
-        list = list.filter(p =>
-          (p.name || "").toLowerCase().includes(search) ||
-          (p.category || "").toLowerCase().includes(search) ||
-          (p.badge || "").toLowerCase().includes(search)
-        );
-      }
-
-      if (sort === "price-asc") {
-        list.sort((a,b) => minPrice(a) - minPrice(b));
-      } else if (sort === "price-desc") {
-        list.sort((a,b) => minPrice(b) - minPrice(a));
-      } else if (sort === "name") {
-        list.sort((a,b) => (a.name || "").localeCompare(b.name || ""));
-      } else {
-        list.sort((a,b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0) || (b.priority || 0) - (a.priority || 0));
-      }
-
-      return list;
+    function setActiveView(id) {
+      ["menu-view","cart-view","account-view"].forEach(v => $(v).classList.remove("active"));
+      $(id).classList.add("active");
+      ["nav-menu","nav-cart","nav-account"].forEach(n => $(n).classList.remove("active"));
+      if (id === "menu-view") $("nav-menu").classList.add("active");
+      if (id === "cart-view") $("nav-cart").classList.add("active");
+      if (id === "account-view") $("nav-account").classList.add("active");
     }
 
     function renderProducts() {
       const grid = $("product-grid");
       grid.innerHTML = "";
-      const products = getVisibleProducts();
+      const products = state.products.filter(p => p.active !== false);
       $("empty-products").style.display = products.length ? "none" : "block";
 
       products.forEach(p => {
         const card = document.createElement("div");
         card.className = "card";
-        if (p.stock === 0) card.classList.add("disabled");
 
         card.appendChild(createMedia(p, "card"));
 
@@ -903,18 +869,10 @@
 
         const body = document.createElement("div");
         body.className = "card-body";
-
-        const title = document.createElement("div");
-        title.className = "card-title";
-        title.textContent = p.name || "Produit";
-
-        const chip = document.createElement("span");
-        chip.className = "chip";
-        chip.textContent = p.origin || "Premium";
-
-        body.appendChild(title);
-        body.appendChild(chip);
-
+        body.innerHTML = `
+          <div class="card-title">${p.name || "Produit"}</div>
+          <span class="chip">${p.origin || "Premium"}</span>
+        `;
         card.appendChild(body);
 
         card.addEventListener("click", () => openProductModal(p));
@@ -929,7 +887,6 @@
 
       $("modal-title").textContent = product.name || "";
       $("modal-desc").textContent = product.description || "";
-      $("modal-stock").textContent = product.stock === 0 ? "Rupture de stock" : "";
 
       const media = $("modal-media");
       media.innerHTML = "";
@@ -960,19 +917,8 @@
     function addToCart() {
       const p = state.selectedProduct;
       if (!p) return;
-
-      if (p.stock === 0) {
-        toast("Rupture de stock");
-        return;
-      }
-
       const opt = (p.prices || [])[state.selectedOptionIndex];
       if (!opt) return;
-
-      const maxStock = Number(p.stock);
-      if (!Number.isNaN(maxStock) && maxStock > 0 && state.qty > maxStock) {
-        state.qty = maxStock;
-      }
 
       const key = `${p.id}_${opt.label}`;
       const existing = state.cart.find(i => i.key === key);
@@ -1003,44 +949,24 @@
 
         const row = document.createElement("div");
         row.className = "cart-item";
-
-        const top = document.createElement("div");
-        top.className = "between";
-
-        const left = document.createElement("div");
-        const name = document.createElement("strong");
-        name.textContent = item.name;
-        const meta = document.createElement("div");
-        meta.className = "muted";
-        meta.textContent = `${item.optionLabel} • ${formatPrice(item.unitPrice)}`;
-        left.appendChild(name);
-        left.appendChild(meta);
-
-        const del = document.createElement("button");
-        del.className = "btn btn-danger";
-        del.textContent = "Supprimer";
-        del.dataset.remove = item.key;
-
-        top.appendChild(left);
-        top.appendChild(del);
-
-        const total = document.createElement("div");
-        total.className = "between";
-        total.style.marginTop = "10px";
-        total.innerHTML = `<div class="muted">Total</div><div>${formatPrice(item.qty * item.unitPrice)}</div>`;
-
-        const qty = document.createElement("div");
-        qty.className = "qty";
-        qty.style.marginTop = "10px";
-        qty.innerHTML = `
-          <button class="minus" data-minus="${item.key}">-</button>
-          <span>${item.qty}</span>
-          <button class="plus" data-plus="${item.key}">+</button>
+        row.innerHTML = `
+          <div class="between">
+            <div>
+              <strong>${item.name}</strong>
+              <div class="muted">${item.optionLabel} • ${formatPrice(item.unitPrice)}</div>
+            </div>
+            <button class="btn btn-danger" data-remove="${item.key}">Supprimer</button>
+          </div>
+          <div class="between" style="margin-top:10px;">
+            <div class="muted">Total</div>
+            <div>${formatPrice(item.qty * item.unitPrice)}</div>
+          </div>
+          <div class="qty" style="margin-top:10px;">
+            <button class="minus" data-minus="${item.key}">-</button>
+            <span>${item.qty}</span>
+            <button class="plus" data-plus="${item.key}">+</button>
+          </div>
         `;
-
-        row.appendChild(top);
-        row.appendChild(total);
-        row.appendChild(qty);
         list.appendChild(row);
       });
 
@@ -1102,11 +1028,8 @@
       }
 
       if (navigator.clipboard) {
-        navigator.clipboard.writeText(message).then(() => {
-          toast("Message copié");
-        }).catch(() => {});
+        navigator.clipboard.writeText(message).catch(() => {});
       }
-
       saveOrderHistory(message);
     }
 
@@ -1132,9 +1055,7 @@
         `;
         container.appendChild(item);
       });
-      if (!history.length) {
-        container.innerHTML = `<div class="muted">Aucune commande enregistrée.</div>`;
-      }
+      if (!history.length) container.innerHTML = `<div class="muted">Aucune commande enregistrée.</div>`;
     }
 
     function renderAdminList() {
@@ -1184,8 +1105,6 @@
         origin: $("p-origin").value.trim(),
         category: $("p-category").value.trim(),
         badge: $("p-badge").value.trim(),
-        stock: $("p-stock").value.trim() ? Number($("p-stock").value.trim()) : null,
-        priority: $("p-priority").value.trim() ? Number($("p-priority").value.trim()) : 0,
         active: $("p-active").checked,
         featured: $("p-featured").checked,
         prices: getPriceInputs(),
@@ -1200,13 +1119,12 @@
         await set(newRef, { ...product, createdAt: Date.now() });
         toast("Produit ajouté");
       }
-
       clearAdminForm();
     }
 
     function clearAdminForm() {
       state.editingId = null;
-      ["p-name","p-desc","p-media-url","p-poster","p-origin","p-category","p-badge","p-stock","p-priority","p-1g","p-5g","p-10g","p-50g"].forEach(id => $(id).value = "");
+      ["p-name","p-desc","p-media-url","p-poster","p-origin","p-category","p-badge","p-1g","p-5g","p-10g","p-50g"].forEach(id => $(id).value = "");
       $("p-active").checked = true;
       $("p-featured").checked = false;
     }
@@ -1227,7 +1145,6 @@
       toast("Produits initiaux ajoutés");
     }
 
-    // Firebase live sync
     onValue(ref(db, "products"), (snapshot) => {
       const data = snapshot.val() || {};
       state.products = Object.entries(data).map(([id, val]) => ({ id, ...val }));
@@ -1241,19 +1158,16 @@
       $("admin-form-wrap").style.display = (state.adminUnlocked && state.adminAuthorized) ? "block" : "none";
     });
 
-    // Navigation
     $("nav-menu").addEventListener("click", () => setActiveView("menu-view"));
     $("nav-cart").addEventListener("click", () => { setActiveView("cart-view"); renderCart(); });
     $("nav-account").addEventListener("click", () => { setActiveView("account-view"); renderOrderHistory(); });
 
-    // Modal
     $("modal-close").addEventListener("click", closeModal);
     $("add-to-cart").addEventListener("click", () => { addToCart(); closeModal(); });
     $("go-cart").addEventListener("click", () => { closeModal(); setActiveView("cart-view"); renderCart(); });
     $("qty-minus").addEventListener("click", () => { if (state.qty > 1) state.qty--; $("qty-value").textContent = state.qty; });
     $("qty-plus").addEventListener("click", () => { state.qty++; $("qty-value").textContent = state.qty; });
 
-    // Cart actions
     $("cart-list").addEventListener("click", (e) => {
       const minus = e.target.dataset.minus;
       const plus = e.target.dataset.plus;
@@ -1263,13 +1177,11 @@
       if (del) removeFromCart(del);
     });
 
-    // Pickup
     document.querySelectorAll(".seg-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".seg-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         const type = btn.dataset.pickup;
-        state.pickupType = type;
         if (type === "Meetup") {
           $("meetup-action").style.display = "block";
           $("delivery-form").style.display = "none";
@@ -1280,10 +1192,7 @@
       });
     });
 
-    $("meetup-order").addEventListener("click", () => {
-      openSecretary(buildOrderMessage("Meetup"));
-    });
-
+    $("meetup-order").addEventListener("click", () => openSecretary(buildOrderMessage("Meetup")));
     $("delivery-order").addEventListener("click", () => {
       const address = $("delivery-address").value.trim();
       const housing = document.querySelector("input[name='housing']:checked");
@@ -1291,7 +1200,6 @@
       openSecretary(buildOrderMessage("Livraison"));
     });
 
-    // Admin panel
     $("open-admin").addEventListener("click", () => {
       const panel = $("admin-panel");
       panel.style.display = panel.style.display === "none" ? "block" : "none";
@@ -1316,7 +1224,7 @@
       try {
         await signInWithEmailAndPassword(auth, email, pass);
         toast("Connecté");
-      } catch (err) {
+      } catch {
         toast("Erreur de connexion");
       }
     });
@@ -1345,8 +1253,6 @@
         $("p-origin").value = p.origin || "";
         $("p-category").value = p.category || "";
         $("p-badge").value = p.badge || "";
-        $("p-stock").value = p.stock ?? "";
-        $("p-priority").value = p.priority ?? "";
         $("p-active").checked = p.active !== false;
         $("p-featured").checked = !!p.featured;
         const prices = p.prices || [];
@@ -1358,11 +1264,9 @@
       if (delId) deleteProduct(delId);
     });
 
-    // Search + sort
     $("search").addEventListener("input", renderProducts);
     $("sort").addEventListener("change", renderProducts);
 
-    // Telegram WebApp polish
     const tg = window.Telegram?.WebApp;
     if (tg) {
       tg.ready();
