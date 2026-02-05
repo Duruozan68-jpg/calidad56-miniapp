@@ -24,10 +24,9 @@
       --muted: #b9b2a1;
       --accent: #3a8fff;
       --danger: #df3b3b;
-      --success: #4cb77b;
       --shadow: 0 14px 40px rgba(0,0,0,0.35);
       --radius: 20px;
-      --bg-image: url("background.png?v=6");
+      --bg-image: url("background.png?v=7");
     }
 
     * { box-sizing: border-box; }
@@ -57,35 +56,10 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .header {
-      text-align: center;
-      margin-top: 6px;
-      margin-bottom: 16px;
-    }
-
-    .brand {
-      font-family: "Cinzel", serif;
-      letter-spacing: 2px;
-      font-size: 34px;
-      margin: 0;
-    }
-
-    .brand-sub {
-      color: var(--muted);
-      font-size: 12px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-top: 6px;
-    }
-
-    .subtle-line {
-      height: 2px;
-      width: 40px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      margin: 8px auto 0;
-      border-radius: 999px;
-      opacity: 0.8;
-    }
+    .header { text-align: center; margin-top: 6px; margin-bottom: 16px; }
+    .brand { font-family: "Cinzel", serif; letter-spacing: 2px; font-size: 34px; margin: 0; }
+    .brand-sub { color: var(--muted); font-size: 12px; letter-spacing: 3px; text-transform: uppercase; margin-top: 6px; }
+    .subtle-line { height: 2px; width: 40px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 8px auto 0; border-radius: 999px; opacity: 0.8; }
 
     .section {
       background: var(--card);
@@ -97,26 +71,10 @@
       margin-bottom: 18px;
     }
 
-    .section-title {
-      font-family: "Cinzel", serif;
-      font-size: 22px;
-      margin: 0 0 8px;
-    }
+    .section-title { font-family: "Cinzel", serif; font-size: 22px; margin: 0 0 8px; }
+    .divider { height: 1px; background: rgba(201,164,92,0.35); margin: 16px 0; }
 
-    .divider {
-      height: 1px;
-      background: rgba(201,164,92,0.35);
-      margin: 16px 0;
-    }
-
-    .toolbar {
-      display: grid;
-      grid-template-columns: 1fr 110px;
-      gap: 10px;
-      margin-top: 10px;
-      margin-bottom: 12px;
-    }
-
+    .toolbar { display: grid; grid-template-columns: 1fr 110px; gap: 10px; margin-top: 10px; margin-bottom: 12px; }
     .input, .select, .textarea {
       width: 100%;
       background: rgba(0,0,0,0.35);
@@ -129,11 +87,7 @@
 
     .textarea { min-height: 90px; }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 
     .card {
       background: var(--card-strong);
@@ -145,70 +99,17 @@
       transition: transform 0.25s ease, box-shadow 0.25s ease;
       animation: floatIn 0.5s ease;
     }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 35px rgba(0,0,0,0.4); }
+    @keyframes floatIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 35px rgba(0,0,0,0.4);
-    }
-
-    @keyframes floatIn {
-      from { opacity: 0; transform: translateY(14px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .media {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      display: block;
-      background: #111;
-    }
-
+    .media { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; background: #111; }
     .media-wrap { position: relative; }
+    .play-icon { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; color: rgba(255,255,255,0.8); font-size: 28px; text-shadow: 0 0 12px rgba(0,0,0,0.6); }
 
-    .play-icon {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      pointer-events: none;
-      color: rgba(255,255,255,0.8);
-      font-size: 28px;
-      text-shadow: 0 0 12px rgba(0,0,0,0.6);
-    }
-
-    .card-body {
-      padding: 10px 12px 14px;
-    }
-
-    .card-title {
-      font-weight: 700;
-      margin: 0 0 6px;
-      font-size: 16px;
-    }
-
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border-radius: 999px;
-      padding: 4px 10px;
-      border: 1px solid rgba(201,164,92,0.5);
-      color: var(--gold);
-      font-size: 12px;
-    }
-
-    .badge {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: rgba(0,0,0,0.7);
-      border: 1px solid rgba(201,164,92,0.5);
-      color: var(--gold);
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: 999px;
-    }
+    .card-body { padding: 10px 12px 14px; }
+    .card-title { font-weight: 700; margin: 0 0 6px; font-size: 16px; }
+    .chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 4px 10px; border: 1px solid rgba(201,164,92,0.5); color: var(--gold); font-size: 12px; }
+    .badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); border: 1px solid rgba(201,164,92,0.5); color: var(--gold); font-size: 11px; padding: 4px 8px; border-radius: 999px; }
 
     .view { display: none; }
     .view.active { display: block; }
@@ -228,23 +129,8 @@
       z-index: 50;
     }
 
-    .nav-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      color: var(--gold);
-      font-size: 12px;
-      text-decoration: none;
-      padding: 8px 0;
-      border-radius: 14px;
-    }
-
-    .nav-btn.active {
-      background: rgba(201,164,92,0.15);
-      color: #fff;
-    }
-
+    .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--gold); font-size: 12px; text-decoration: none; padding: 8px 0; border-radius: 14px; }
+    .nav-btn.active { background: rgba(201,164,92,0.15); color: #fff; }
     .nav-icon { font-size: 20px; }
 
     .btn {
@@ -258,40 +144,13 @@
       cursor: pointer;
       transition: transform 0.2s ease;
     }
-
     .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: linear-gradient(135deg, #2ea8ff, #3a8fff); border: none; color: #fff; }
+    .btn-danger { background: rgba(223, 59, 59, 0.15); border: 1px solid rgba(223, 59, 59, 0.5); color: #ffb3b3; }
+    .btn-gold { background: linear-gradient(135deg, #c9a45c, #a9853a); color: #1a1a1a; border: none; }
 
-    .btn-primary {
-      background: linear-gradient(135deg, #2ea8ff, #3a8fff);
-      border: none;
-      color: #fff;
-    }
-
-    .btn-danger {
-      background: rgba(223, 59, 59, 0.15);
-      border: 1px solid rgba(223, 59, 59, 0.5);
-      color: #ffb3b3;
-    }
-
-    .btn-gold {
-      background: linear-gradient(135deg, #c9a45c, #a9853a);
-      color: #1a1a1a;
-      border: none;
-    }
-
-    .row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .between {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
+    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .between { display: flex; justify-content: space-between; align-items: center; }
     .muted { color: var(--muted); }
 
     .cart-item {
@@ -303,189 +162,60 @@
     }
 
     .qty {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(0,0,0,0.3);
-      border-radius: 999px;
-      padding: 4px 8px;
-      border: 1px solid rgba(201,164,92,0.3);
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(0,0,0,0.3); border-radius: 999px; padding: 4px 8px; border: 1px solid rgba(201,164,92,0.3);
     }
-
-    .qty button {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: none;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
+    .qty button { width: 28px; height: 28px; border-radius: 50%; border: none; cursor: pointer; font-weight: 700; }
     .qty .minus { background: #9b1f1f; color: #fff; }
     .qty .plus { background: #c9a45c; color: #1a1a1a; }
 
-    .segmented {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .seg-btn {
-      flex: 1;
-      padding: 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(201,164,92,0.5);
-      background: rgba(0,0,0,0.3);
-      color: #fff;
-      cursor: pointer;
-    }
-
-    .seg-btn.active {
-      background: linear-gradient(135deg, #c9a45c, #a9853a);
-      color: #1a1a1a;
-      border: none;
-    }
+    .segmented { display: flex; gap: 8px; margin-top: 10px; }
+    .seg-btn { flex: 1; padding: 12px; border-radius: 999px; border: 1px solid rgba(201,164,92,0.5); background: rgba(0,0,0,0.3); color: #fff; cursor: pointer; }
+    .seg-btn.active { background: linear-gradient(135deg, #c9a45c, #a9853a); color: #1a1a1a; border: none; }
 
     .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      padding: 12px;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+      display: none; align-items: center; justify-content: center; z-index: 100; padding: 12px;
     }
-
     .modal.active { display: flex; }
-
     .modal-card {
-      width: 92vw;
-      max-width: 430px;
-      max-height: 78vh;
+      width: 92vw; max-width: 420px; max-height: 72vh;
       background: var(--card-strong);
-      border-radius: 22px;
-      border: 1px solid rgba(201,164,92,0.4);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      animation: modalIn 0.3s ease;
+      border-radius: 22px; border: 1px solid rgba(201,164,92,0.4);
+      overflow: hidden; box-shadow: var(--shadow); animation: modalIn 0.3s ease; position: relative;
     }
-
-    .modal-scroll {
-      max-height: 78vh;
-      overflow-y: auto;
-    }
-
-    @keyframes modalIn {
-      from { opacity: 0; transform: translateY(18px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
+    .modal-scroll { max-height: 72vh; overflow-y: auto; }
+    @keyframes modalIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
     .modal-close {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.6);
-      border: 1px solid rgba(201,164,92,0.7);
-      color: #fff;
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      z-index: 2;
-      font-weight: 700;
+      position: absolute; top: 10px; left: 10px; width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(0,0,0,0.6); border: 1px solid rgba(201,164,92,0.7); color: #fff; display: grid; place-items: center;
+      cursor: pointer; z-index: 2; font-weight: 700;
     }
-
-    .modal-media .media {
-      width: 100%;
-      height: 190px;
-      object-fit: cover;
-    }
-
+    .modal-media .media { width: 100%; height: 180px; object-fit: cover; }
     .modal-body { padding: 14px 16px 16px; }
+    .price-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 8px; }
+    .price-option { border: 1px solid rgba(201,164,92,0.5); border-radius: 14px; padding: 10px; text-align: center; cursor: pointer; transition: background 0.2s ease; }
+    .price-option.active { background: rgba(201,164,92,0.2); color: #fff; }
 
-    .price-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 8px;
-    }
-
-    .price-option {
-      border: 1px solid rgba(201,164,92,0.5);
-      border-radius: 14px;
-      padding: 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    .price-option.active {
-      background: rgba(201,164,92,0.2);
-      color: #fff;
-    }
-
-    .admin-panel {
-      margin-top: 10px;
-      border: 1px dashed rgba(201,164,92,0.4);
-      border-radius: 16px;
-      padding: 12px;
-    }
-
-    .admin-list {
-      margin-top: 12px;
-      display: grid;
-      gap: 8px;
-    }
-
-    .admin-item {
-      padding: 10px;
-      border: 1px solid rgba(201,164,92,0.3);
-      border-radius: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(10,10,10,0.5);
-    }
-
-    .admin-box {
-      border: 1px solid rgba(201,164,92,0.25);
-      border-radius: 14px;
-      padding: 12px;
-      margin-top: 10px;
-      background: rgba(0,0,0,0.3);
-    }
+    .admin-panel { margin-top: 10px; border: 1px dashed rgba(201,164,92,0.4); border-radius: 16px; padding: 12px; }
+    .admin-list { margin-top: 12px; display: grid; gap: 8px; }
+    .admin-item { padding: 10px; border: 1px solid rgba(201,164,92,0.3); border-radius: 12px; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,10,0.5); }
+    .admin-box { border: 1px solid rgba(201,164,92,0.25); border-radius: 14px; padding: 12px; margin-top: 10px; background: rgba(0,0,0,0.3); }
 
     .toast {
-      position: fixed;
-      bottom: 90px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.85);
-      border: 1px solid rgba(201,164,92,0.5);
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 10px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 200;
+      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.85); border: 1px solid rgba(201,164,92,0.5);
+      color: #fff; padding: 10px 14px; border-radius: 10px; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease; z-index: 200;
     }
-
     .toast.show { opacity: 1; }
 
     @media (max-width: 420px) {
       .brand { font-size: 28px; }
       .grid { grid-template-columns: 1fr 1fr; }
       .toolbar { grid-template-columns: 1fr; }
-      .modal-card { max-height: 74vh; }
-      .modal-media .media { height: 170px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      * { animation: none !important; transition: none !important; }
+      .modal-card { max-height: 70vh; }
+      .modal-media .media { height: 165px; }
     }
   </style>
 </head>
@@ -835,7 +565,6 @@
         img.loading = "lazy";
         wrap.appendChild(img);
       }
-
       return wrap;
     }
 
@@ -857,7 +586,6 @@
       products.forEach(p => {
         const card = document.createElement("div");
         card.className = "card";
-
         card.appendChild(createMedia(p, "card"));
 
         if (p.badge) {
@@ -869,12 +597,18 @@
 
         const body = document.createElement("div");
         body.className = "card-body";
-        body.innerHTML = `
-          <div class="card-title">${p.name || "Produit"}</div>
-          <span class="chip">${p.origin || "Premium"}</span>
-        `;
-        card.appendChild(body);
 
+        const title = document.createElement("div");
+        title.className = "card-title";
+        title.textContent = p.name || "Produit";
+        body.appendChild(title);
+
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.textContent = p.origin || "Premium";
+        body.appendChild(chip);
+
+        card.appendChild(body);
         card.addEventListener("click", () => openProductModal(p));
         grid.appendChild(card);
       });
@@ -910,9 +644,7 @@
       $("product-modal").classList.add("active");
     }
 
-    function closeModal() {
-      $("product-modal").classList.remove("active");
-    }
+    function closeModal() { $("product-modal").classList.remove("active"); }
 
     function addToCart() {
       const p = state.selectedProduct;
@@ -949,24 +681,44 @@
 
         const row = document.createElement("div");
         row.className = "cart-item";
-        row.innerHTML = `
-          <div class="between">
-            <div>
-              <strong>${item.name}</strong>
-              <div class="muted">${item.optionLabel} • ${formatPrice(item.unitPrice)}</div>
-            </div>
-            <button class="btn btn-danger" data-remove="${item.key}">Supprimer</button>
-          </div>
-          <div class="between" style="margin-top:10px;">
-            <div class="muted">Total</div>
-            <div>${formatPrice(item.qty * item.unitPrice)}</div>
-          </div>
-          <div class="qty" style="margin-top:10px;">
-            <button class="minus" data-minus="${item.key}">-</button>
-            <span>${item.qty}</span>
-            <button class="plus" data-plus="${item.key}">+</button>
-          </div>
+
+        const top = document.createElement("div");
+        top.className = "between";
+
+        const left = document.createElement("div");
+        const name = document.createElement("strong");
+        name.textContent = item.name;
+        const meta = document.createElement("div");
+        meta.className = "muted";
+        meta.textContent = `${item.optionLabel} • ${formatPrice(item.unitPrice)}`;
+        left.appendChild(name);
+        left.appendChild(meta);
+
+        const del = document.createElement("button");
+        del.className = "btn btn-danger";
+        del.textContent = "Supprimer";
+        del.dataset.remove = item.key;
+
+        top.appendChild(left);
+        top.appendChild(del);
+
+        const total = document.createElement("div");
+        total.className = "between";
+        total.style.marginTop = "10px";
+        total.innerHTML = `<div class="muted">Total</div><div>${formatPrice(item.qty * item.unitPrice)}</div>`;
+
+        const qty = document.createElement("div");
+        qty.className = "qty";
+        qty.style.marginTop = "10px";
+        qty.innerHTML = `
+          <button class="minus" data-minus="${item.key}">-</button>
+          <span>${item.qty}</span>
+          <button class="plus" data-plus="${item.key}">+</button>
         `;
+
+        row.appendChild(top);
+        row.appendChild(total);
+        row.appendChild(qty);
         list.appendChild(row);
       });
 
@@ -1018,7 +770,6 @@
         return;
       }
       const url = `${SECRETARY_URL}?text=${encodeURIComponent(message)}`;
-
       if (window.Telegram?.WebApp?.openTelegramLink) {
         window.Telegram.WebApp.openTelegramLink(url);
       } else if (window.Telegram?.WebApp?.openLink) {
@@ -1026,10 +777,7 @@
       } else {
         window.open(url, "_blank");
       }
-
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(message).catch(() => {});
-      }
+      if (navigator.clipboard) navigator.clipboard.writeText(message).catch(() => {});
       saveOrderHistory(message);
     }
 
@@ -1047,12 +795,16 @@
       history.forEach(h => {
         const item = document.createElement("div");
         item.className = "admin-item";
-        item.innerHTML = `
-          <div>
-            <div><strong>${new Date(h.date).toLocaleString()}</strong></div>
-            <div class="muted" style="font-size:12px;">${h.message.split("\\n")[0]}</div>
-          </div>
-        `;
+        const left = document.createElement("div");
+        const date = document.createElement("strong");
+        date.textContent = new Date(h.date).toLocaleString();
+        const msg = document.createElement("div");
+        msg.className = "muted";
+        msg.style.fontSize = "12px";
+        msg.textContent = h.message.split("\\n")[0];
+        left.appendChild(date);
+        left.appendChild(msg);
+        item.appendChild(left);
         container.appendChild(item);
       });
       if (!history.length) container.innerHTML = `<div class="muted">Aucune commande enregistrée.</div>`;
@@ -1064,16 +816,33 @@
       state.products.forEach(p => {
         const item = document.createElement("div");
         item.className = "admin-item";
-        item.innerHTML = `
-          <div>
-            <strong>${p.name}</strong>
-            <div class="muted" style="font-size:12px;">${p.mediaType || "image"} • ${p.active === false ? "Inactif" : "Actif"}</div>
-          </div>
-          <div class="row">
-            <button class="btn" data-edit="${p.id}">Modifier</button>
-            <button class="btn btn-danger" data-del="${p.id}">Supprimer</button>
-          </div>
-        `;
+
+        const left = document.createElement("div");
+        const t = document.createElement("strong");
+        t.textContent = p.name || "Produit";
+        const s = document.createElement("div");
+        s.className = "muted";
+        s.style.fontSize = "12px";
+        s.textContent = `${p.mediaType || "image"} • ${p.active === false ? "Inactif" : "Actif"}`;
+        left.appendChild(t);
+        left.appendChild(s);
+
+        const actions = document.createElement("div");
+        actions.className = "row";
+        const edit = document.createElement("button");
+        edit.className = "btn";
+        edit.textContent = "Modifier";
+        edit.dataset.edit = p.id;
+        const del = document.createElement("button");
+        del.className = "btn btn-danger";
+        del.textContent = "Supprimer";
+        del.dataset.del = p.id;
+
+        actions.appendChild(edit);
+        actions.appendChild(del);
+
+        item.appendChild(left);
+        item.appendChild(actions);
         list.appendChild(item);
       });
     }
