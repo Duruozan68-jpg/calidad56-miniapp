@@ -19,14 +19,12 @@
       --card: rgba(18, 18, 18, 0.78);
       --card-strong: rgba(12, 12, 12, 0.92);
       --gold: #c9a45c;
-      --gold-2: #a9853a;
       --text: #f7f4ee;
       --muted: #b9b2a1;
-      --accent: #3a8fff;
       --danger: #df3b3b;
       --shadow: 0 14px 40px rgba(0,0,0,0.35);
       --radius: 20px;
-      --bg-image: url("background.png?v=9");
+      --bg-image: url("background.png?v=11");
     }
 
     * { box-sizing: border-box; }
@@ -50,7 +48,6 @@
       backdrop-filter: blur(2px);
       animation: appFade 0.8s ease;
     }
-
     @keyframes appFade {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -160,28 +157,54 @@
     }
     .modal.active { display: flex; }
     .modal-card {
-      width: 92vw; max-width: 420px; max-height: 70vh;
+      width: 92vw; max-width: 420px; max-height: 68vh;
       background: var(--card-strong);
       border-radius: 22px; border: 1px solid rgba(201,164,92,0.4);
       overflow: hidden; box-shadow: var(--shadow); animation: modalIn 0.3s ease; position: relative;
     }
-    .modal-scroll { max-height: 70vh; overflow-y: auto; }
+    .modal-scroll { max-height: 68vh; overflow-y: auto; }
     @keyframes modalIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
     .modal-close {
       position: absolute; top: 10px; left: 10px; width: 32px; height: 32px; border-radius: 50%;
       background: rgba(0,0,0,0.6); border: 1px solid rgba(201,164,92,0.7); color: #fff; display: grid; place-items: center;
       cursor: pointer; z-index: 2; font-weight: 700;
     }
-    .modal-media .media { width: 100%; height: 175px; object-fit: cover; }
+    .modal-media .media { width: 100%; height: 160px; object-fit: cover; }
     .modal-body { padding: 14px 16px 16px; }
     .price-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 8px; }
     .price-option { border: 1px solid rgba(201,164,92,0.5); border-radius: 14px; padding: 10px; text-align: center; cursor: pointer; transition: background 0.2s ease; }
     .price-option.active { background: rgba(201,164,92,0.2); color: #fff; }
 
     .admin-panel { margin-top: 10px; border: 1px dashed rgba(201,164,92,0.4); border-radius: 16px; padding: 12px; }
+    .admin-tabs { display: flex; gap: 8px; margin-top: 8px; }
+    .admin-tab {
+      flex: 1; padding: 10px; border-radius: 999px; border: 1px solid rgba(201,164,92,0.5);
+      background: rgba(0,0,0,0.3); color: #fff; cursor: pointer; text-align: center;
+    }
+    .admin-tab.active { background: linear-gradient(135deg, #c9a45c, #a9853a); color: #1a1a1a; border: none; }
+
+    .admin-pane { display: none; margin-top: 12px; }
+    .admin-pane.active { display: block; }
+
     .admin-list { margin-top: 12px; display: grid; gap: 8px; }
-    .admin-item { padding: 10px; border: 1px solid rgba(201,164,92,0.3); border-radius: 12px; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,10,0.5); }
-    .admin-box { border: 1px solid rgba(201,164,92,0.25); border-radius: 14px; padding: 12px; margin-top: 10px; background: rgba(0,0,0,0.3); }
+    .admin-item {
+      padding: 10px;
+      border: 1px solid rgba(201,164,92,0.3);
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10,10,10,0.5);
+    }
+
+    .admin-card {
+      border: 1px solid rgba(201,164,92,0.25);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(0,0,0,0.3);
+      margin-top: 10px;
+    }
+
     .price-edit-grid { display: grid; gap: 8px; margin-top: 8px; }
     .price-edit-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
@@ -192,13 +215,6 @@
       transition: opacity 0.3s ease; z-index: 200;
     }
     .toast.show { opacity: 1; }
-
-    @media (max-width: 420px) {
-      .brand { font-size: 28px; }
-      .grid { grid-template-columns: 1fr 1fr; }
-      .modal-card { max-height: 68vh; }
-      .modal-media .media { height: 160px; }
-    }
   </style>
 </head>
 <body>
@@ -269,73 +285,100 @@
             <div class="section-title" style="font-size:16px;">Admin panel</div>
             <div class="muted" id="admin-status">Non connecté</div>
 
-            <div class="admin-box">
-              <strong>Étape 1 — Code admin</strong>
+            <div class="admin-card">
+              <strong>Accès admin</strong>
               <input id="admin-code" class="input" placeholder="Code admin (2810)" style="margin-top:8px;" />
               <button id="admin-unlock" class="btn" style="margin-top:8px;">Déverrouiller</button>
+
+              <div id="admin-auth" style="margin-top:10px; display:none;">
+                <input id="admin-email" class="input" placeholder="Email admin" />
+                <input id="admin-password" class="input" type="password" placeholder="Mot de passe admin" style="margin-top:8px;" />
+                <div class="row" style="margin-top:8px;">
+                  <button id="admin-login" class="btn btn-primary">Connexion</button>
+                  <button id="admin-logout" class="btn btn-danger">Déconnexion</button>
+                </div>
+              </div>
             </div>
 
-            <div class="admin-box" id="admin-auth" style="display:none;">
-              <strong>Étape 2 — Connexion Firebase</strong>
-              <input id="admin-email" class="input" placeholder="Email admin" style="margin-top:8px;" />
-              <input id="admin-password" class="input" type="password" placeholder="Mot de passe admin" style="margin-top:8px;" />
-              <div class="row" style="margin-top:8px;">
-                <button id="admin-login" class="btn btn-primary">Connexion</button>
-                <button id="admin-logout" class="btn btn-danger">Déconnexion</button>
+            <div id="admin-area" style="display:none;">
+              <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="tab-products">Produits</button>
+                <button class="admin-tab" data-tab="tab-media">Médias</button>
+                <button class="admin-tab" data-tab="tab-settings">Paramètres</button>
+              </div>
+
+              <div class="admin-pane active" id="tab-products">
+                <div class="admin-card">
+                  <strong id="editing-label">Nouveau produit</strong>
+
+                  <input id="p-name" class="input" placeholder="Nom du produit" style="margin-top:10px;" />
+                  <textarea id="p-desc" class="textarea" placeholder="Description"></textarea>
+
+                  <div class="row">
+                    <select id="p-media-type" class="input">
+                      <option value="image">Image</option>
+                      <option value="video">Vidéo</option>
+                    </select>
+                    <input id="p-media-url" class="input" placeholder="URL média (ex: assets/bridesmaid.mp4)" />
+                  </div>
+                  <input id="p-poster" class="input" placeholder="Poster vidéo (optionnel)" />
+                  <input id="p-origin" class="input" placeholder="Origine (ex: USA)" />
+                  <input id="p-category" class="input" placeholder="Catégorie (optionnel)" />
+                  <input id="p-badge" class="input" placeholder="Badge (ex: Static US)" />
+
+                  <div class="price-edit-grid">
+                    <div class="price-edit-row">
+                      <input id="price-label-1" class="input" placeholder="Grammage (ex: 1g)" />
+                      <input id="price-value-1" class="input" placeholder="Prix (EUR)" />
+                    </div>
+                    <div class="price-edit-row">
+                      <input id="price-label-2" class="input" placeholder="Grammage (ex: 5g)" />
+                      <input id="price-value-2" class="input" placeholder="Prix (EUR)" />
+                    </div>
+                    <div class="price-edit-row">
+                      <input id="price-label-3" class="input" placeholder="Grammage (ex: 10g)" />
+                      <input id="price-value-3" class="input" placeholder="Prix (EUR)" />
+                    </div>
+                    <div class="price-edit-row">
+                      <input id="price-label-4" class="input" placeholder="Grammage (ex: 50g)" />
+                      <input id="price-value-4" class="input" placeholder="Prix (EUR)" />
+                    </div>
+                  </div>
+
+                  <div class="row" style="margin-top:8px;">
+                    <label class="chip"><input id="p-active" type="checkbox" checked /> Actif</label>
+                    <label class="chip"><input id="p-featured" type="checkbox" /> Mis en avant</label>
+                  </div>
+
+                  <div class="row" style="margin-top:10px;">
+                    <button id="p-save" class="btn btn-gold">Enregistrer</button>
+                    <button id="p-reset" class="btn">Nouveau</button>
+                  </div>
+
+                  <button id="seed-products" class="btn" style="margin-top:10px;">Initialiser 4 produits</button>
+                </div>
+
+                <div class="admin-card">
+                  <strong>Liste produits</strong>
+                  <div id="admin-list" class="admin-list"></div>
+                </div>
+              </div>
+
+              <div class="admin-pane" id="tab-media">
+                <div class="admin-card">
+                  <strong>Médias utilisés</strong>
+                  <div id="media-list" class="admin-list"></div>
+                </div>
+              </div>
+
+              <div class="admin-pane" id="tab-settings">
+                <div class="admin-card">
+                  <strong>Outils admin</strong>
+                  <button id="clear-local" class="btn">Nettoyer cache local (admin)</button>
+                </div>
               </div>
             </div>
 
-            <div class="admin-box" id="admin-form-wrap" style="display:none;">
-              <strong>Étape 3 — Gestion des produits</strong>
-
-              <input id="p-name" class="input" placeholder="Nom du produit" style="margin-top:10px;" />
-              <textarea id="p-desc" class="textarea" placeholder="Description"></textarea>
-
-              <div class="row">
-                <select id="p-media-type" class="select">
-                  <option value="image">Image</option>
-                  <option value="video">Vidéo</option>
-                </select>
-                <input id="p-media-url" class="input" placeholder="URL média (ex: assets/bridesmaid.mp4)" />
-              </div>
-              <input id="p-poster" class="input" placeholder="Poster vidéo (optionnel)" />
-              <input id="p-origin" class="input" placeholder="Origine (ex: USA)" />
-              <input id="p-category" class="input" placeholder="Catégorie (optionnel)" />
-              <input id="p-badge" class="input" placeholder="Badge (ex: Static US)" />
-
-              <div class="price-edit-grid">
-                <div class="price-edit-row">
-                  <input id="price-label-1" class="input" placeholder="Grammes (ex: 1g)" />
-                  <input id="price-value-1" class="input" placeholder="Prix (EUR)" />
-                </div>
-                <div class="price-edit-row">
-                  <input id="price-label-2" class="input" placeholder="Grammes (ex: 5g)" />
-                  <input id="price-value-2" class="input" placeholder="Prix (EUR)" />
-                </div>
-                <div class="price-edit-row">
-                  <input id="price-label-3" class="input" placeholder="Grammes (ex: 10g)" />
-                  <input id="price-value-3" class="input" placeholder="Prix (EUR)" />
-                </div>
-                <div class="price-edit-row">
-                  <input id="price-label-4" class="input" placeholder="Grammes (ex: 50g)" />
-                  <input id="price-value-4" class="input" placeholder="Prix (EUR)" />
-                </div>
-              </div>
-
-              <div class="row" style="margin-top:8px;">
-                <label class="chip"><input id="p-active" type="checkbox" checked /> Actif</label>
-                <label class="chip"><input id="p-featured" type="checkbox" /> Mis en avant</label>
-              </div>
-
-              <div class="row" style="margin-top:10px;">
-                <button id="p-save" class="btn btn-gold">Enregistrer</button>
-                <button id="p-cancel" class="btn">Annuler</button>
-              </div>
-
-              <button id="seed-products" class="btn" style="margin-top:10px;">Initialiser 4 produits</button>
-
-              <div class="admin-list" id="admin-list"></div>
-            </div>
           </div>
         </div>
       </section>
@@ -431,216 +474,91 @@
           { label: "10g", price: 350 },
           { label: "50g", price: 1450 }
         ]
-      },
-      {
-        name: "Autumn",
-        description: "Notes terreuses, effet stable, qualité top.",
-        mediaType: "image",
-        mediaUrl: "background.png",
-        poster: "background.png",
-        origin: "USA",
-        category: "Classic",
-        badge: "Premium",
-        featured: false,
-        active: true,
-        prices: [
-          { label: "1g", price: 30 },
-          { label: "5g", price: 150 },
-          { label: "10g", price: 280 },
-          { label: "50g", price: 1200 }
-        ]
-      },
-      {
-        name: "OG Kush",
-        description: "Puissante, arômes marqués, parfaite soirée.",
-        mediaType: "image",
-        mediaUrl: "background.png",
-        poster: "background.png",
-        origin: "USA",
-        category: "Classic",
-        badge: "Top",
-        featured: false,
-        active: true,
-        prices: [
-          { label: "1g", price: 35 },
-          { label: "5g", price: 170 },
-          { label: "10g", price: 320 },
-          { label: "50g", price: 1300 }
-        ]
-      },
-      {
-        name: "Lemon Cherry Gelato",
-        description: "Sucré, fruité, très propre.",
-        mediaType: "image",
-        mediaUrl: "background.png",
-        poster: "background.png",
-        origin: "USA",
-        category: "Premium",
-        badge: "Premium",
-        featured: true,
-        active: true,
-        prices: [
-          { label: "1g", price: 40 },
-          { label: "5g", price: 200 },
-          { label: "10g", price: 350 },
-          { label: "50g", price: 1450 }
-        ]
       }
     ];
 
     const $ = (id) => document.getElementById(id);
+    const toast = (m)=>{ const t=$("toast"); t.textContent=m; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2000); };
+    const formatPrice = (v)=>`${Number(v||0).toFixed(0)} €`;
+    const saveCart = ()=>localStorage.setItem("calidad_cart", JSON.stringify(state.cart));
+    const resolveUrl = (p)=>{ try{return new URL(p,location.href).href;}catch{return p;} };
 
-    function toast(msg) {
-      const el = $("toast");
-      el.textContent = msg;
-      el.classList.add("show");
-      setTimeout(() => el.classList.remove("show"), 2200);
-    }
-
-    function formatPrice(v) { return `${Number(v || 0).toFixed(0)} €`; }
-    function saveCart() { localStorage.setItem("calidad_cart", JSON.stringify(state.cart)); }
-    function resolveUrl(path) { try { return new URL(path, window.location.href).href; } catch { return path; } }
-
-    function createMedia(product, mode = "card") {
-      const wrap = document.createElement("div");
-      wrap.className = "media-wrap";
-      const type = product.mediaType || "image";
-
-      if (type === "video") {
-        const video = document.createElement("video");
-        video.className = "media";
-        video.poster = product.poster || "background.png";
-        video.playsInline = true;
-        video.muted = mode === "card";
-        video.loop = mode === "card";
-        video.autoplay = mode === "card";
-        video.preload = "metadata";
-        if (mode === "modal") video.controls = true;
-
-        const source = document.createElement("source");
-        source.src = resolveUrl(product.mediaUrl || "");
-        source.type = "video/mp4";
-        video.appendChild(source);
-
-        wrap.appendChild(video);
-
-        if (mode === "card") {
-          const icon = document.createElement("div");
-          icon.className = "play-icon";
-          icon.textContent = "▶";
-          wrap.appendChild(icon);
-        }
+    function createMedia(product, mode="card"){
+      const wrap=document.createElement("div"); wrap.className="media-wrap";
+      if ((product.mediaType||"image")==="video"){
+        const v=document.createElement("video"); v.className="media";
+        v.poster=product.poster||"background.png"; v.playsInline=true; v.muted=mode==="card"; v.loop=mode==="card"; v.autoplay=mode==="card"; v.preload="metadata";
+        if (mode==="modal") v.controls=true;
+        const s=document.createElement("source"); s.src=resolveUrl(product.mediaUrl||""); s.type="video/mp4"; v.appendChild(s);
+        wrap.appendChild(v);
+        if (mode==="card"){ const i=document.createElement("div"); i.className="play-icon"; i.textContent="▶"; wrap.appendChild(i); }
       } else {
-        const img = document.createElement("img");
-        img.className = "media";
-        img.src = resolveUrl(product.mediaUrl || "background.png");
-        img.loading = "lazy";
-        wrap.appendChild(img);
+        const img=document.createElement("img"); img.className="media"; img.src=resolveUrl(product.mediaUrl||"background.png"); img.loading="lazy"; wrap.appendChild(img);
       }
       return wrap;
     }
 
-    function setActiveView(id) {
+    function setActiveView(id){
       ["menu-view","cart-view","account-view"].forEach(v => $(v).classList.remove("active"));
       $(id).classList.add("active");
       ["nav-menu","nav-cart","nav-account"].forEach(n => $(n).classList.remove("active"));
-      if (id === "menu-view") $("nav-menu").classList.add("active");
-      if (id === "cart-view") $("nav-cart").classList.add("active");
-      if (id === "account-view") $("nav-account").classList.add("active");
+      if (id==="menu-view") $("nav-menu").classList.add("active");
+      if (id==="cart-view") $("nav-cart").classList.add("active");
+      if (id==="account-view") $("nav-account").classList.add("active");
     }
 
-    function renderProducts() {
-      const grid = $("product-grid");
-      grid.innerHTML = "";
-      const products = state.products.filter(p => p.active !== false);
+    function renderProducts(){
+      const grid=$("product-grid"); grid.innerHTML="";
+      const products=state.products.filter(p=>p.active!==false);
       $("empty-products").style.display = products.length ? "none" : "block";
-
-      products.forEach(p => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.appendChild(createMedia(p, "card"));
-
-        if (p.badge) {
-          const badge = document.createElement("div");
-          badge.className = "badge";
-          badge.textContent = p.badge;
-          card.appendChild(badge);
-        }
-
-        const body = document.createElement("div");
-        body.className = "card-body";
-        body.innerHTML = `
-          <div class="card-title">${p.name || "Produit"}</div>
-          <span class="chip">${p.origin || "Premium"}</span>
-        `;
+      products.forEach(p=>{
+        const card=document.createElement("div"); card.className="card";
+        card.appendChild(createMedia(p,"card"));
+        if(p.badge){ const b=document.createElement("div"); b.className="badge"; b.textContent=p.badge; card.appendChild(b); }
+        const body=document.createElement("div"); body.className="card-body";
+        body.innerHTML=`<div class="card-title">${p.name||"Produit"}</div><span class="chip">${p.origin||"Premium"}</span>`;
         card.appendChild(body);
-
-        card.addEventListener("click", () => openProductModal(p));
+        card.onclick=()=>openProductModal(p);
         grid.appendChild(card);
       });
     }
 
-    function openProductModal(product) {
-      state.selectedProduct = product;
-      state.selectedOptionIndex = 0;
-      state.qty = 1;
-
-      $("modal-title").textContent = product.name || "";
-      $("modal-desc").textContent = product.description || "";
-
-      const media = $("modal-media");
-      media.innerHTML = "";
-      media.appendChild(createMedia(product, "modal"));
-
-      const priceGrid = $("modal-prices");
-      priceGrid.innerHTML = "";
-      (product.prices || []).forEach((opt, idx) => {
-        const btn = document.createElement("div");
-        btn.className = "price-option" + (idx === 0 ? " active" : "");
-        btn.textContent = `${opt.label} - ${formatPrice(opt.price)}`;
-        btn.addEventListener("click", () => {
-          state.selectedOptionIndex = idx;
-          [...priceGrid.children].forEach(c => c.classList.remove("active"));
-          btn.classList.add("active");
-        });
-        priceGrid.appendChild(btn);
+    function openProductModal(product){
+      state.selectedProduct=product;
+      state.selectedOptionIndex=0;
+      state.qty=1;
+      $("modal-title").textContent=product.name||"";
+      $("modal-desc").textContent=product.description||"";
+      const media=$("modal-media"); media.innerHTML=""; media.appendChild(createMedia(product,"modal"));
+      const grid=$("modal-prices"); grid.innerHTML="";
+      (product.prices||[]).forEach((opt,idx)=>{
+        const btn=document.createElement("div");
+        btn.className="price-option"+(idx===0?" active":"");
+        btn.textContent=`${opt.label} - ${formatPrice(opt.price)}`;
+        btn.onclick=()=>{ state.selectedOptionIndex=idx; [...grid.children].forEach(c=>c.classList.remove("active")); btn.classList.add("active"); };
+        grid.appendChild(btn);
       });
-
-      $("qty-value").textContent = state.qty;
+      $("qty-value").textContent=state.qty;
       $("product-modal").classList.add("active");
     }
+    function closeModal(){ $("product-modal").classList.remove("active"); }
 
-    function closeModal() { $("product-modal").classList.remove("active"); }
-
-    function addToCart() {
-      const p = state.selectedProduct;
-      if (!p) return;
-      const opt = (p.prices || [])[state.selectedOptionIndex];
-      if (!opt) return toast("Aucun prix défini");
-
-      const key = `${p.id}_${opt.label}`;
-      const existing = state.cart.find(i => i.key === key);
-      if (existing) existing.qty += state.qty;
-      else state.cart.push({ key, productId: p.id, name: p.name, optionLabel: opt.label, unitPrice: opt.price, qty: state.qty });
-
-      saveCart();
-      renderCart();
-      toast("Ajouté au panier");
+    function addToCart(){
+      const p=state.selectedProduct; if(!p) return;
+      const opt=(p.prices||[])[state.selectedOptionIndex]; if(!opt) return toast("Aucun prix");
+      const key=`${p.id}_${opt.label}`;
+      const ex=state.cart.find(i=>i.key===key);
+      if(ex) ex.qty+=state.qty; else state.cart.push({key,productId:p.id,name:p.name,optionLabel:opt.label,unitPrice:opt.price,qty:state.qty});
+      saveCart(); renderCart(); toast("Ajouté au panier");
     }
 
-    function renderCart() {
-      const list = $("cart-list");
-      list.innerHTML = "";
-      let totalItems = 0;
-      let totalPrice = 0;
-
-      state.cart.forEach(item => {
-        totalItems += item.qty;
-        totalPrice += item.qty * item.unitPrice;
-
-        const row = document.createElement("div");
-        row.className = "cart-item";
-        row.innerHTML = `
+    function renderCart(){
+      const list=$("cart-list"); list.innerHTML="";
+      let totalItems=0,totalPrice=0;
+      state.cart.forEach(item=>{
+        totalItems+=item.qty; totalPrice+=item.qty*item.unitPrice;
+        const row=document.createElement("div"); row.className="cart-item";
+        row.innerHTML=`
           <div class="between">
             <div>
               <strong>${item.name}</strong>
@@ -656,318 +574,228 @@
             <button class="minus" data-minus="${item.key}">-</button>
             <span>${item.qty}</span>
             <button class="plus" data-plus="${item.key}">+</button>
-          </div>
-        `;
+          </div>`;
         list.appendChild(row);
       });
-
-      $("total-items").textContent = totalItems;
-      $("total-price").textContent = formatPrice(totalPrice);
+      $("total-items").textContent=totalItems;
+      $("total-price").textContent=formatPrice(totalPrice);
     }
 
-    function updateCartQty(key, delta) {
-      const item = state.cart.find(i => i.key === key);
-      if (!item) return;
-      item.qty += delta;
-      if (item.qty <= 0) state.cart = state.cart.filter(i => i.key !== key);
-      saveCart();
-      renderCart();
+    function updateCartQty(key,delta){
+      const item=state.cart.find(i=>i.key===key); if(!item) return;
+      item.qty+=delta; if(item.qty<=0) state.cart=state.cart.filter(i=>i.key!==key);
+      saveCart(); renderCart();
     }
+    function removeFromCart(key){ state.cart=state.cart.filter(i=>i.key!==key); saveCart(); renderCart(); }
 
-    function removeFromCart(key) {
-      state.cart = state.cart.filter(i => i.key !== key);
-      saveCart();
-      renderCart();
-    }
-
-    function buildOrderMessage(type) {
-      const lines = [];
+    function buildOrderMessage(type){
+      const lines=[];
       lines.push("Calidad Shop - Nouvelle commande");
       lines.push(`Type de retrait: ${type}`);
-      if (type === "Livraison") {
-        const address = $("delivery-address").value.trim();
-        const housing = document.querySelector("input[name='housing']:checked")?.value || "";
-        lines.push(`Adresse: ${address || "Non renseignée"}`);
-        lines.push(`Logement: ${housing || "Non renseigné"}`);
+      if(type==="Livraison"){
+        const address=$("delivery-address").value.trim();
+        const housing=document.querySelector("input[name='housing']:checked")?.value||"";
+        lines.push(`Adresse: ${address||"Non renseignée"}`);
+        lines.push(`Logement: ${housing||"Non renseigné"}`);
       }
       lines.push("");
       lines.push("Articles:");
-      state.cart.forEach((item, idx) => {
-        lines.push(`${idx + 1}) ${item.name} - ${item.optionLabel} x${item.qty} = ${formatPrice(item.qty * item.unitPrice)}`);
-      });
-      const totalItems = state.cart.reduce((s,i) => s + i.qty, 0);
-      const totalPrice = state.cart.reduce((s,i) => s + i.qty * i.unitPrice, 0);
+      state.cart.forEach((item,idx)=>{ lines.push(`${idx+1}) ${item.name} - ${item.optionLabel} x${item.qty} = ${formatPrice(item.qty*item.unitPrice)}`); });
+      const totalItems=state.cart.reduce((s,i)=>s+i.qty,0);
+      const totalPrice=state.cart.reduce((s,i)=>s+i.qty*i.unitPrice,0);
       lines.push("");
       lines.push(`Total articles: ${totalItems}`);
       lines.push(`Total à payer: ${formatPrice(totalPrice)}`);
       return lines.join("\\n");
     }
 
-    function openSecretary(message) {
-      if (!message || !state.cart.length) return toast("Panier vide");
-      const url = `${SECRETARY_URL}?text=${encodeURIComponent(message)}`;
-      if (window.Telegram?.WebApp?.openTelegramLink) window.Telegram.WebApp.openTelegramLink(url);
-      else if (window.Telegram?.WebApp?.openLink) window.Telegram.WebApp.openLink(url);
-      else window.open(url, "_blank");
-      if (navigator.clipboard) navigator.clipboard.writeText(message).catch(() => {});
-      saveOrderHistory(message);
+    function openSecretary(message){
+      if(!message||!state.cart.length) return toast("Panier vide");
+      const url=`${SECRETARY_URL}?text=${encodeURIComponent(message)}`;
+      if(window.Telegram?.WebApp?.openTelegramLink) window.Telegram.WebApp.openTelegramLink(url);
+      else if(window.Telegram?.WebApp?.openLink) window.Telegram.WebApp.openLink(url);
+      else window.open(url,"_blank");
     }
 
-    function saveOrderHistory(message) {
-      const history = JSON.parse(localStorage.getItem("calidad_orders") || "[]");
-      history.unshift({ message, date: new Date().toISOString() });
-      localStorage.setItem("calidad_orders", JSON.stringify(history.slice(0, 30)));
-      renderOrderHistory();
-    }
-
-    function renderOrderHistory() {
-      const history = JSON.parse(localStorage.getItem("calidad_orders") || "[]");
-      const container = $("order-history");
-      container.innerHTML = "";
-      history.forEach(h => {
-        const item = document.createElement("div");
-        item.className = "admin-item";
-        item.innerHTML = `
-          <div>
-            <div><strong>${new Date(h.date).toLocaleString()}</strong></div>
-            <div class="muted" style="font-size:12px;">${h.message.split("\\n")[0]}</div>
-          </div>
-        `;
-        container.appendChild(item);
-      });
-      if (!history.length) container.innerHTML = `<div class="muted">Aucune commande enregistrée.</div>`;
-    }
-
-    function renderAdminList() {
-      const list = $("admin-list");
-      list.innerHTML = "";
-      state.products.forEach(p => {
-        const item = document.createElement("div");
-        item.className = "admin-item";
-        item.innerHTML = `
+    function renderAdminList(){
+      const list=$("admin-list"); list.innerHTML="";
+      state.products.forEach(p=>{
+        const item=document.createElement("div"); item.className="admin-item";
+        item.innerHTML=`
           <div>
             <strong>${p.name}</strong>
-            <div class="muted" style="font-size:12px;">${p.mediaType || "image"} • ${p.active === false ? "Inactif" : "Actif"}</div>
+            <div class="muted" style="font-size:12px;">${p.mediaType||"image"} • ${p.active===false?"Inactif":"Actif"}</div>
           </div>
           <div class="row">
             <button class="btn" data-edit="${p.id}">Modifier</button>
             <button class="btn btn-danger" data-del="${p.id}">Supprimer</button>
-          </div>
-        `;
+          </div>`;
         list.appendChild(item);
       });
     }
 
-    function getPriceInputs() {
-      const prices = [];
-      for (let i = 1; i <= 4; i++) {
-        const label = $(`price-label-${i}`).value.trim();
-        const priceRaw = $(`price-value-${i}`).value.trim();
-        const price = Number(priceRaw);
-        if (label && priceRaw !== "" && !Number.isNaN(price)) {
-          prices.push({ label, price });
-        }
+    function renderMediaList(){
+      const list=$("media-list"); list.innerHTML="";
+      state.products.forEach(p=>{
+        const item=document.createElement("div"); item.className="admin-item";
+        item.innerHTML=`
+          <div>
+            <strong>${p.name}</strong>
+            <div class="muted" style="font-size:12px;">${p.mediaType||"image"} • ${p.mediaUrl||""}</div>
+          </div>`;
+        list.appendChild(item);
+      });
+      if(!state.products.length) list.innerHTML = `<div class="muted">Aucun média.</div>`;
+    }
+
+    function getPriceInputs(){
+      const prices=[];
+      for(let i=1;i<=4;i++){
+        const label=$(`price-label-${i}`).value.trim();
+        const priceRaw=$(`price-value-${i}`).value.trim();
+        const price=Number(priceRaw);
+        if(label && priceRaw!=="" && !Number.isNaN(price)) prices.push({label,price});
       }
       return prices;
     }
 
-    async function saveProduct() {
-      if (!state.adminAuthorized) return toast("Admin non autorisé");
-      const name = $("p-name").value.trim();
-      if (!name) return toast("Nom requis");
-
-      const prices = getPriceInputs();
-      if (!prices.length) return toast("Ajoute au moins 1 prix");
-
-      const product = {
+    async function saveProduct(){
+      if(!state.adminAuthorized) return toast("Admin non autorisé");
+      const name=$("p-name").value.trim(); if(!name) return toast("Nom requis");
+      const prices=getPriceInputs(); if(!prices.length) return toast("Ajoute au moins 1 prix");
+      const product={
         name,
-        description: $("p-desc").value.trim(),
-        mediaType: $("p-media-type").value,
-        mediaUrl: $("p-media-url").value.trim() || "background.png",
-        poster: $("p-poster").value.trim() || "background.png",
-        origin: $("p-origin").value.trim(),
-        category: $("p-category").value.trim(),
-        badge: $("p-badge").value.trim(),
-        active: $("p-active").checked,
-        featured: $("p-featured").checked,
+        description:$("p-desc").value.trim(),
+        mediaType:$("p-media-type").value,
+        mediaUrl:$("p-media-url").value.trim()||"background.png",
+        poster:$("p-poster").value.trim()||"background.png",
+        origin:$("p-origin").value.trim(),
+        category:$("p-category").value.trim(),
+        badge:$("p-badge").value.trim(),
+        active:$("p-active").checked,
+        featured:$("p-featured").checked,
         prices,
-        updatedAt: Date.now()
+        updatedAt:Date.now()
       };
-
-      if (state.editingId) {
-        await update(ref(db, "products/" + state.editingId), product);
-        toast("Produit modifié");
-      } else {
-        const newRef = push(ref(db, "products"));
-        await set(newRef, { ...product, createdAt: Date.now() });
-        toast("Produit ajouté");
-      }
-      clearAdminForm();
+      if(state.editingId) await update(ref(db,"products/"+state.editingId),product);
+      else await set(push(ref(db,"products")),{...product,createdAt:Date.now()});
+      clearAdminForm(); toast("Produit enregistré");
     }
 
-    function clearAdminForm() {
-      state.editingId = null;
-      ["p-name","p-desc","p-media-url","p-poster","p-origin","p-category","p-badge"].forEach(id => $(id).value = "");
-      for (let i = 1; i <= 4; i++) {
-        $(`price-label-${i}`).value = "";
-        $(`price-value-${i}`).value = "";
-      }
-      $("p-active").checked = true;
-      $("p-featured").checked = false;
+    function clearAdminForm(){
+      state.editingId=null;
+      ["p-name","p-desc","p-media-url","p-poster","p-origin","p-category","p-badge"].forEach(id=>$(id).value="");
+      for(let i=1;i<=4;i++){ $(`price-label-${i}`).value=""; $(`price-value-${i}`).value=""; }
+      $("p-active").checked=true; $("p-featured").checked=false;
+      $("editing-label").textContent="Nouveau produit";
     }
 
-    async function deleteProduct(id) {
-      if (!state.adminAuthorized) return toast("Admin non autorisé");
-      await remove(ref(db, "products/" + id));
-      toast("Produit supprimé");
-    }
+    async function deleteProduct(id){ if(!state.adminAuthorized) return; await remove(ref(db,"products/"+id)); toast("Supprimé"); }
 
-    async function seedDefaults() {
-      if (!state.adminAuthorized) return toast("Admin non autorisé");
-      if (!confirm("Ajouter les 4 produits par défaut ?")) return;
-      for (const p of DEFAULT_PRODUCTS) {
-        const newRef = push(ref(db, "products"));
-        await set(newRef, { ...p, createdAt: Date.now() });
-      }
-      toast("Produits initiaux ajoutés");
-    }
-
-    onValue(ref(db, "products"), (snapshot) => {
-      const data = snapshot.val() || {};
-      state.products = Object.entries(data).map(([id, val]) => ({ id, ...val }));
-      renderProducts();
-      renderAdminList();
+    onValue(ref(db,"products"),snap=>{
+      const data=snap.val()||{};
+      state.products=Object.entries(data).map(([id,val])=>({id,...val}));
+      renderProducts(); renderAdminList(); renderMediaList();
     });
 
-    onAuthStateChanged(auth, (user) => {
-      state.adminAuthorized = !!user && user.uid === ADMIN_UID;
-      $("admin-status").textContent = state.adminAuthorized ? "Connecté en admin" : "Non connecté";
-      $("admin-form-wrap").style.display = (state.adminUnlocked && state.adminAuthorized) ? "block" : "none";
+    onAuthStateChanged(auth,user=>{
+      state.adminAuthorized=!!user && user.uid===ADMIN_UID;
+      $("admin-status").textContent=state.adminAuthorized?"Connecté en admin":"Non connecté";
+      $("admin-area").style.display=(state.adminUnlocked && state.adminAuthorized)?"block":"none";
     });
 
-    $("nav-menu").addEventListener("click", () => setActiveView("menu-view"));
-    $("nav-cart").addEventListener("click", () => { setActiveView("cart-view"); renderCart(); });
-    $("nav-account").addEventListener("click", () => { setActiveView("account-view"); renderOrderHistory(); });
+    $("nav-menu").onclick=()=>setActiveView("menu-view");
+    $("nav-cart").onclick=()=>{ setActiveView("cart-view"); renderCart(); };
+    $("nav-account").onclick=()=>setActiveView("account-view");
 
-    $("modal-close").addEventListener("click", closeModal);
-    $("add-to-cart").addEventListener("click", () => { addToCart(); closeModal(); });
-    $("qty-minus").addEventListener("click", () => { if (state.qty > 1) state.qty--; $("qty-value").textContent = state.qty; });
-    $("qty-plus").addEventListener("click", () => { state.qty++; $("qty-value").textContent = state.qty; });
+    $("modal-close").onclick=closeModal;
+    $("add-to-cart").onclick=()=>{ addToCart(); closeModal(); };
+    $("qty-minus").onclick=()=>{ if(state.qty>1) state.qty--; $("qty-value").textContent=state.qty; };
+    $("qty-plus").onclick=()=>{ state.qty++; $("qty-value").textContent=state.qty; };
 
-    $("cart-list").addEventListener("click", (e) => {
-      const minus = e.target.dataset.minus;
-      const plus = e.target.dataset.plus;
-      const del = e.target.dataset.remove;
-      if (minus) updateCartQty(minus, -1);
-      if (plus) updateCartQty(plus, 1);
-      if (del) removeFromCart(del);
-    });
+    $("cart-list").onclick=(e)=>{
+      if(e.target.dataset.minus) updateCartQty(e.target.dataset.minus,-1);
+      if(e.target.dataset.plus) updateCartQty(e.target.dataset.plus,1);
+      if(e.target.dataset.remove) removeFromCart(e.target.dataset.remove);
+    };
 
-    document.querySelectorAll(".seg-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".seg-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".seg-btn").forEach(btn=>{
+      btn.onclick=()=>{
+        document.querySelectorAll(".seg-btn").forEach(b=>b.classList.remove("active"));
         btn.classList.add("active");
-        const type = btn.dataset.pickup;
-        if (type === "Meetup") {
-          $("meetup-action").style.display = "block";
-          $("delivery-form").style.display = "none";
-        } else {
-          $("meetup-action").style.display = "none";
-          $("delivery-form").style.display = "block";
-        }
-      });
+        const type=btn.dataset.pickup;
+        $("meetup-action").style.display= type==="Meetup" ? "block":"none";
+        $("delivery-form").style.display= type==="Livraison" ? "block":"none";
+      };
     });
 
-    $("meetup-order").addEventListener("click", () => openSecretary(buildOrderMessage("Meetup")));
-    $("delivery-order").addEventListener("click", () => {
-      const address = $("delivery-address").value.trim();
-      const housing = document.querySelector("input[name='housing']:checked");
-      if (!address || !housing) return toast("Adresse + logement requis");
+    $("meetup-order").onclick=()=>openSecretary(buildOrderMessage("Meetup"));
+    $("delivery-order").onclick=()=>{
+      const address=$("delivery-address").value.trim();
+      const housing=document.querySelector("input[name='housing']:checked");
+      if(!address||!housing) return toast("Adresse + logement requis");
       openSecretary(buildOrderMessage("Livraison"));
-    });
+    };
 
-    $("open-admin").addEventListener("click", () => {
-      const panel = $("admin-panel");
-      panel.style.display = panel.style.display === "none" ? "block" : "none";
-    });
+    $("open-admin").onclick=()=>{
+      const panel=$("admin-panel");
+      panel.style.display=panel.style.display==="none"?"block":"none";
+    };
 
-    $("admin-unlock").addEventListener("click", () => {
-      const code = $("admin-code").value.trim();
-      if (code === ADMIN_CODE) {
-        state.adminUnlocked = true;
-        $("admin-auth").style.display = "block";
-        $("admin-status").textContent = "Code accepté, connecte-toi";
-        toast("Code valide");
-      } else {
-        toast("Code incorrect");
+    $("admin-unlock").onclick=()=>{
+      if($("admin-code").value.trim()===ADMIN_CODE){
+        state.adminUnlocked=true; $("admin-auth").style.display="block"; $("admin-status").textContent="Code accepté, connecte-toi";
+      } else toast("Code incorrect");
+    };
+
+    $("admin-login").onclick=async()=>{
+      const email=$("admin-email").value.trim();
+      const pass=$("admin-password").value.trim();
+      if(!email||!pass) return toast("Email + mot de passe requis");
+      try{ await signInWithEmailAndPassword(auth,email,pass); toast("Connecté"); }catch{ toast("Erreur"); }
+    };
+    $("admin-logout").onclick=async()=>{ await signOut(auth); toast("Déconnecté"); };
+
+    $("p-save").onclick=saveProduct;
+    $("p-reset").onclick=clearAdminForm;
+    $("seed-products").onclick=async()=>{
+      if(!state.adminAuthorized) return toast("Admin non autorisé");
+      for(const p of DEFAULT_PRODUCTS){ await set(push(ref(db,"products")),{...p,createdAt:Date.now()}); }
+      toast("Produits initiaux ajoutés");
+    };
+
+    $("admin-list").onclick=(e)=>{
+      if(e.target.dataset.edit){
+        const p=state.products.find(x=>x.id===e.target.dataset.edit); if(!p) return;
+        state.editingId=p.id;
+        $("editing-label").textContent=`Modification: ${p.name}`;
+        $("p-name").value=p.name||"";
+        $("p-desc").value=p.description||"";
+        $("p-media-type").value=p.mediaType||"image";
+        $("p-media-url").value=p.mediaUrl||"";
+        $("p-poster").value=p.poster||"";
+        $("p-origin").value=p.origin||"";
+        $("p-category").value=p.category||"";
+        $("p-badge").value=p.badge||"";
+        $("p-active").checked=p.active!==false;
+        $("p-featured").checked=!!p.featured;
+        for(let i=1;i<=4;i++){ $(`price-label-${i}`).value=""; $(`price-value-${i}`).value=""; }
+        (p.prices||[]).forEach((pr,idx)=>{ const i=idx+1; if(i<=4){ $(`price-label-${i}`).value=pr.label||""; $(`price-value-${i}`).value=pr.price??""; } });
       }
+      if(e.target.dataset.del) deleteProduct(e.target.dataset.del);
+    };
+
+    document.querySelectorAll(".admin-tab").forEach(tab=>{
+      tab.onclick=()=>{
+        document.querySelectorAll(".admin-tab").forEach(t=>t.classList.remove("active"));
+        tab.classList.add("active");
+        document.querySelectorAll(".admin-pane").forEach(p=>p.classList.remove("active"));
+        $(tab.dataset.tab).classList.add("active");
+      };
     });
-
-    $("admin-login").addEventListener("click", async () => {
-      const email = $("admin-email").value.trim();
-      const pass = $("admin-password").value.trim();
-      if (!email || !pass) return toast("Email + mot de passe requis");
-      try {
-        await signInWithEmailAndPassword(auth, email, pass);
-        toast("Connecté");
-      } catch {
-        toast("Erreur de connexion");
-      }
-    });
-
-    $("admin-logout").addEventListener("click", async () => {
-      await signOut(auth);
-      toast("Déconnecté");
-    });
-
-    $("p-save").addEventListener("click", saveProduct);
-    $("p-cancel").addEventListener("click", clearAdminForm);
-    $("seed-products").addEventListener("click", seedDefaults);
-
-    $("admin-list").addEventListener("click", (e) => {
-      const editId = e.target.dataset.edit;
-      const delId = e.target.dataset.del;
-      if (editId) {
-        const p = state.products.find(x => x.id === editId);
-        if (!p) return;
-        state.editingId = editId;
-        $("p-name").value = p.name || "";
-        $("p-desc").value = p.description || "";
-        $("p-media-type").value = p.mediaType || "image";
-        $("p-media-url").value = p.mediaUrl || "";
-        $("p-poster").value = p.poster || "";
-        $("p-origin").value = p.origin || "";
-        $("p-category").value = p.category || "";
-        $("p-badge").value = p.badge || "";
-        $("p-active").checked = p.active !== false;
-        $("p-featured").checked = !!p.featured;
-
-        for (let i = 1; i <= 4; i++) {
-          $(`price-label-${i}`).value = "";
-          $(`price-value-${i}`).value = "";
-        }
-        (p.prices || []).forEach((pr, idx) => {
-          const i = idx + 1;
-          if (i <= 4) {
-            $(`price-label-${i}`).value = pr.label || "";
-            $(`price-value-${i}`).value = pr.price ?? "";
-          }
-        });
-      }
-      if (delId) deleteProduct(delId);
-    });
-
-    const tg = window.Telegram?.WebApp;
-    if (tg) {
-      tg.ready();
-      tg.expand();
-      if (tg.setHeaderColor) tg.setHeaderColor("#0b0b0b");
-      if (tg.setBackgroundColor) tg.setBackgroundColor("#0b0b0b");
-    }
 
     renderProducts();
     renderCart();
-    renderOrderHistory();
   </script>
 </body>
 </html>
